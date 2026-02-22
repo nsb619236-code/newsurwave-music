@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SurWave Music</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+<h1>🎵 SurWave Music Player</h1>
+
+<div class="player">
+    <img id="cover" src="images/cover1.jpg">
+    <h2 id="title">Song Name</h2>
+
+    <audio id="audio"></audio>
+
+    <div class="controls">
+        <button onclick="prevSong()">⏮</button>
+        <button onclick="playPause()">▶ / ⏸</button>
+        <button onclick="nextSong()">⏭</button>
+    </div>
+</div>
+
+<div class="add-section">
+    <h3>Add New Song</h3>
+    <input type="text" id="songName" placeholder="Song Name">
+    <input type="text" id="songFile" placeholder="songs/song3.mp3">
+    <input type="text" id="songCover" placeholder="images/cover3.jpg">
+    <button onclick="addSong()">Add Song</button>
+</div>
+
+<h3>Playlist</h3>
+<ul id="playlist"></ul>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

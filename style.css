@@ -1,0 +1,75 @@
+body{
+    margin:0;
+    font-family: Arial;
+    background: linear-gradient(135deg,#ff512f,#dd2476);
+    color:white;
+    text-align:center;
+}
+
+.app{
+    padding:20px;
+}
+
+.player{
+    background: rgba(0,0,0,0.3);
+    padding:20px;
+    border-radius:20px;
+}
+
+#cover{
+    width:200px;
+    height:200px;
+    object-fit:cover;
+    border-radius:15px;
+}
+
+.controls button{
+    padding:10px 20px;
+    margin:10px;
+    border:none;
+    border-radius:30px;
+    font-size:18px;
+    cursor:pointer;
+    background:#fff;
+    color:#dd2476;
+    font-weight:bold;
+}
+
+.controls button:hover{
+    background:#ffd700;
+}
+
+.add-section input{
+    width:90%;
+    padding:10px;
+    margin:5px;
+    border-radius:10px;
+    border:none;
+}
+
+.add-section button{
+    padding:10px 20px;
+    border:none;
+    border-radius:20px;
+    background:#00ffcc;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+#playlist{
+    list-style:none;
+    padding:0;
+}
+
+#playlist li{
+    background:rgba(0,0,0,0.3);
+    margin:5px;
+    padding:10px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+#playlist li:hover{
+    background:#000;
+}
+
