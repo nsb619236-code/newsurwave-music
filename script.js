@@ -8,12 +8,12 @@ let currentSong = 0;
 let songs = [
 {
     name: "Song 1",
-    file: "songs/song1.mp3",
+    file: "song1.mp3",
     cover: "images/cover1.jpg"
 },
 {
     name: "Song 2",
-    file: "songs/song2.mp3",
+    file: "song2.mp3",
     cover: "images/cover2.jpg"
 }
 ];
