@@ -9,12 +9,12 @@ let songs = [
 {
     name: "Song 1",
     file: "song1.mp3",
-    cover: "images/cover1.jpg"
+    cover: "cover1.jpg"
 },
 {
     name: "Song 2",
     file: "song2.mp3",
-    cover: "images/cover2.jpg"
+    cover: "cover2.jpg"
 }
 ];
 
