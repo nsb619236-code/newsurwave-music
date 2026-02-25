@@ -92,4 +92,36 @@ function addSong(){
 
 loadSong(currentSong);
 showPlaylist();
+// Upload Song
+
+const addBtn = document.querySelector(".add-song-btn");
+
+addBtn.addEventListener("click", async () => {
+
+  const title = document.querySelector("#songName").value;
+  const audioUrl = document.querySelector("#audioUrl").value;
+  const imageUrl = document.querySelector("#imageUrl").value;
+
+  if (!title || !audioUrl) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "songs"), {
+      title: title,
+      artist: "SurWave",
+      audioUrl: audioUrl,
+      imageUrl: imageUrl
+    });
+
+    alert("Song Uploaded ✅");
+    location.reload();
+
+  } catch (err) {
+    console.error(err);
+    alert("Error uploading ❌");
+  }
+
+});
 
