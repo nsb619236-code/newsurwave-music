@@ -1,9 +1,11 @@
+// songs array (duration जोड़ दिया – optional, audio से auto calculate होगा)
 const songs = [
   {
     title: "Sky Dreams",
     artist: "WaveBeats",
     audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-    cover: "https://picsum.photos/id/1015/500/500"
+    cover: "https://picsum.photos/id/1015/500/500",
+    // duration: "3:42"   ← optional, audio से ले लेंगे
   },
   {
     title: "Night Drive",
@@ -19,139 +21,132 @@ const songs = [
   }
 ];
 
-const audio = document.getElementById("audio");
-const cover = document.getElementById("cover");
-const title = document.getElementById("title");
-const artist = document.getElementById("artist");
-const playBtn = document.getElementById("play");
-const prevBtn = document.getElementById("prev");
-const nextBtn = document.getElementById("next");
-const progress = document.getElementById("progress");
+// Elements (तुम्हारे HTML IDs से मैच करो)
+const audio          = document.getElementById("audio-player");  // या "audio" अगर HTML में id="audio" है
+const cover          = document.getElementById("cover");         // player-cover या cover
+const titleEl        = document.getElementById("title");
+const artistEl       = document.getElementById("artist");
+const playBtn        = document.getElementById("play");          // play-btn भी हो सकता है
+const prevBtn        = document.getElementById("prev");
+const nextBtn        = document.getElementById("next");
+const progress       = document.getElementById("progress");
 const progressContainer = document.getElementById("progressContainer");
-const playlist = document.getElementById("playlist");
+const currentTimeEl  = document.getElementById("currentTime");
+const durationEl     = document.getElementById("duration");
+const playlist       = document.getElementById("playlist");
 
-let currentSong = 0;
+let currentSongIndex = 0;
 let isPlaying = false;
 
+// पुराने playSong को हटा दो – सिर्फ ये वाला रखो
 function loadSong(index) {
   const song = songs[index];
-  title.innerText = song.title;
-  artist.innerText = song.artist;
-  audio.src = song.audio;
+  titleEl.textContent = song.title;
+  artistEl.textContent = song.artist;
   cover.src = song.cover;
+  audio.src = song.audio;
+  audio.load();
 }
 
-function playSong() {
-  audio.play();
-  playBtn.innerText = "⏸";
-  isPlaying = true;
-}
+function playSong(index) {
+  if (index < 0 || index >= songs.length) return;
 
-function pauseSong() {
+  currentSongIndex = index;
+  loadSong(index);
+
   audio.pause();
-  playBtn.innerText = "▶";
-  isPlaying = false;
+  audio.currentTime = 0;
+
+  const playPromise = audio.play();
+
+  if (playPromise !== undefined) {
+    playPromise
+      .then(() => {
+        isPlaying = true;
+        playBtn.innerHTML = '<i class="fas fa-pause"></i>';  // Font Awesome icon
+        cover.classList.add('rotating');
+      })
+      .catch(err => {
+        console.log("Play failed:", err);
+        isPlaying = false;
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        cover.classList.remove('rotating');
+        if (err.name === 'NotAllowedError') {
+          alert("Mobile पर प्ले करने के लिए पहले पेज पर कहीं टैप करो या नीचे वाला प्ले बटन दबाओ।");
+        }
+      });
+  }
 }
 
-playBtn.addEventListener("click", () => {
-  isPlaying ? pauseSong() : playSong();
+function togglePlay() {
+  if (isPlaying) {
+    audio.pause();
+    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+    cover.classList.remove('rotating');
+    isPlaying = false;
+  } else {
+    playSong(currentSongIndex);
+  }
+}
+
+// Event Listeners
+playBtn.addEventListener("click", togglePlay);
+
+prevBtn.addEventListener("click", () => {
+  currentSongIndex--;
+  if (currentSongIndex < 0) currentSongIndex = songs.length - 1;
+  playSong(currentSongIndex);
 });
 
 nextBtn.addEventListener("click", () => {
-  currentSong++;
-  if (currentSong >= songs.length) currentSong = 0;
-  loadSong(currentSong);
-  playSong();
+  currentSongIndex++;
+  if (currentSongIndex >= songs.length) currentSongIndex = 0;
+  playSong(currentSongIndex);
 });
 
-prevBtn.addEventListener("click", () => {
-  currentSong--;
-  if (currentSong < 0) currentSong = songs.length - 1;
-  loadSong(currentSong);
-  playSong();
-});
-
+// Progress update
 audio.addEventListener("timeupdate", () => {
-  const { duration, currentTime } = audio;
-  const progressPercent = (currentTime / duration) * 100;
-  progress.style.width = `${progressPercent}%`;
+  if (!audio.duration) return;
+  const percent = (audio.currentTime / audio.duration) * 100;
+  progress.style.width = `${percent}%`;
 
-  document.getElementById("currentTime").innerText =
-    formatTime(currentTime);
-  document.getElementById("duration").innerText =
-    formatTime(duration);
+  currentTimeEl.textContent = formatTime(audio.currentTime);
+  durationEl.textContent   = formatTime(audio.duration);
 });
 
+// Seek on progress bar
 progressContainer.addEventListener("click", (e) => {
   const width = progressContainer.clientWidth;
   const clickX = e.offsetX;
-  const duration = audio.duration;
-  audio.currentTime = (clickX / width) * duration;
+  audio.currentTime = (clickX / width) * audio.duration;
 });
 
-audio.addEventListener("ended", () => nextBtn.click());
+// Auto next song
+audio.addEventListener("ended", () => {
+  nextBtn.click();
+});
 
+// Playlist
 function showPlaylist() {
   playlist.innerHTML = "";
   songs.forEach((song, index) => {
     const li = document.createElement("li");
-    li.innerText = song.title;
+    li.textContent = song.title;
     li.addEventListener("click", () => {
-      currentSong = index;
-      loadSong(index);
-      playSong();
+      currentSongIndex = index;
+      playSong(index);
     });
     playlist.appendChild(li);
   });
 }
 
 function formatTime(time) {
-  const minutes = Math.floor(time / 60);
-  const seconds = Math.floor(time % 60);
-  return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  if (isNaN(time)) return "0:00";
+  const min = Math.floor(time / 60);
+  const sec = Math.floor(time % 60);
+  return `${min}:${sec < 10 ? "0" : ""}${sec}`;
 }
 
-loadSong(currentSong);
+// Start
+loadSong(currentSongIndex);
 showPlaylist();
-function playSong(index) {
-    if (index < 0 || index >= songs.length) return;
-
-    currentSongIndex = index;
-    const song = songs[index];
-
-    // Pehle purana audio stop + reset karo (mobile pe zaroori)
-    audio.pause();
-    audio.currentTime = 0;
-    audio.src = song.audio;
-    audio.load();  // Mobile browsers ke liye bahut important
-
-    // Ab play try karo
-    const playPromise = audio.play();
-
-    if (playPromise !== undefined) {
-        playPromise
-            .then(() => {
-                // Success – play shuru ho gaya
-                isPlaying = true;
-                playBtn.innerHTML = `<i class="fas fa-pause text-2xl"></i>`;
-                playerCover.classList.add('rotating');
-                updatePlayerUI();
-                startProgress();
-            })
-            .catch(err => {
-                // Fail hone pe (mobile pe common: NotAllowedError ya AbortError)
-                console.log("Play failed:", err.message);
-                isPlaying = false;
-                playBtn.innerHTML = `<i class="fas fa-play text-2xl ml-0.5"></i>`;
-                playerCover.classList.remove('rotating');
-
-                // User ko hint do (sirf pehli baar ya jab fail ho)
-                if (err.name === 'NotAllowedError') {
-                    alert("Mobile pe play karne ke liye bottom wale Play button ko tap karo ya page pe pehle kahin touch karo.");
-                }
-            });
-    }
-
-    // Chahe play ho ya na ho, UI to update kar do
-    updatePlayerUI();
-}
