@@ -664,3 +664,147 @@ input[type="range"]::-webkit-slider-thumb {
   .logo-text { font-size: 2.8rem; }
   .hero-bg { height: 50vh; }
 }
+/* ──────────────────────────────────────────────── */
+/*     VIBRANT COLOURFUL & ATTRACTIVE UPDATES       */
+/*   पुराने CSS के नीचे paste करो – ये override करेगा   */
+/* ──────────────────────────────────────────────── */
+
+/* Updated Root Variables – More colourful accents */
+:root {
+  --bg-primary: #0a0e17;
+  --bg-secondary: #111827;
+  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #020617 50%, #1e293b 100%);
+
+  --accent-green: #22c55e;    /* Main vibrant green */
+  --accent-blue: #3b82f6;     /* Blue for buttons/search */
+  --accent-yellow: #facc15;   /* Yellow for trending/glow */
+  --accent-red: #ef4444;      /* Red for fire/popular */
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+}
+
+/* Overall Body Background – Subtle gradient for depth */
+body {
+  background: var(--bg-gradient) !important;
+  background-attachment: fixed !important;
+}
+
+/* Logo – Bigger, Multi-gradient, Glow Effect */
+.logo-font,
+.logo-text,
+.text-4xl.font-bold.tracking-tighter.text-white,
+h1.logo-font {
+  font-size: 4rem !important;               /* बड़ा और attractive */
+  font-weight: 900 !important;
+  letter-spacing: -3px !important;
+  background: linear-gradient(90deg, #3b82f6, #22c55e, #facc15, #ef4444) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: 0 0 25px rgba(59, 130, 246, 0.7), 0 0 50px rgba(34, 197, 94, 0.5) !important;
+  font-family: 'Playfair Display', serif !important;
+}
+
+/* Subtitle (BEAT MUSIC) – Cyan glow */
+p.text-emerald-400.text-sm.-mt-1.font-medium,
+.logo-subtext {
+  color: #67e8f9 !important;   /* Bright cyan */
+  text-shadow: 0 0 10px rgba(103, 232, 249, 0.6) !important;
+  font-size: 1.2rem !important;
+}
+
+/* Hero Banner – Vibrant animated gradient overlay */
+.hero-bg {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.5), rgba(99, 102, 241, 0.45), rgba(168, 85, 247, 0.35), rgba(34, 197, 94, 0.3)) !important;
+  background-size: 300% 300% !important;
+  animation: vibrantFlow 18s ease infinite !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit; /* या अपनी image url अगर अलग से set है */
+  opacity: 0.55;
+  z-index: -1;
+}
+
+@keyframes vibrantFlow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Hero Text – White + Yellow/Green gradient pop */
+.hero-bg h1.text-7xl,
+.hero-bg p.text-2xl.text-emerald-300 {
+  background: linear-gradient(90deg, #ffffff, #facc15, #22c55e) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: 0 5px 25px rgba(0,0,0,0.8) !important;
+}
+
+/* PLAY NOW Button – Blue to Green gradient + glow */
+button.bg-emerald-500.hover\:bg-emerald-400.text-black.font-bold.text-xl.px-12.py-6.rounded-2xl,
+.btn-play-now {
+  background: linear-gradient(45deg, #3b82f6, #22c55e) !important;
+  color: white !important;
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.6), 0 0 40px rgba(34, 197, 94, 0.4) !important;
+  border: none !important;
+}
+
+/* Upload Song Button – Green gradient */
+button.flex.items-center.gap-2.bg-white.text-black.hover\:bg-emerald-400,
+button[onclick="showUploadModal()"] {
+  background: linear-gradient(45deg, #22c55e, #16a34a) !important;
+  color: white !important;
+  box-shadow: 0 0 15px rgba(34,197,94,0.6) !important;
+}
+
+/* Trending Badge – Yellow glow */
+div.inline-flex.items-center.gap-2.bg-white\/10.backdrop-blur-md.px-5.py-1.5.rounded-full.text-xs.font-medium.mb-6 {
+  background: #facc15 !important;
+  color: #0f172a !important;
+  box-shadow: 0 0 15px rgba(250,204,21,0.6) !important;
+}
+
+/* Fire Icon – Red pulse animation */
+.fire-icon,
+.text-red-500 {
+  color: #ef4444 !important;
+  animation: firePulse 1.6s infinite ease-in-out !important;
+}
+
+@keyframes firePulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.2); opacity: 0.85; }
+}
+
+/* Song Cards – Enhanced hover glow */
+.song-card:hover {
+  transform: translateY(-12px) scale(1.05) !important;
+  box-shadow: 0 30px 60px -15px rgba(34,197,94,0.4), 0 0 40px rgba(59,130,246,0.3) !important;
+  border: 1px solid rgba(59,130,246,0.5) !important;
+}
+
+/* Progress Bar – Green to Yellow gradient */
+#progress-bar,
+.bg-emerald-500.rounded-full.transition-all {
+  background: linear-gradient(to right, #22c55e, #facc15) !important;
+}
+
+/* Bottom Player – Subtle top border glow */
+.bottom-player {
+  border-top: 3px solid var(--accent-green) !important;
+  background: rgba(15, 23, 42, 0.95) !important;
+  box-shadow: 0 -10px 30px rgba(34,197,94,0.2) !important;
+}
+
+/* Mobile – Ensure big logo & hero fit well */
+@media (max-width: 768px) {
+  .logo-font { font-size: 3rem !important; }
+  .hero-bg h1 { font-size: 3.5rem !important; line-height: 1.1 !important; }
+  .hero-bg { min-height: 50vh !important; }
+}
