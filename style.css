@@ -1,27 +1,37 @@
 body {
   margin: 0;
   font-family: Arial;
-  background: linear-gradient(135deg, #ff4e50, #1e90ff);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  background: linear-gradient(135deg, #ff416c, #1e90ff);
+  text-align: center;
+  color: white;
+}
+
+.logo {
+  font-size: 50px;
+  margin-top: 20px;
+  text-shadow: 0 0 20px #00ffcc;
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 10px #00ffcc; }
+  to { text-shadow: 0 0 30px #ffffff; }
 }
 
 .music-container {
   display: flex;
-  gap: 30px;
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(20px);
+  justify-content: center;
+  gap: 40px;
+  margin-top: 30px;
   padding: 30px;
-  border-radius: 20px;
-  color: white;
-  width: 900px;
 }
 
 .player {
-  text-align: center;
-  width: 400px;
+  width: 350px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(20px);
+  padding: 20px;
+  border-radius: 20px;
 }
 
 .cover-container img {
@@ -29,7 +39,7 @@ body {
   height: 250px;
   border-radius: 20px;
   object-fit: cover;
-  animation: rotate 10s linear infinite;
+  animation: rotate 15s linear infinite;
 }
 
 @keyframes rotate {
@@ -41,8 +51,8 @@ body {
   background: rgba(255,255,255,0.3);
   height: 8px;
   border-radius: 10px;
-  cursor: pointer;
   margin: 15px 0;
+  cursor: pointer;
 }
 
 .progress {
@@ -70,9 +80,9 @@ body {
 #playlist {
   list-style: none;
   padding: 0;
-  width: 300px;
+  width: 250px;
+  max-height: 400px;
   overflow-y: auto;
-  max-height: 450px;
 }
 
 #playlist li {
