@@ -516,6 +516,147 @@ body {
 
 .volume-slider::-webkit-slider-thumb {
   background: var(--accent-blue);
+}/* ──────────────────────────────────────────────── */
+/*          VIBRANT & COLOURFUL UPDATES 2025         */
+/*     पुराने CSS के नीचे paste करो (overwrite के लिए)    */
+/* ──────────────────────────────────────────────── */
+
+/* Root Variables - Vibrant Colours */
+:root {
+  --bg-primary: #0a0e17;
+  --bg-secondary: #111827;
+  --bg-gradient: linear-gradient(135deg, #0f172a, #020617, #1e293b);
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+
+  --accent-green: #22c55e;
+  --accent-blue: #3b82f6;
+  --accent-yellow: #facc15;
+  --accent-red: #ef4444;
+
+  --card-bg: rgba(30, 41, 59, 0.6);
+  --card-hover: rgba(51, 65, 85, 0.8);
+
+  --player-bg: rgba(15, 23, 42, 0.92);
+}
+
+/* Body Background - Gradient */
+body {
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+}
+
+/* Logo - Bigger, Gradient, Glow */
+.logo-text,
+.logo-font {
+  font-size: 3.5rem !important;           /* बड़ा कर दिया */
+  font-weight: 900 !important;
+  letter-spacing: -2px !important;
+  background: linear-gradient(90deg, #3b82f6, #22c55e, #facc15, #ef4444) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  text-shadow: 0 0 20px rgba(59, 130, 246, 0.6), 0 0 40px rgba(34, 197, 94, 0.4) !important;
+  font-family: 'Playfair Display', 'Georgia', serif !important;
+}
+
+/* Hero Section - Vibrant Overlay + Animation */
+.hero-bg {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.45), rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.35)) !important;
+  background-size: 200% 200% !important;
+  animation: gradientFlow 15s ease infinite !important;
+  position: relative !important;
+}
+
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit; /* या तुम्हारी original image url डाल सकते हो */
+  opacity: 0.5;
+  z-index: -1;
+}
+
+@keyframes gradientFlow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Hero Text - Gradient + Shadow */
+.hero-bg h1,
+.hero-bg .logo-font {
+  background: linear-gradient(90deg, #ffffff, #facc15, #22c55e) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.7) !important;
+  font-size: 4.5rem !important; /* Mobile पर भी बड़ा दिखे */
+}
+
+/* Buttons - Colourful Gradients */
+button.bg-emerald-500,
+button[onclick="showUploadModal()"],
+.btn-upload {
+  background: linear-gradient(45deg, #22c55e, #16a34a) !important;
+  color: white !important;
+  box-shadow: 0 0 15px rgba(34,197,94,0.5) !important;
+}
+
+button.bg-white.text-black,
+.btn-play-now {
+  background: linear-gradient(45deg, #3b82f6, #2563eb, #22c55e) !important;
+  color: white !important;
+  box-shadow: 0 0 20px rgba(59,130,246,0.6) !important;
+}
+
+/* Trending Badge & Fire Icon */
+.trending-badge,
+.text-emerald-400.bg-white\/10 {
+  background: #facc15 !important;
+  color: #0f172a !important;
+  box-shadow: 0 0 15px rgba(250,204,21,0.5) !important;
+}
+
+.fire-icon,
+.text-red-500 {
+  color: #ef4444 !important;
+  animation: firePulse 1.8s infinite !important;
+}
+
+@keyframes firePulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.15); }
+}
+
+/* Song Cards Hover - Glow */
+.song-card:hover {
+  transform: translateY(-10px) scale(1.04) !important;
+  box-shadow: 0 25px 50px -12px rgba(34,197,94,0.4), 0 0 30px rgba(59,130,246,0.3) !important;
+  border: 1px solid rgba(59,130,246,0.4) !important;
+}
+
+/* Progress Bar - Gradient */
+#progress-bar,
+.progress-bar {
+  background: linear-gradient(to right, #22c55e, #facc15) !important;
+}
+
+/* Bottom Player Border & Volume */
+.bottom-player {
+  border-top: 2px solid var(--accent-green) !important;
+  background: var(--player-bg) !important;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  background: var(--accent-blue) !important;
+}
+
+/* Mobile Adjustments (अगर जरूरत हो) */
+@media (max-width: 768px) {
+  .logo-text { font-size: 2.8rem !important; }
+  .hero-bg h1 { font-size: 3.2rem !important; }
+  .hero-bg { min-height: 45vh !important; }
 }
 
 /* Mobile Adjustments (already good, but add if needed) */
