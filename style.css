@@ -386,3 +386,140 @@ a {
     flex-direction: column;
   }
 }
+/* Root Variables - Vibrant + Colourful Update */
+:root {
+  --bg-primary: #0a0e17;                /* Deep ocean navy-black */
+  --bg-secondary: #111827;              /* Slightly lighter for cards */
+  --bg-gradient: linear-gradient(135deg, #0f172a, #020617, #1e293b);  /* Hero/overall bg */
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+
+  --accent-green: #22c55e;             /* Main green - vibrant */
+  --accent-blue: #3b82f6;               /* Blue for buttons/search */
+  --accent-yellow: #facc15;             /* Yellow glow for highlights/trending */
+  --accent-red: #ef4444;                /* Red for fire icons/popular */
+
+  --card-bg: rgba(30, 41, 59, 0.6);     /* Semi-transparent cards */
+  --card-hover: rgba(51, 65, 85, 0.8);
+
+  --player-bg: rgba(15, 23, 42, 0.92);
+}
+
+/* Body & Main Background */
+body {
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-primary);
+}
+
+/* Logo - Bigger & Attractive with Gradient */
+.logo-container {
+  padding: 1.5rem 1rem;
+}
+
+.logo-text {
+  font-size: 3.5rem;                    /* बड़ा कर दिया */
+  font-weight: 900;
+  letter-spacing: -2px;
+  background: linear-gradient(90deg, #3b82f6, #22c55e, #facc15);  /* Blue → Green → Yellow */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(34, 197, 94, 0.5);  /* Glow effect */
+  font-family: 'Playfair Display', 'Georgia', serif;  /* Attractive serif for premium feel */
+}
+
+.logo-subtext {
+  font-size: 1.1rem;
+  color: #94a3b8;
+  letter-spacing: 2px;
+  margin-top: -0.5rem;
+}
+
+/* Hero Banner - More Vibrant */
+.hero-bg {
+  background: linear-gradient(to bottom right, #0ea5e9, #6366f1, #a855f7);  /* Blue-Purple vibrant gradient */
+  background-size: 200% 200%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.hero-bg img {
+  opacity: 0.4;  /* Background image को थोड़ा fade करो ताकि text pop करे */
+}
+
+/* Buttons - Colourful */
+.btn-upload {
+  background: linear-gradient(45deg, #22c55e, #16a34a);
+  color: white;
+  border: none;
+}
+
+.btn-play-now {
+  background: linear-gradient(45deg, #3b82f6, #2563eb);
+  color: white;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+.btn-login {
+  background: #64748b;
+  color: white;
+}
+
+.btn-signup {
+  background: linear-gradient(45deg, #facc15, #eab308);
+  color: black;
+  font-weight: bold;
+}
+
+/* Trending/Popular Section Highlights */
+.trending-badge {
+  background: var(--accent-yellow);
+  color: black;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-weight: bold;
+}
+
+.fire-icon {
+  color: var(--accent-red);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+/* Cards Hover - Glow effect */
+.song-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(34, 197, 94, 0.3);  /* Green glow */
+  border: 1px solid rgba(59, 130, 246, 0.4);      /* Blue border */
+}
+
+/* Bottom Player - More vibrant */
+.bottom-player {
+  background: var(--player-bg);
+  border-top: 1px solid var(--accent-green);
+}
+
+.progress-bar {
+  background: var(--accent-green);
+}
+
+.volume-slider::-webkit-slider-thumb {
+  background: var(--accent-blue);
+}
+
+/* Mobile Adjustments (already good, but add if needed) */
+@media (max-width: 768px) {
+  .logo-text { font-size: 2.8rem; }
+  .hero-bg { height: 50vh; }
+}
