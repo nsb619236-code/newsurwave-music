@@ -1,14 +1,23 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const songs = [
+  {
+    title: "Sky Dreams",
+    artist: "WaveBeats",
+    audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    cover: "https://picsum.photos/id/1015/500/500"
+  },
+  {
+    title: "Night Drive",
+    artist: "DJ Flow",
+    audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    cover: "https://picsum.photos/id/1016/500/500"
+  },
+  {
+    title: "Sunset Vibes",
+    artist: "Chill Master",
+    audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+    cover: "https://picsum.photos/id/1018/500/500"
+  }
+];
 
 const audio = document.getElementById("audio");
 const cover = document.getElementById("cover");
@@ -21,25 +30,15 @@ const progress = document.getElementById("progress");
 const progressContainer = document.getElementById("progressContainer");
 const playlist = document.getElementById("playlist");
 
-let songs = [];
 let currentSong = 0;
 let isPlaying = false;
-
-async function loadSongs() {
-  const querySnapshot = await getDocs(collection(db, "songs"));
-  querySnapshot.forEach((doc) => {
-    songs.push(doc.data());
-  });
-  showPlaylist();
-  loadSong(0);
-}
 
 function loadSong(index) {
   const song = songs[index];
   title.innerText = song.title;
   artist.innerText = song.artist;
-  audio.src = song.audioUrl;
-  cover.src = song.imageUrl;
+  audio.src = song.audio;
+  cover.src = song.cover;
 }
 
 function playSong() {
@@ -112,4 +111,5 @@ function formatTime(time) {
   return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 }
 
-loadSongs();
+loadSong(currentSong);
+showPlaylist();
