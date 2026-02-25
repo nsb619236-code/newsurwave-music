@@ -1,53 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>SurWave Upload</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SurWave Music</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Upload Song</h2>
+<div class="app">
 
-<input type="file" id="songFile" accept="audio/*">
-<br><br>
-<button onclick="uploadSong()">Upload</button>
+<h1>🎵 SurWave Music Player</h1>
 
-<p id="status"></p>
+<div class="player">
+    <img id="cover" src="images/cover1.jpg">
+    <h2 id="title">Song Name</h2>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
+    <audio id="audio"></audio>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBKLIkIKE0dnGJIcqzwjsE-xAf4o6yr0hU",
-  authDomain: "surwave-music.firebaseapp.com",
-  projectId: "surwave-music",
-  storageBucket: "surwave-music.firebasestorage.app",
-  messagingSenderId: "561946331576",
-  appId: "1:561946331576:web:573eab138d761a1b9ce74d",
-  measurementId: "G-DR7D6D9B7W"
-};
+    <div class="controls">
+        <button onclick="prevSong()">⏮</button>
+        <button onclick="playPause()">▶ / ⏸</button>
+        <button onclick="nextSong()">⏭</button>
+    </div>
+</div>
 
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
+<div class="add-section">
+    <h3>Add New Song</h3>
+    <input type="text" id="songName" placeholder="Song Name">
+    <input type="text" id="songFile" placeholder="songs/song3.mp3">
+    <input type="text" id="songCover" placeholder="images/cover3.jpg">
+    <button onclick="addSong()">Add Song</button>
+</div>
 
-window.uploadSong = async function() {
-  const file = document.getElementById("songFile").files[0];
-  if (!file) {
-    alert("File select karo");
-    return;
-  }
+<h3>Playlist</h3>
+<ul id="playlist"></ul>
 
-  const storageRef = ref(storage, "songs/" + file.name);
+</div>
 
-  document.getElementById("status").innerText = "Uploading...";
-
-  await uploadBytes(storageRef, file);
-  const url = await getDownloadURL(storageRef);
-
-  document.getElementById("status").innerHTML =
-    "Upload Complete ✅<br>Song URL:<br>" + url;
-};
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
