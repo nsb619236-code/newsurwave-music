@@ -97,4 +97,42 @@ body {
 #playlist li:hover {
   background: #00ffcc;
   color: black;
+  
+}
+body {
+  background: linear-gradient(135deg, #ff416c, #1e90ff);
+  font-family: Arial;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.auth-box {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(20px);
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  width: 300px;
+  color: white;
+}
+
+.auth-box input,
+.auth-box select {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: none;
+}
+
+.auth-box button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #00ffcc;
+  cursor: pointer;
+  font-weight: bold;
 }
