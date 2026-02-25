@@ -1,47 +1,397 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
-  <title>WaveBeats Music</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waves Beat Music</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Playfair+Display:wght@700&amp;display=swap');
+        
+        :root {
+            --primary: #22c55e;
+        }
+        
+        .tail-container {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        
+        .logo-font {
+            font-family: 'Playfair Display', sans-serif;
+        }
+
+        .song-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .song-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.2);
+        }
+        
+        .play-overlay {
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .song-card:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .rotating {
+            animation: rotate 25s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-bg {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e, #16213e);
+        }
+
+        .bottom-player {
+            backdrop-filter: blur(20px);
+        }
+
+        .modal {
+            animation: modalPop 0.3s ease forwards;
+        }
+        
+        @keyframes modalPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .nav-link {
+            transition: all 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            background-color: #27272a;
+            color: #22c55e;
+        }
+        
+        .active {
+            background-color: #27272a;
+            color: #22c55e;
+            border-left: 4px solid #22c55e;
+        }
+    </style>
 </head>
-<body>
+<body class="tail-container bg-zinc-950 text-white overflow-hidden h-screen flex flex-col">
+    <div class="flex flex-1 overflow-hidden">
+        <!-- SIDEBAR -->
+        <div class="w-72 bg-zinc-900 border-r border-zinc-800 flex flex-col">
+            <!-- Logo -->
+            <div class="p-6 flex items-center gap-3 border-b border-zinc-800">
+                <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-emerald-500/50">
+                    🌊 
+                </div>
+                <div>
+                    <h1 class="logo-font text-4xl font-bold tracking-tighter text-white">Waves</h1>
+                    <p class="text-emerald-400 text-sm -mt-1 font-medium">BEAT MUSIC</p>
+                </div>
+            </div>
 
-<h1 class="logo">🎵 WaveBeats Music 🎵</h1>
+            <!-- Navigation -->
+            <div class="flex-1 px-4 py-6 overflow-y-auto">
+                <div class="space-y-2">
+                    <a onclick="switchTab(0)" id="nav-home" class="nav-link active flex items-center gap-4 px-5 py-3.5 rounded-2xl text-lg font-medium cursor-pointer">
+                        <i class="fas fa-home text-2xl"></i>
+                        <span>Home</span>
+                    </a>
+                    <a onclick="switchTab(1)" id="nav-search" class="nav-link flex items-center gap-4 px-5 py-3.5 rounded-2xl text-lg font-medium cursor-pointer">
+                        <i class="fas fa-search text-2xl"></i>
+                        <span>Search</span>
+                    </a>
+                    <a onclick="switchTab(2)" id="nav-library" class="nav-link flex items-center gap-4 px-5 py-3.5 rounded-2xl text-lg font-medium cursor-pointer">
+                        <i class="fas fa-book text-2xl"></i>
+                        <span>Your Library</span>
+                    </a>
+                </div>
 
-<div class="music-container">
+                <div class="mt-10 px-5">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3 text-zinc-400">
+                            <i class="fas fa-list-ul"></i>
+                            <span class="font-semibold text-sm tracking-widest">PLAYLISTS</span>
+                        </div>
+                        <button onclick="showUploadModal()" class="w-8 h-8 bg-zinc-800 hover:bg-emerald-500 hover:text-white rounded-full flex items-center justify-center transition-all">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    
+                    <div id="playlist-list" class="space-y-3 text-zinc-400 text-sm font-medium">
+                        <!-- JS filled -->
+                    </div>
+                </div>
+            </div>
 
-  <div class="player">
+            <!-- Footer sidebar -->
+            <div class="p-6 border-t border-zinc-800 text-xs text-zinc-500 flex items-center justify-between">
+                <div class="flex gap-4">
+                    <i class="fas fa-globe cursor-pointer hover:text-white"></i>
+                    <i class="fas fa-cog cursor-pointer hover:text-white"></i>
+                </div>
+                <div onclick="logout()" id="sidebar-user" class="flex items-center gap-2 cursor-pointer hidden">
+                    <div id="sidebar-avatar" class="w-7 h-7 bg-emerald-500 rounded-full flex items-center justify-center text-xs font-bold">U</div>
+                    <span id="sidebar-username" class="font-medium">User</span>
+                </div>
+            </div>
+        </div>
 
-    <div class="cover-container">
-      <img id="cover" src="">
+        <!-- MAIN CONTENT -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- TOP BAR -->
+            <div class="h-16 bg-zinc-900/80 backdrop-blur-lg border-b border-zinc-800 px-8 flex items-center justify-between z-50">
+                <div class="flex items-center gap-6">
+                    <button onclick="goBack()" class="w-8 h-8 bg-black/60 hover:bg-black rounded-full flex items-center justify-center">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button onclick="goForward()" class="w-8 h-8 bg-black/60 hover:bg-black rounded-full flex items-center justify-center">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <div class="flex-1 max-w-xl mx-8">
+                    <div onclick="switchTab(1)" class="bg-zinc-800 hover:bg-zinc-700 transition-all rounded-full py-3 px-6 flex items-center gap-4 cursor-pointer">
+                        <i class="fas fa-search text-zinc-400"></i>
+                        <input id="search-input" 
+                               onkeyup="if(event.key==='Enter') searchSongs()"
+                               type="text" 
+                               placeholder="What do you want to play? (e.g. Chill, Party, EDM)" 
+                               class="bg-transparent outline-none flex-1 text-sm placeholder-zinc-500">
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-6">
+                    <button onclick="showUploadModal()" 
+                            class="flex items-center gap-2 bg-white text-black hover:bg-emerald-400 hover:text-white px-6 py-2 rounded-full font-semibold text-sm transition-all">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Upload Song</span>
+                    </button>
+
+                    <!-- Auth Buttons -->
+                    <div id="auth-buttons" class="flex items-center gap-3">
+                        <button onclick="showLoginModal()" 
+                                class="px-6 py-2 font-semibold text-sm hover:text-emerald-400 transition-colors">
+                            Log in
+                        </button>
+                        <button onclick="showSignupModal()" 
+                                class="bg-white text-black hover:bg-emerald-400 hover:text-white px-6 py-2 rounded-full font-semibold text-sm transition-all">
+                            Sign up free
+                        </button>
+                    </div>
+
+                    <!-- Logged in user -->
+                    <div onclick="toggleProfileMenu()" id="profile-section" class="hidden items-center gap-3 cursor-pointer">
+                        <div id="profile-avatar" class="w-8 h-8 bg-gradient-to-br from-pink-500 to-violet-500 rounded-full flex items-center justify-center text-sm font-bold ring-2 ring-emerald-400">U</div>
+                        <div>
+                            <p id="profile-name" class="font-semibold text-sm">Guest</p>
+                        </div>
+                        <i class="fas fa-caret-down text-xs"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTENT AREA -->
+            <div class="flex-1 overflow-y-auto bg-gradient-to-b from-zinc-900 to-black pb-32" id="main-content">
+                <!-- HOME TAB -->
+                <div id="tab-home" class="p-8">
+                    <!-- Hero -->
+                    <div class="hero-bg h-96 rounded-3xl overflow-hidden relative mb-12 flex items-center">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-transparent to-transparent"></div>
+                        <img src="https://picsum.photos/id/1015/1200/600" alt="Hero" class="absolute inset-0 w-full h-full object-cover">
+                        <div class="relative z-10 p-16 max-w-lg">
+                            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-5 py-1.5 rounded-full text-xs font-medium mb-6">
+                                <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                                TRENDING THIS WEEK
+                            </div>
+                            <h1 class="text-7xl font-bold logo-font leading-none mb-4">Waves Beat<br>Music</h1>
+                            <p class="text-2xl text-emerald-300 mb-8">Feel every beat. Live every wave.</p>
+                            <button onclick="playFeatured()" 
+                                    class="bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xl px-12 py-6 rounded-2xl flex items-center gap-4 transition-all active:scale-95">
+                                <i class="fas fa-play"></i>
+                                PLAY NOW
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Made for you -->
+                    <div class="mb-12">
+                        <div class="flex items-end justify-between mb-6">
+                            <h2 class="text-3xl font-bold">Made for You</h2>
+                            <a onclick="switchTab(2)" class="text-emerald-400 text-sm font-medium flex items-center gap-2 hover:underline">
+                                SEE ALL <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                        <div id="made-for-you" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                            <!-- JS filled -->
+                        </div>
+                    </div>
+
+                    <!-- Popular Songs -->
+                    <div>
+                        <div class="flex items-end justify-between mb-6">
+                            <h2 class="text-3xl font-bold">Popular Songs Right Now 🔥</h2>
+                        </div>
+                        <div id="popular-songs-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                            <!-- JS filled cards -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEARCH TAB (hidden initially) -->
+                <div id="tab-search" class="p-8 hidden">
+                    <h1 class="text-4xl font-bold mb-8">Search Songs</h1>
+                    <div id="search-results" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                        <!-- JS filled -->
+                    </div>
+                </div>
+
+                <!-- LIBRARY TAB -->
+                <div id="tab-library" class="p-8 hidden">
+                    <h1 class="text-4xl font-bold mb-8 flex items-center gap-3">
+                        <i class="fas fa-heart text-red-500"></i> 
+                        Your Library
+                    </h1>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="library-grid">
+                        <!-- JS filled -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <h2 id="title"></h2>
-    <p id="artist"></p>
+    <!-- BOTTOM MUSIC PLAYER -->
+    <div id="player" class="bottom-player fixed bottom-0 left-0 right-0 h-24 bg-zinc-900 border-t border-zinc-700 z-50 flex items-center px-6 gap-8">
+        <!-- Song Info -->
+        <div class="w-72 flex items-center gap-4">
+            <img id="player-cover" src="https://picsum.photos/id/1015/300/300" 
+                 class="w-14 h-14 rounded-xl object-cover shadow-xl">
+            <div class="flex-1 min-w-0">
+                <p id="player-title" class="font-medium text-sm truncate">Select a song...</p>
+                <p id="player-artist" class="text-zinc-400 text-xs truncate">—</p>
+            </div>
+            <button onclick="toggleLike()" id="like-btn"
+                    class="text-zinc-400 hover:text-red-500 transition-colors">
+                <i class="far fa-heart text-xl"></i>
+            </button>
+        </div>
 
-    <audio id="audio"></audio>
+        <!-- Controls -->
+        <div class="flex-1 flex flex-col items-center gap-2">
+            <div class="flex items-center gap-8 text-xl">
+                <button onclick="toggleShuffle()" class="text-zinc-400 hover:text-white transition-colors">
+                    <i class="fas fa-random"></i>
+                </button>
+                <button onclick="prevSong()" class="text-zinc-400 hover:text-white transition-colors">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                <button onclick="togglePlay()" id="play-btn"
+                        class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-xl">
+                    <i class="fas fa-play text-2xl ml-0.5"></i>
+                </button>
+                <button onclick="nextSong()" class="text-zinc-400 hover:text-white transition-colors">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+                <button onclick="toggleRepeat()" class="text-zinc-400 hover:text-white transition-colors">
+                    <i class="fas fa-redo"></i>
+                </button>
+            </div>
+            
+            <!-- Progress -->
+            <div class="w-full max-w-md flex items-center gap-3 text-xs text-zinc-400">
+                <span id="current-time">0:00</span>
+                <div class="flex-1 h-1 bg-zinc-700 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="h-1 w-0 bg-emerald-500 rounded-full transition-all"></div>
+                </div>
+                <span id="total-time">0:00</span>
+            </div>
+        </div>
 
-    <div class="progress-container" id="progressContainer">
-      <div class="progress" id="progress"></div>
+        <!-- Volume & Extras -->
+        <div class="w-72 flex items-center justify-end gap-6">
+            <button onclick="showLyrics()" class="text-zinc-400 hover:text-white">
+                <i class="fas fa-align-left"></i>
+            </button>
+            <div class="flex items-center gap-3 w-40">
+                <i class="fas fa-volume-up text-zinc-400"></i>
+                <input type="range" id="volume-slider" min="0" max="100" value="80"
+                       class="accent-emerald-500 w-full">
+            </div>
+            <button onclick="toggleQueue()" class="text-zinc-400 hover:text-white">
+                <i class="fas fa-list"></i>
+            </button>
+        </div>
+
+        <!-- Hidden Audio -->
+        <audio id="audio-player" class="hidden"></audio>
     </div>
 
-    <div class="time">
-      <span id="currentTime">0:00</span>
-      <span id="duration">0:00</span>
+    <!-- LOGIN MODAL -->
+    <div id="login-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[100]">
+        <div class="modal bg-zinc-900 w-full max-w-md rounded-3xl p-10">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold">Welcome back</h2>
+                <button onclick="hideLoginModal()" class="text-3xl leading-none">×</button>
+            </div>
+            <div class="space-y-6">
+                <div>
+                    <label class="text-xs uppercase tracking-widest text-zinc-400 block mb-2">Email or username</label>
+                    <input id="login-email" type="text" value="demo@waves.com" 
+                           class="w-full bg-zinc-800 border border-zinc-700 focus:border-emerald-500 rounded-2xl px-6 py-5 outline-none">
+                </div>
+                <div>
+                    <label class="text-xs uppercase tracking-widest text-zinc-400 block mb-2">Password</label>
+                    <input id="login-pass" type="password" value="demo123" 
+                           class="w-full bg-zinc-800 border border-zinc-700 focus:border-emerald-500 rounded-2xl px-6 py-5 outline-none">
+                </div>
+                <button onclick="performLogin()" 
+                        class="w-full bg-emerald-500 hover:bg-emerald-400 py-6 rounded-2xl text-xl font-bold text-black">
+                    LOG IN
+                </button>
+                <p class="text-center text-sm text-zinc-400">
+                    Don't have an account? 
+                    <span onclick="hideLoginModal();showSignupModal()" class="text-emerald-400 cursor-pointer">Sign up</span>
+                </p>
+            </div>
+        </div>
     </div>
 
-    <div class="controls">
-      <button id="prev">⏮</button>
-      <button id="play">▶</button>
-      <button id="next">⏭</button>
+    <!-- SIGNUP MODAL -->
+    <div id="signup-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[100]">
+        <div class="modal bg-zinc-900 w-full max-w-md rounded-3xl p-10">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold">Create account</h2>
+                <button onclick="hideSignupModal()" class="text-3xl leading-none">×</button>
+            </div>
+            <div class="space-y-6">
+                <div>
+                    <label class="text-xs uppercase tracking-widest text-zinc-400 block mb-2">Name</label>
+                    <input id="signup-name" type="text" value="Rahul Kumar" 
+                           class="w-full bg-zinc-800 border border-zinc-700 focus:border-emerald-500 rounded-2xl px-6 py-5 outline-none">
+                </div>
+                <div>
+                    <label class="text-xs uppercase tracking-widest text-zinc-400 block mb-2">Email</label>
+                    <input id="signup-email" type="email" value="rahul@waves.in" 
+                           class="w-full bg-zinc-800 border border-zinc-700 focus:border-emerald-500 rounded-2xl px-6 py-5 outline-none">
+                </div>
+                <div>
+                    <label class="text-xs uppercase tracking-widest text-zinc-400 block mb-2">Password</label>
+                    <input id="signup-pass" type="password" value="waves123" 
+                           class="w-full bg-zinc-800 border border-zinc-700 focus:border-emerald-500 rounded-2xl px-6 py-5 outline-none">
+                </div>
+                <button onclick="performSignup()" 
+                        class="w-full bg-white hover:bg-emerald-400 hover:text-black py-6 rounded-2xl text-xl font-bold text-zinc-900">
+                    SIGN UP FREE
+                </button>
+            </div>
+        </div>
     </div>
 
-  </div>
-
-  <ul id="playlist"></ul>
-
-</div>
-
-<script src="script.js"></script>
-</body>
-</html>
+    <!-- UPLOAD MODAL -->
+    <div id="upload-modal" class="hidden fixed inset-0 bg-bl
