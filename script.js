@@ -113,3 +113,45 @@ function formatTime(time) {
 
 loadSong(currentSong);
 showPlaylist();
+function playSong(index) {
+    if (index < 0 || index >= songs.length) return;
+
+    currentSongIndex = index;
+    const song = songs[index];
+
+    // Pehle purana audio stop + reset karo (mobile pe zaroori)
+    audio.pause();
+    audio.currentTime = 0;
+    audio.src = song.audio;
+    audio.load();  // Mobile browsers ke liye bahut important
+
+    // Ab play try karo
+    const playPromise = audio.play();
+
+    if (playPromise !== undefined) {
+        playPromise
+            .then(() => {
+                // Success – play shuru ho gaya
+                isPlaying = true;
+                playBtn.innerHTML = `<i class="fas fa-pause text-2xl"></i>`;
+                playerCover.classList.add('rotating');
+                updatePlayerUI();
+                startProgress();
+            })
+            .catch(err => {
+                // Fail hone pe (mobile pe common: NotAllowedError ya AbortError)
+                console.log("Play failed:", err.message);
+                isPlaying = false;
+                playBtn.innerHTML = `<i class="fas fa-play text-2xl ml-0.5"></i>`;
+                playerCover.classList.remove('rotating');
+
+                // User ko hint do (sirf pehli baar ya jab fail ho)
+                if (err.name === 'NotAllowedError') {
+                    alert("Mobile pe play karne ke liye bottom wale Play button ko tap karo ya page pe pehle kahin touch karo.");
+                }
+            });
+    }
+
+    // Chahe play ho ya na ho, UI to update kar do
+    updatePlayerUI();
+}
