@@ -227,3 +227,28 @@ function saveSettings() {
     alert("Settings Saved Successfully! 🎧 Changes will apply on next play.");
     hideSettingsModal();
 }
+function downloadCurrentSong() {
+    if (currentSongIndex === undefined || !songs[currentSongIndex]) {
+        alert("कोई गाना select नहीं है! पहले गाना चुनो।");
+        return;
+    }
+
+    const song = songs[currentSongIndex];
+    const fileName = `${song.title || 'Song'} - ${song.artist || 'Artist'}.mp3`;
+
+    // Create download link
+    const link = document.createElement('a');
+    link.href = song.audio;  // तुम्हारा MP3 URL
+    link.download = fileName;
+    link.target = '_blank';  // New tab में open (better for external URLs)
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Toast / alert
+    const toast = document.createElement('div');
+    toast.className = 'fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-emerald-500 text-black px-6 py-3 rounded-full font-bold shadow-xl z-50';
+    toast.textContent = `Downloading: ${fileName}...`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
