@@ -149,4 +149,42 @@ function formatTime(time) {
 
 // Start
 loadSong(currentSongIndex);
-showPlaylist();
+showPlaylist();// Settings Modal Functions
+function showSettingsModal() {
+    document.getElementById('settings-modal').classList.remove('hidden');
+    document.getElementById('settings-modal').classList.add('flex');
+    
+    // Load saved settings if any
+    const settings = JSON.parse(localStorage.getItem('wavesSettings')) || {};
+    if (settings.quality) document.getElementById('audio-quality').value = settings.quality;
+    if (settings.normalize !== undefined) document.getElementById('normalize-volume').checked = settings.normalize;
+    if (settings.darkMode !== undefined) document.getElementById('dark-mode').checked = settings.darkMode;
+}
+
+function hideSettingsModal() {
+    document.getElementById('settings-modal').classList.add('hidden');
+    document.getElementById('settings-modal').classList.remove('flex');
+}
+
+function saveSettings() {
+    const settings = {
+        quality: document.getElementById('audio-quality').value,
+        normalize: document.getElementById('normalize-volume').checked,
+        darkMode: document.getElementById('dark-mode').checked,
+    };
+    
+    localStorage.setItem('wavesSettings', JSON.stringify(settings));
+    
+    // Apply changes (simple simulation)
+    if (settings.normalize) {
+        audio.volume = 0.8; // Dummy normalization
+    }
+    if (!settings.darkMode) {
+        document.body.classList.add('light-mode'); // Add light mode CSS if you want
+    } else {
+        document.body.classList.remove('light-mode');
+    }
+    
+    alert('Settings Saved! 🎧');
+    hideSettingsModal();
+}
