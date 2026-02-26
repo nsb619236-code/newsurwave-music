@@ -188,3 +188,42 @@ function saveSettings() {
     alert('Settings Saved! 🎧');
     hideSettingsModal();
 }
+// Settings Modal
+function showSettingsModal() {
+    document.getElementById('settings-modal').classList.remove('hidden');
+    document.getElementById('settings-modal').classList.add('flex');
+
+    // Load saved (from localStorage)
+    const saved = JSON.parse(localStorage.getItem('wavesSettings') || '{}');
+    document.getElementById('audio-quality').value = saved.quality || 'auto';
+    document.getElementById('normalize-volume').checked = saved.normalize ?? true;
+    document.getElementById('data-saver').checked = saved.dataSaver ?? false;
+    document.getElementById('explicit').checked = saved.explicit ?? true;
+}
+
+function hideSettingsModal() {
+    document.getElementById('settings-modal').classList.add('hidden');
+}
+
+function saveSettings() {
+    const settings = {
+        quality: document.getElementById('audio-quality').value,
+        normalize: document.getElementById('normalize-volume').checked,
+        dataSaver: document.getElementById('data-saver').checked,
+        explicit: document.getElementById('explicit').checked,
+    };
+    localStorage.setItem('wavesSettings', JSON.stringify(settings));
+
+    // Simple apply (demo)
+    if (settings.dataSaver) {
+        // Future: lower quality stream
+        console.log("Data Saver ON - Using low quality");
+    }
+    if (!settings.explicit) {
+        // Future: filter explicit songs
+        console.log("Explicit content hidden");
+    }
+
+    alert("Settings Saved Successfully! 🎧 Changes will apply on next play.");
+    hideSettingsModal();
+}
