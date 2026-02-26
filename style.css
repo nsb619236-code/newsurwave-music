@@ -808,3 +808,29 @@ div.inline-flex.items-center.gap-2.bg-white\/10.backdrop-blur-md.px-5.py-1.5.rou
   .hero-bg h1 { font-size: 3.5rem !important; line-height: 1.1 !important; }
   .hero-bg { min-height: 50vh !important; }
 }
+@media (max-width: 768px) {
+  #player {
+    height: 70px !important;
+    padding: 0 8px !important;
+    gap: 8px !important;
+  }
+  
+  #player-cover {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  
+  #player-title { font-size: 0.9rem !important; }
+  #player-artist { font-size: 0.75rem !important; }
+  
+  .bottom-player .flex-1 { max-width: none !important; }
+  
+  /* Controls को थोड़ा बड़ा और सेंटर में रखो */
+  #play-btn {
+    width: 48px !important;
+    height: 48px !important;
+  }
+  
+  /* Progress bar को full width दो */
+  #player .flex-1.flex-col { width: 100% !important; }
+}
