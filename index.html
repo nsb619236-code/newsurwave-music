@@ -82,7 +82,70 @@
     </style>
 </head>
 <body class="tail-container bg-zinc-950 text-white overflow-hidden h-screen flex flex-col">
-    <div class="flex flex-1 overflow-hidden">
+    <div class="flex flex-1 overflow-hidden"> <!-- Settings Modal -->
+<div id="settings-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[100]">
+    <div class="modal bg-zinc-900 w-full max-w-lg rounded-3xl p-8 max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-3xl font-bold">Settings</h2>
+            <button onclick="hideSettingsModal()" class="text-3xl leading-none">×</button>
+        </div>
+
+        <div class="space-y-6">
+            <!-- Audio Quality -->
+            <div>
+                <label class="block text-sm font-medium text-zinc-400 mb-2">Audio Quality</label>
+                <select id="audio-quality" class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3">
+                    <option value="auto">Auto (Recommended)</option>
+                    <option value="high">High (320kbps)</option>
+                    <option value="normal">Normal (160kbps)</option>
+                    <option value="low">Low (96kbps - Data Saver)</option>
+                </select>
+            </div>
+
+            <!-- Normalize Volume -->
+            <div class="flex items-center justify-between">
+                <span>Normalize Volume</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="normalize-volume" class="sr-only peer">
+                    <div class="w-11 h-6 bg-zinc-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                </label>
+            </div>
+
+            <!-- Theme Toggle (Dark/Light) -->
+            <div class="flex items-center justify-between">
+                <span>Dark Mode</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="dark-mode" checked class="sr-only peer">
+                    <div class="w-11 h-6 bg-zinc-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                </label>
+            </div>
+
+            <!-- Download Quality (simulation) -->
+            <div>
+                <label class="block text-sm font-medium text-zinc-400 mb-2">Download Quality</label>
+                <select id="download-quality" class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3">
+                    <option value="high">High (320kbps)</option>
+                    <option value="normal">Normal (160kbps)</option>
+                </select>
+            </div>
+
+            <!-- Language (dummy) -->
+            <div>
+                <label class="block text-sm font-medium text-zinc-400 mb-2">Language</label>
+                <select class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3">
+                    <option>English</option>
+                    <option>हिंदी</option>
+                    <option>Punjabi</option>
+                </select>
+            </div>
+
+            <!-- Save Button -->
+            <button onclick="saveSettings()" class="w-full bg-emerald-500 hover:bg-emerald-400 py-4 rounded-2xl text-lg font-bold">
+                Save Settings
+            </button>
+        </div>
+    </div>
+</div>
         <!-- SIDEBAR -->
         <!-- Logo Area -->
 <div class="p-6 flex items-center gap-4 border-b border-zinc-800">
