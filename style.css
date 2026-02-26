@@ -417,7 +417,10 @@ body {
 .logo-container {
   padding: 1.5rem 1rem;
 }
-
+.logo-container {
+  justify-content: center !important;
+  text-align: center !important;
+}
 .logo-text {
   font-size: 3.5rem;                    /* बड़ा कर दिया */
   font-weight: 900;
