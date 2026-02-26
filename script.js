@@ -269,4 +269,8 @@ function hideSettingsModal() {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
     }
-}
+}card.addEventListener('click', () => {
+    currentSongIndex = globalIndex;
+    updatePlayerUI();           // sirf song info change karo
+    // playSong(globalIndex);   ← is line ko comment out ya hata do
+});
