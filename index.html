@@ -476,3 +476,66 @@
 
     <!-- UPLOAD MODAL -->
     <div id="upload-modal" class="hidden fixed inset-0 bg-bl
+        <!-- Settings Modal -->
+<div id="settings-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[100]">
+    <div class="bg-zinc-900 w-full max-w-md rounded-3xl p-8 overflow-y-auto max-h-[85vh]">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-3xl font-bold">Settings</h2>
+            <button onclick="hideSettingsModal()" class="text-4xl leading-none text-zinc-400 hover:text-white">×</button>
+        </div>
+
+        <div class="space-y-6 divide-y divide-zinc-800">
+            <!-- Audio Quality -->
+            <div class="pt-4">
+                <label class="block text-sm uppercase tracking-wider text-zinc-400 mb-3">Audio Quality</label>
+                <select id="audio-quality" class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-5 py-4 text-white focus:border-emerald-500 outline-none">
+                    <option value="auto">Auto (Recommended)</option>
+                    <option value="high">High (320kbps)</option>
+                    <option value="normal">Normal (160kbps)</option>
+                    <option value="low">Low (96kbps - Save Data)</option>
+                </select>
+            </div>
+
+            <!-- Normalize Volume -->
+            <div class="flex items-center justify-between py-4">
+                <span class="text-lg">Normalize Volume</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="normalize-volume" class="sr-only peer">
+                    <div class="w-12 h-6 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:bg-emerald-600 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-6"></div>
+                </label>
+            </div>
+
+            <!-- Dark Mode (already dark, but toggle for future) -->
+            <div class="flex items-center justify-between py-4">
+                <span class="text-lg">Dark Mode</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="dark-mode" checked class="sr-only peer">
+                    <div class="w-12 h-6 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:bg-emerald-600 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-6"></div>
+                </label>
+            </div>
+
+            <!-- Data Saver -->
+            <div class="flex items-center justify-between py-4">
+                <span class="text-lg">Data Saver</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="data-saver" class="sr-only peer">
+                    <div class="w-12 h-6 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:bg-emerald-600 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-6"></div>
+                </label>
+            </div>
+
+            <!-- Explicit Content -->
+            <div class="flex items-center justify-between py-4">
+                <span class="text-lg">Allow Explicit Content</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="explicit" checked class="sr-only peer">
+                    <div class="w-12 h-6 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:bg-emerald-600 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-6"></div>
+                </label>
+            </div>
+
+            <!-- Save Button -->
+            <button onclick="saveSettings()" class="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-black font-bold py-4 rounded-2xl text-lg shadow-lg">
+                Save & Apply
+            </button>
+        </div>
+    </div>
+    </div>
