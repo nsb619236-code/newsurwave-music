@@ -274,3 +274,19 @@ function hideSettingsModal() {
     updatePlayerUI();           // sirf song info change karo
     // playSong(globalIndex);   ← is line ko comment out ya hata do
 });
+function showSettingsModal() {
+    const modal = document.getElementById('settings-modal');
+    if (!modal) {
+        console.error("Modal ID 'settings-modal' नहीं मिला – HTML check करो!");
+        alert("Settings modal error – developer से कहो HTML में ID add करे।");
+        return;
+    }
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    console.log("Settings खुल गया!");  // Console में check करो
+}
+
+function hideSettingsModal() {
+    const modal = document.getElementById('settings-modal');
+    if (modal) modal.classList.add('hidden');
+}
