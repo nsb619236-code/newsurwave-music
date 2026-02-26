@@ -3,8 +3,7 @@ const songs = [
   {
     title: "Sky Dreams",
     artist: "WaveBeats",
-    audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-    cover: "https://picsum.photos/id/1015/500/500",
+    audio: https://www.jioaicloud.com/l/?u=QRMQLmonS16YYqQH5CqUPhYyg1YglSjb4S4PtWJt07H4Z7mTTTUtIwLY95sWp69pNL3
     // duration: "3:42"   ← optional, audio से ले लेंगे
   },
   {
