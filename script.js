@@ -185,7 +185,7 @@ function saveSettings() {
         document.body.classList.remove('light-mode');
     }
     
-    alert('Settings Saved! 🎧');
+    alert('Settings Saved! 🎧');9
     hideSettingsModal();
 }
 // Settings Modal
@@ -251,4 +251,22 @@ function downloadCurrentSong() {
     toast.textContent = `Downloading: ${fileName}...`;
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 3000);
+}function showSettingsModal() {
+    const modal = document.getElementById('settings-modal');
+    if (!modal) {
+        console.error("Settings modal not found! Check HTML ID.");
+        alert("Settings modal loading error – contact developer.");
+        return;
+    }
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    console.log("Settings modal opened");
+}
+
+function hideSettingsModal() {
+    const modal = document.getElementById('settings-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
 }
