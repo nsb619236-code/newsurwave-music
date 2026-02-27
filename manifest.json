@@ -1,6 +1,6 @@
 {
   "name": "Waves Beat Music",
-  "short_name": "Waves",
+  "short_name": "Waves", 
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0e17",
