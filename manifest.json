@@ -1,20 +1,42 @@
 {
   "name": "Waves Beat Music",
-  "short_name": "Waves", 
+  "short_name": "Waves",
+  "description": "Feel every beat. Live every wave. Your personal music streaming app with upload, download, playlists and more.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0e17",
   "theme_color": "#22c55e",
+  "orientation": "portrait-primary",
+  "dir": "ltr",
+  "lang": "en",
+  "id": "/?homescreen=1",
   "icons": [
     {
-      "src": "https://picsum.photos/id/1015/192/192",
+      "src": "https://picsum.photos/192/192?random=1",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "https://picsum.photos/id/1015/512/512",
+      "src": "https://picsum.photos/512/512?random=1",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
-  ]
+  ],
+  "screenshots": [
+    {
+      "src": "https://picsum.photos/1280/720?random=2",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "https://picsum.photos/750/1334?random=3",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "categories": ["music", "entertainment"]
 }
