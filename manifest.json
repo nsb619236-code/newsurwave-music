@@ -12,13 +12,13 @@
   "id": "waves-beat-music-pwa",
   "icons": [
     {
-      "src": "https://res.cloudinary.com/demo/image/upload/v1/icons/waves-192.png",
+      "src": "https://res.cloudinary.com/dezo04bnx/image/upload/v1772200559/e5326d2a-3772-4045-b18f-4d3fbb78918a_csxw6p.jpg",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://res.cloudinary.com/demo/image/upload/v1/icons/waves-512.png",
+      "src": "https://res.cloudinary.com/dezo04bnx/image/upload/v1772200540/b35f34bd-e304-469b-b90f-87429d2c2bfd_sacinx.jpg",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -26,13 +26,13 @@
   ],
   "screenshots": [
     {
-      "src": "https://picsum.photos/1280/720?random=1",
+      "src": "https://https://res.cloudinary.com/dezo04bnx/image/upload/v1772200559/e5326d2a-3772-4045-b18f-4d3fbb78918a_csxw6p.jpg",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide"
     },
     {
-      "src": "https://picsum.photos/750/1334?random=2",
+      "src": "https://https://res.cloudinary.com/dezo04bnx/image/upload/v1772200540/b35f34bd-e304-469b-b90f-87429d2c2bfd_sacinx.jpg",
       "sizes": "750x1334",
       "type": "image/png",
       "form_factor": "narrow"
