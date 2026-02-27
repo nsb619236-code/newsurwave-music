@@ -1,6 +1,14 @@
 // songs array (duration जोड़ दिया – optional, audio से auto calculate होगा)
 const songs = [
   {
+    // script.js के टॉप पर
+const firebaseConfig = { ... तुम्हारा config ... };
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const storage = firebase.storage();
+
+// बाकी तुम्हारा code नीचे...
     title: "Sky Dreams",
     artist: "WaveBeats",
     audio: https://www.jioaicloud.com/l/?u=QRMQLmonS16YYqQH5CqUPhYyg1YglSjb4S4PtWJt07H4Z7mTTTUtIwLY95sWp69pNL3
