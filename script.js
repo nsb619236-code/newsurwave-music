@@ -289,3 +289,28 @@ function hideSettingsModal() {
     const modal = document.getElementById('settings-modal');
     if (modal) modal.classList.add('hidden');
 }
+<body>
+  <!-- तुम्हारा सारा HTML content -->
+
+  <!-- Firebase Initialize (body के अंत में) -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSy...तुम्हारा-api-key...",
+      authDomain: "your-project-id.firebaseapp.com",
+      projectId: "your-project-id",
+      storageBucket: "your-project-id.appspot.com",
+      messagingSenderId: "your-sender-id",
+      appId: "1:your-number:web:your-web-id"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Firestore और Storage ready
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    // अब तुम्हारा बाकी code (uploadSong, loadAllSongs आदि)
+    // ...
+  </script>
+</body>
