@@ -12,7 +12,7 @@
   "id": "waves-beat-music-pwa",
   "icons": [
     {
-      "src": "https://https://res.cloudinary.com/dezo04bnx/image/upload/v1772211603/9b6dac8c-5efd-4784-b71f-037ff22ff708_oci9jk.png",
+      "src": "https://https://https://res.cloudinary.com/dezo04bnx/image/upload/v1772217948/wave_beat_music_512_1_cu1smo.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
@@ -32,7 +32,7 @@
       "form_factor": "wide"
     },
     {
-      "src": "https://https://https://res.cloudinary.com/dezo04bnx/image/upload/v1772211603/9b6dac8c-5efd-4784-b71f-037ff22ff708_oci9jk.png",
+      "src": "https://https://https://https://res.cloudinary.com/dezo04bnx/image/upload/v1772217948/wave_beat_music_512_1_cu1smo.png",
       "sizes": "750x1334",
       "type": "image/png",
       "form_factor": "narrow"
