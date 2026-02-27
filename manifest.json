@@ -40,3 +40,37 @@
   ],
   "categories": ["music", "entertainment"]
 }
+"description": "Waves Beat Music - Feel every beat. Live every wave. Upload, play, download songs.",
+"orientation": "portrait-primary",
+"dir": "ltr",
+"id": "waves-beat-music-pwa",
+"screenshots": [
+  {
+    "src": "https://picsum.photos/1280/720?random=1",
+    "sizes": "1280x720",
+    "type": "image/png",
+    "form_factor": "wide"
+  },
+  {
+    "src": "https://picsum.photos/750/1334?random=2",
+    "sizes": "750x1334",
+    "type": "image/png",
+    "form_factor": "narrow"
+  }
+]"description": "Waves Beat Music - Feel every beat. Live every wave. Upload, play, download songs.",
+"orientation": "portrait-primary",
+"dir": "ltr",
+"id": "waves-beat-music-pwa",
+"screenshots": [
+  {
+    "src": "https://picsum.photos/1280/720?random=1",
+    "sizes": "1280x720",
+    "type": "image/png",
+    "form_factor": "wide"
+  },
+  {
+    "src": "https://picsum.photos/750/1334?random=2",
+    "sizes": "750x1334",
+    "type": "image/png",
+    "form_factor": "narrow"
+  }
