@@ -12,13 +12,13 @@
   "id": "waves-beat-music-pwa",
   "icons": [
     {
-      "src": "https://res.cloudinary.com/dezo04bnx/image/upload/v1772200559/e5326d2a-3772-4045-b18f-4d3fbb78918a_csxw6p.jpg",
+      "src": "https://https://res.cloudinary.com/dezo04bnx/image/upload/v1772211603/9b6dac8c-5efd-4784-b71f-037ff22ff708_oci9jk.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://res.cloudinary.com/dezo04bnx/image/upload/v1772200540/b35f34bd-e304-469b-b90f-87429d2c2bfd_sacinx.jpg",
+      "src": "https://https://res.cloudinary.com/dezo04bnx/image/upload/v1772211576/262ed083-2976-4509-9c15-447341909c66_zexyba.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -26,13 +26,13 @@
   ],
   "screenshots": [
     {
-      "src": "https://https://res.cloudinary.com/dezo04bnx/image/upload/v1772200559/e5326d2a-3772-4045-b18f-4d3fbb78918a_csxw6p.jpg",
+      "src": "https://https://https://res.cloudinary.com/dezo04bnx/image/upload/v1772211576/262ed083-2976-4509-9c15-447341909c66_zexyba.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide"
     },
     {
-      "src": "https://https://res.cloudinary.com/dezo04bnx/image/upload/v1772200540/b35f34bd-e304-469b-b90f-87429d2c2bfd_sacinx.jpg",
+      "src": "https://https://https://res.cloudinary.com/dezo04bnx/image/upload/v1772211603/9b6dac8c-5efd-4784-b71f-037ff22ff708_oci9jk.png",
       "sizes": "750x1334",
       "type": "image/png",
       "form_factor": "narrow"
