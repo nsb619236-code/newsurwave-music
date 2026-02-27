@@ -130,3 +130,25 @@ window.onload = () => {
   loadAllSongs();
 };
 </script>
+function switchTab(tab) {
+  // ... existing code for active class
+
+  const contentArea = document.getElementById('main-content');
+  contentArea.innerHTML = ''; // पुराना content clear
+
+  if (tab === 0) { // Home
+    // Home content (hero + made for you + popular)
+    contentArea.innerHTML = /* तुम्हारा home HTML */;
+    renderSongs('popular-songs-grid', songs);
+    renderSongs('made-for-you', songs.slice(0, 5));
+  } else if (tab === 2) { // Your Library
+    contentArea.innerHTML = `
+      <div class="px-12 py-10">
+        <h2 class="text-3xl font-bold mb-6">Your Library</h2>
+        <div id="library-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"></div>
+      </div>
+    `;
+    renderSongs('library-grid', songs); // यहीं songs दिखेंगे
+  }
+  // Search tab के लिए भी add कर सकते हो
+}
