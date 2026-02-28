@@ -3,226 +3,227 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wave Beat Pro MAX</title>
+<title>WaveBeat X</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-body{background:#0f0f0f;color:white;display:flex;height:100vh;overflow:hidden;transition:.3s;}
-body.light{background:#f4f4f4;color:#111;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif;}
 
-.sidebar{width:220px;background:#181818;padding:20px;transition:.3s;}
-body.light .sidebar{background:#fff;}
+body{
+background:#121212;
+color:white;
+display:flex;
+height:100vh;
+overflow:hidden;
+}
+
+/* SIDEBAR */
+.sidebar{
+width:230px;
+background:#000;
+padding:25px 15px;
+display:flex;
+flex-direction:column;
+}
 
 .logo{
-display:flex;align-items:center;gap:10px;margin-bottom:20px;
-}
-.logo svg{width:35px;height:35px;animation:spin 5s linear infinite;}
-@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-
-.sidebar button{
-width:100%;margin:6px 0;padding:10px;
-border:none;border-radius:8px;
-background:#222;color:white;cursor:pointer;
-}
-.sidebar button:hover{background:#1db954;}
-
-.main{flex:1;padding:20px;overflow-y:auto;}
-.page{display:none;}
-.page.active{display:block;}
-
-input{
-width:100%;padding:10px;margin:8px 0;
-border:none;border-radius:8px;
+font-size:22px;
+font-weight:700;
+margin-bottom:30px;
+color:#1db954;
 }
 
-button.primary{
-background:#1db954;color:white;
-padding:10px;border:none;border-radius:8px;
-cursor:pointer;width:100%;
+.nav button{
+background:none;
+border:none;
+color:#bbb;
+padding:10px;
+text-align:left;
+width:100%;
+font-size:14px;
+border-radius:6px;
+cursor:pointer;
+transition:.3s;
+}
+
+.nav button:hover{
+background:#1db954;
+color:white;
+}
+
+/* MAIN */
+.main{
+flex:1;
+padding:30px;
+overflow-y:auto;
+background:linear-gradient(to bottom,#1e1e1e,#121212);
+}
+
+h1{
+font-size:24px;
+margin-bottom:20px;
 }
 
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
-gap:15px;margin-top:20px;
+grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+gap:20px;
 }
 
 .card{
-background:#181818;padding:10px;
-border-radius:12px;text-align:center;
-cursor:pointer;transition:.3s;
+background:#181818;
+padding:15px;
+border-radius:12px;
+cursor:pointer;
+transition:.3s;
 }
-.card:hover{transform:scale(1.05);}
-.card img{width:100%;border-radius:8px;margin-bottom:8px;}
 
-.playerBar{
-position:fixed;bottom:0;left:0;width:100%;
-background:#181818;padding:10px;
-display:flex;justify-content:space-between;
+.card:hover{
+background:#282828;
+transform:translateY(-5px);
+}
+
+.card img{
+width:100%;
+border-radius:8px;
+margin-bottom:10px;
+}
+
+.card h4{
+font-size:14px;
+}
+
+/* PLAYER */
+.player{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#181818;
+padding:12px 20px;
+display:flex;
 align-items:center;
+justify-content:space-between;
+border-top:1px solid #333;
 }
 
-.menuBtn{display:none;background:#1db954;border:none;padding:8px;border-radius:6px;margin-bottom:15px;color:white;}
+.player-info{
+display:flex;
+align-items:center;
+gap:10px;
+}
 
+.player-info img{
+width:50px;
+border-radius:6px;
+}
+
+.controls button{
+background:none;
+border:none;
+color:white;
+font-size:18px;
+margin:0 8px;
+cursor:pointer;
+}
+
+.controls button:hover{
+color:#1db954;
+}
+
+/* MOBILE */
 @media(max-width:768px){
-body{flex-direction:column;}
-.sidebar{position:absolute;left:-230px;top:0;height:100%;z-index:1000;}
-.sidebar.active{left:0;}
-.menuBtn{display:block;}
+.sidebar{
+display:none;
 }
-
+body{
+flex-direction:column;
+}
+.main{
+padding:20px;
+}
+}
 </style>
 </head>
+
 <body>
 
-<div class="sidebar" id="sidebar">
-<div class="logo">
-<svg viewBox="0 0 24 24" fill="#1db954">
-<path d="M9 18V5l12-2v13"/>
-</svg>
-<h3>WaveBeat Pro</h3>
+<div class="sidebar">
+<div class="logo">🎧 WaveBeat X</div>
+<div class="nav">
+<button>Home</button>
+<button>Search</button>
+<button>Your Library</button>
+<button>Create Playlist</button>
 </div>
-
-<button onclick="showPage('home')">Home</button>
-<button onclick="showPage('upload')">Upload</button>
-<button onclick="showPage('library')">Library</button>
-<button onclick="smartShuffle()">Smart Shuffle</button>
-<button onclick="logout()">Logout</button>
-<button onclick="toggleTheme()">Toggle Theme</button>
 </div>
 
 <div class="main">
-<button class="menuBtn" onclick="toggleMenu()">☰ Menu</button>
+<h1>Good Evening</h1>
 
-<div id="login" class="page active">
-<h2>Login / Signup</h2>
-<input type="text" id="username" placeholder="Enter Username">
-<button class="primary" onclick="login()">Continue</button>
+<div class="grid">
+<div class="card" onclick="play('Song 1')">
+<img src="https://picsum.photos/200?1">
+<h4>Chill Vibes</h4>
 </div>
 
-<div id="home" class="page">
-<h2>Welcome <span id="userDisplay"></span></h2>
-<p>Your Personal Music World</p>
+<div class="card" onclick="play('Song 2')">
+<img src="https://picsum.photos/200?2">
+<h4>Workout Hits</h4>
 </div>
 
-<div id="upload" class="page">
-<h2>Upload Song</h2>
-<input type="text" id="title" placeholder="Song Title">
-<input type="file" id="audioFile" accept="audio/*">
-<button class="primary" onclick="uploadSong()">Upload</button>
+<div class="card" onclick="play('Song 3')">
+<img src="https://picsum.photos/200?3">
+<h4>LoFi Mix</h4>
 </div>
 
-<div id="library" class="page">
-<h2>Your Library</h2>
-<div class="grid" id="songGrid"></div>
+<div class="card" onclick="play('Song 4')">
+<img src="https://picsum.photos/200?4">
+<h4>Party Mode</h4>
+</div>
+
+<div class="card" onclick="play('Song 5')">
+<img src="https://picsum.photos/200?5">
+<h4>Romantic</h4>
+</div>
+
+<div class="card" onclick="play('Song 6')">
+<img src="https://picsum.photos/200?6">
+<h4>Night Drive</h4>
+</div>
 </div>
 </div>
 
-<div class="playerBar" id="playerBar" style="display:none;">
-<div id="playerTitle"></div>
-<div>
-<button onclick="prevSong()">⏮</button>
-<button onclick="togglePlay()">▶</button>
-<button onclick="nextSong()">⏭</button>
+<div class="player">
+<div class="player-info">
+<img id="cover" src="https://picsum.photos/200?7">
+<div id="title">No song playing</div>
+</div>
+
+<div class="controls">
+<button onclick="prev()">⏮</button>
+<button onclick="toggle()">▶</button>
+<button onclick="next()">⏭</button>
 </div>
 </div>
 
 <script>
-let currentUser=null;
-let audio=new Audio();
-let currentIndex=0;
-
-function toggleMenu(){
-document.getElementById("sidebar").classList.toggle("active");
-}
-function toggleTheme(){
-document.body.classList.toggle("light");
+function play(name){
+document.getElementById("title").innerText=name;
 }
 
-function showPage(id){
-document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-if(window.innerWidth<768)toggleMenu();
-if(id==="library")loadSongs();
+function toggle(){
+alert("Audio feature next upgrade 🔥");
 }
 
-function login(){
-let name=document.getElementById("username").value;
-if(!name)return alert("Enter username");
-currentUser=name;
-localStorage.setItem("currentUser",name);
-document.getElementById("userDisplay").innerText=name;
-showPage("home");
+function prev(){
+alert("Previous track");
 }
 
-function logout(){
-localStorage.removeItem("currentUser");
-location.reload();
+function next(){
+alert("Next track");
 }
-
-function uploadSong(){
-let title=document.getElementById("title").value;
-let file=document.getElementById("audioFile").files[0];
-if(!title||!file)return alert("Fill all fields");
-
-let reader=new FileReader();
-reader.onload=e=>{
-let songs=JSON.parse(localStorage.getItem(currentUser+"_songs"))||[];
-songs.push({title,audio:e.target.result});
-localStorage.setItem(currentUser+"_songs",JSON.stringify(songs));
-alert("Uploaded!");
-};
-reader.readAsDataURL(file);
-}
-
-function loadSongs(){
-let songs=JSON.parse(localStorage.getItem(currentUser+"_songs"))||[];
-let grid=document.getElementById("songGrid");
-grid.innerHTML="";
-songs.forEach((song,i)=>{
-let card=document.createElement("div");
-card.className="card";
-card.innerHTML=`<h4>${song.title}</h4>`;
-card.onclick=()=>playSong(i);
-grid.appendChild(card);
-});
-}
-
-function playSong(index){
-let songs=JSON.parse(localStorage.getItem(currentUser+"_songs"))||[];
-currentIndex=index;
-audio.src=songs[index].audio;
-audio.play();
-document.getElementById("playerBar").style.display="flex";
-document.getElementById("playerTitle").innerText=songs[index].title;
-}
-
-function togglePlay(){
-if(audio.paused)audio.play();
-else audio.pause();
-}
-
-function prevSong(){if(currentIndex>0)playSong(currentIndex-1);}
-function nextSong(){
-let songs=JSON.parse(localStorage.getItem(currentUser+"_songs"))||[];
-if(currentIndex<songs.length-1)playSong(currentIndex+1);
-}
-
-function smartShuffle(){
-let songs=JSON.parse(localStorage.getItem(currentUser+"_songs"))||[];
-if(songs.length<1)return alert("No songs");
-let random=Math.floor(Math.random()*songs.length);
-playSong(random);
-}
-
-window.onload=function(){
-let savedUser=localStorage.getItem("currentUser");
-if(savedUser){
-currentUser=savedUser;
-document.getElementById("userDisplay").innerText=savedUser;
-showPage("home");
-}
-};
 </script>
 
 </body>
