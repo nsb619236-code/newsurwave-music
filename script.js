@@ -92,6 +92,40 @@ function renderSongs(containerId, list) {
     card.onclick = () => playSong(index);
     container.appendChild(card);
   });
+}let songs = []; // खाली array – Firestore से भरेगी
+
+// Page load पर songs लोड करो
+window.onload = () => {
+  loadAllSongs();
+};
+
+// Firestore से गाने लोड करो
+async function loadAllSongs() {
+  try {
+    const snapshot = await db.collection('Songs').orderBy('uploadedAt', 'desc').get();
+    songs = [];
+    snapshot.forEach(doc => {
+      songs.push({
+        id: doc.id,
+        ...doc.data()
+      });
+    });
+    console.log("Loaded songs from Firestore:", songs.length); // console में चेक करो
+    renderSongs('popular-songs-grid', songs);
+    renderSongs('made-for-you', songs.slice(0, 5));
+    renderSongs('library-grid', songs); // Library में भी दिखाओ
+  } catch (error) {
+    console.error("Firestore load error:", error);
+  }
+}
+
+// Upload के बाद list refresh
+async function uploadSong() {
+  // ... तुम्हारा upload code (Storage + Firestore add)
+
+  // Success होने पर
+  alert("Song uploaded and saved!");
+  await loadAllSongs(); // तुरंत refresh
 }
 
 // Play, toggle, download etc. functions (तुम्हारे पुराने वाले रख सकते हो या ये यूज करो)
