@@ -6,69 +6,56 @@
   <title>Waves Beat Music</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link rel="manifest" href="data:application/manifest+json,{
-    &quot;name&quot;:&quot;Waves Beat Music&quot;,
-    &quot;short_name&quot;:&quot;WavesBeat&quot;,
-    &quot;start_url&quot;:&quot;.&quot;,
-    &quot;display&quot;:&quot;standalone&quot;,
-    &quot;background_color&quot;:&quot;#000000&quot;,
-    &quot;theme_color&quot;:&quot;#a855f7&quot;,
-    &quot;icons&quot;:[{&quot;src&quot;:&quot;https://picsum.photos/id/1015/192/192&quot;,&quot;sizes&quot;:&quot;192x192&quot;,&quot;type&quot;:&quot;image/png&quot;}]
-  }" />
+  <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Waves Beat Music%22,%22short_name%22:%22WavesBeat%22,%22start_url%22:%.%22,%22display%22:%22standalone%22,%22background_color%22:%22#000000%22,%22theme_color%22:%22#1DB954%22,%22icons%22:[{%22src%22:%22https://picsum.photos/id/1015/192/192%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22}]}">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     body { font-family: 'Inter', system-ui, sans-serif; }
-    .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(20px); }
-    .player-glass { background: rgba(0,0,0,0.7); backdrop-filter: blur(30px); }
-    .wave { animation: wave 1.5s infinite linear; }
-    @keyframes wave { 0%{transform:translateY(0)} 50%{transform:translateY(-8px)} 100%{transform:translateY(0)} }
-    .song-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    .song-card:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3); }
-    .visualizer { image-rendering: crisp-edges; }
+    .glass { background: rgba(255,255,255,0.06); backdrop-filter: blur(20px); }
+    .player-glass { background: rgba(0,0,0,0.85); backdrop-filter: blur(30px); }
+    .green { color: #1DB954; }
+    .green-bg { background-color: #1DB954; }
+    .song-card { transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); }
+    .song-card:hover { transform: scale(1.04) translateY(-6px); box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4); }
+    .nav-btn.active { background-color: rgba(29, 185, 84, 0.15); color: #1DB954; }
   </style>
 </head>
-<body class="bg-gradient-to-br from-zinc-950 via-purple-950 to-black text-white min-h-screen pb-28">
+<body class="bg-gradient-to-br from-zinc-950 via-zinc-900 to-black text-white min-h-screen pb-28 overflow-hidden">
+
   <div class="flex h-screen">
     <!-- Sidebar -->
-    <div id="sidebar" class="w-72 bg-black/80 border-r border-white/10 flex flex-col transition-all duration-300">
+    <div class="w-72 bg-black/90 border-r border-white/10 flex flex-col">
       <div class="p-6 flex items-center gap-3 border-b border-white/10">
-        <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-2xl">🌊</div>
+        <div class="w-11 h-11 bg-[#1DB954] rounded-2xl flex items-center justify-center text-3xl shadow-lg">🌊</div>
         <h1 class="text-3xl font-bold tracking-tighter">Waves Beat</h1>
       </div>
-      
-      <div class="flex-1 p-4 space-y-8 overflow-y-auto">
-        <div>
-          <button onclick="switchView('home')" class="nav-btn flex items-center gap-4 w-full p-4 hover:bg-white/10 rounded-3xl text-left active">
-            <i class="fa-solid fa-house text-xl"></i>
-            <span class="font-medium">Home</span>
-          </button>
-          <button onclick="switchView('library')" class="nav-btn flex items-center gap-4 w-full p-4 hover:bg-white/10 rounded-3xl text-left">
-            <i class="fa-solid fa-music text-xl"></i>
-            <span class="font-medium">Library</span>
-          </button>
-          <button onclick="switchView('playlists')" class="nav-btn flex items-center gap-4 w-full p-4 hover:bg-white/10 rounded-3xl text-left">
-            <i class="fa-solid fa-list text-xl"></i>
-            <span class="font-medium">Playlists</span>
-          </button>
-        </div>
 
-        <div>
-          <div class="px-4 text-xs uppercase tracking-widest text-white/50 mb-3">Your Music</div>
-          <button onclick="showUpload()" class="flex items-center gap-3 w-full px-6 py-4 hover:bg-white/10 rounded-3xl text-left">
-            <i class="fa-solid fa-cloud-upload-alt text-2xl text-purple-400"></i>
+      <div class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <button onclick="switchView('home')" class="nav-btn active flex items-center gap-4 w-full p-4 rounded-3xl text-left hover:bg-white/10">
+          <i class="fa-solid fa-house text-xl"></i><span class="font-medium">Home</span>
+        </button>
+        <button onclick="switchView('library')" class="nav-btn flex items-center gap-4 w-full p-4 rounded-3xl text-left hover:bg-white/10">
+          <i class="fa-solid fa-music text-xl"></i><span class="font-medium">Library</span>
+        </button>
+        <button onclick="switchView('playlists')" class="nav-btn flex items-center gap-4 w-full p-4 rounded-3xl text-left hover:bg-white/10">
+          <i class="fa-solid fa-list-ul text-xl"></i><span class="font-medium">Playlists</span>
+        </button>
+
+        <div class="pt-6">
+          <button onclick="showUpload()" class="flex items-center gap-4 w-full p-4 rounded-3xl hover:bg-white/10 text-left">
+            <i class="fa-solid fa-cloud-upload-alt text-2xl green"></i>
             <div>
-              <div class="font-medium">Upload Songs</div>
-              <div class="text-xs text-white/50">to Cloud</div>
+              <div class="font-medium">Upload to Cloud</div>
+              <div class="text-xs text-white/50">MP3 • WAV supported</div>
             </div>
           </button>
         </div>
       </div>
 
-      <div class="p-6 border-t border-white/10 flex items-center gap-3">
-        <div onclick="toggleLoginModal()" id="user-avatar" class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-500 rounded-2xl flex items-center justify-center text-xl cursor-pointer">👤</div>
-        <div>
-          <div id="username-display" class="font-medium">Guest</div>
-          <div onclick="logout()" class="text-xs text-purple-400 cursor-pointer hover:underline">Logout</div>
+      <div class="p-6 border-t border-white/10 flex items-center gap-3 cursor-pointer" onclick="toggleLoginModal()">
+        <div id="user-avatar" class="w-10 h-10 bg-[#1DB954] rounded-2xl flex items-center justify-center text-2xl">👤</div>
+        <div class="flex-1">
+          <div id="username-display" class="font-semibold">Guest</div>
+          <div onclick="event.stopImmediatePropagation(); logout()" class="text-xs text-white/60 hover:text-white">Logout</div>
         </div>
       </div>
     </div>
@@ -77,56 +64,50 @@
     <div class="flex-1 overflow-y-auto">
       <!-- Top Bar -->
       <div class="sticky top-0 z-50 glass border-b border-white/10 px-8 py-5 flex items-center justify-between">
-        <div class="flex items-center gap-6">
+        <div class="flex items-center gap-4">
           <button onclick="toggleSidebar()" class="lg:hidden text-2xl"><i class="fa-solid fa-bars"></i></button>
           <div class="relative w-96">
-            <input id="search-input" onkeyup="searchSongs()" type="text" placeholder="Search songs, artists..." 
-                   class="w-full bg-white/10 border border-white/20 rounded-full py-3 pl-12 focus:outline-none focus:border-purple-500"/>
-            <i class="fa-solid fa-magnifying-glass absolute left-5 top-3.5 text-white/50"></i>
+            <input id="search-input" onkeyup="searchMusic()" type="text" placeholder="What do you want to play?" 
+                   class="w-full bg-white/10 border border-white/20 rounded-full py-3 pl-14 focus:outline-none focus:border-[#1DB954] text-sm">
+            <i class="fa-solid fa-magnifying-glass absolute left-6 top-3.5 text-white/50"></i>
           </div>
         </div>
-        
         <div class="flex items-center gap-6">
           <button onclick="toggleTheme()" class="text-2xl hover:scale-110 transition"><i id="theme-icon" class="fa-solid fa-moon"></i></button>
-          <button onclick="showUpload()" class="px-6 py-2.5 bg-white text-black rounded-3xl font-semibold flex items-center gap-2 hover:bg-purple-400 hover:text-white transition">
-            <i class="fa-solid fa-plus"></i> Upload to Cloud
+          <button onclick="showUpload()" class="px-8 py-3 bg-[#1DB954] hover:bg-[#1ed760] text-black font-semibold rounded-3xl flex items-center gap-2 transition">
+            <i class="fa-solid fa-plus"></i> Upload Song
           </button>
         </div>
       </div>
 
       <!-- Home View -->
       <div id="view-home" class="p-8">
-        <h2 class="text-4xl font-bold mb-8">Good evening, <span id="greeting-name">Guest</span> 🌊</h2>
+        <h2 class="text-4xl font-bold mb-2">Good evening, <span id="greeting-name" class="text-[#1DB954]">Guest</span></h2>
         
-        <!-- Recently Played -->
         <div class="mb-12">
-          <div class="flex justify-between items-end mb-6">
+          <div class="flex justify-between mb-6">
             <h3 class="text-2xl font-semibold">Recently Played</h3>
-            <button onclick="switchView('library')" class="text-purple-400 hover:underline">See all</button>
           </div>
-          <div id="recent-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"></div>
+          <div id="recent-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
         </div>
 
-        <!-- Demo / Cloud Songs -->
         <div>
-          <div class="flex justify-between items-end mb-6">
-            <h3 class="text-2xl font-semibold">From the Cloud</h3>
-          </div>
-          <div id="cloud-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"></div>
+          <h3 class="text-2xl font-semibold mb-6">Popular on Waves Beat</h3>
+          <div id="cloud-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
         </div>
       </div>
 
       <!-- Library View -->
       <div id="view-library" class="p-8 hidden">
         <h2 class="text-4xl font-bold mb-8">Your Library</h2>
-        <div id="library-list" class="space-y-2"></div>
+        <div id="library-list" class="space-y-1"></div>
       </div>
 
       <!-- Playlists View -->
       <div id="view-playlists" class="p-8 hidden">
         <div class="flex justify-between items-center mb-8">
           <h2 class="text-4xl font-bold">Your Playlists</h2>
-          <button onclick="createPlaylist()" class="px-6 py-3 bg-purple-600 rounded-3xl flex items-center gap-2">
+          <button onclick="createPlaylist()" class="px-8 py-3 bg-[#1DB954] hover:bg-[#1ed760] text-black font-semibold rounded-3xl flex items-center gap-2">
             <i class="fa-solid fa-plus"></i> New Playlist
           </button>
         </div>
@@ -136,112 +117,103 @@
   </div>
 
   <!-- Bottom Player -->
-  <div id="player" class="player-glass fixed bottom-0 left-0 right-0 border-t border-white/20 h-28 flex items-center px-6 z-50">
+  <div id="player" class="player-glass fixed bottom-0 left-0 right-0 h-24 border-t border-white/10 flex items-center px-6 z-50">
     <div class="flex items-center gap-4 w-80">
-      <img id="player-cover" src="https://picsum.photos/id/1015/80/80" class="w-16 h-16 rounded-2xl object-cover" />
-      <div>
-        <div id="player-title" class="font-semibold">Not Playing</div>
-        <div id="player-artist" class="text-sm text-white/60">—</div>
+      <img id="player-cover" src="https://picsum.photos/id/1015/80/80" class="w-16 h-16 rounded-2xl object-cover shadow-md">
+      <div class="min-w-0">
+        <div id="player-title" class="font-semibold text-sm truncate">Not playing</div>
+        <div id="player-artist" class="text-xs text-white/60 truncate">—</div>
       </div>
     </div>
 
-    <div class="flex-1 flex flex-col items-center gap-2">
-      <div class="flex items-center gap-8 text-xl">
-        <button onclick="toggleShuffle()" id="shuffle-btn" class="hover:text-purple-400 transition"><i class="fa-solid fa-shuffle"></i></button>
-        <button onclick="prevSong()" class="hover:text-purple-400 transition"><i class="fa-solid fa-backward-step"></i></button>
-        <button onclick="togglePlay()" id="play-btn" class="w-12 h-12 bg-white text-black rounded-2xl flex items-center justify-center text-3xl hover:scale-105 transition">
+    <div class="flex-1 flex flex-col items-center">
+      <div class="flex items-center gap-8 mb-1">
+        <button onclick="toggleShuffle()" id="shuffle-btn" class="text-xl hover:text-[#1DB954] transition"><i class="fa-solid fa-shuffle"></i></button>
+        <button onclick="prevSong()" class="text-2xl hover:text-[#1DB954] transition"><i class="fa-solid fa-backward-step"></i></button>
+        
+        <button onclick="togglePlay()" id="play-btn" 
+                class="w-12 h-12 bg-[#1DB954] hover:bg-[#1ed760] text-black rounded-2xl flex items-center justify-center text-3xl shadow-lg transition">
           <i class="fa-solid fa-play"></i>
         </button>
-        <button onclick="nextSong()" class="hover:text-purple-400 transition"><i class="fa-solid fa-forward-step"></i></button>
-        <button onclick="toggleRepeat()" id="repeat-btn" class="hover:text-purple-400 transition"><i class="fa-solid fa-repeat"></i></button>
+        
+        <button onclick="nextSong()" class="text-2xl hover:text-[#1DB954] transition"><i class="fa-solid fa-forward-step"></i></button>
+        <button onclick="toggleRepeat()" id="repeat-btn" class="text-xl hover:text-[#1DB954] transition"><i class="fa-solid fa-repeat"></i></button>
       </div>
-      
+
       <div class="w-full max-w-md flex items-center gap-3 text-xs">
-        <span id="current-time">0:00</span>
+        <span id="current-time" class="tabular-nums">0:00</span>
         <input id="progress-bar" type="range" min="0" max="100" value="0" 
-               class="flex-1 accent-purple-500" oninput="seekAudio()">
-        <span id="total-time">0:00</span>
+               class="flex-1 accent-[#1DB954]" oninput="seekAudio()">
+        <span id="total-time" class="tabular-nums">0:00</span>
       </div>
     </div>
 
-    <div class="w-80 flex items-center justify-end gap-6">
-      <button onclick="toggleVisualizerModal()" class="text-xl"><i class="fa-solid fa-waveform"></i></button>
+    <div class="w-80 flex justify-end items-center gap-4">
+      <button onclick="toggleVisualizerModal()" class="text-2xl hover:text-[#1DB954]"><i class="fa-solid fa-waveform-lines"></i></button>
       <div class="flex items-center gap-3">
-        <i class="fa-solid fa-volume-low"></i>
-        <input id="volume-slider" type="range" min="0" max="1" step="0.01" value="0.8" 
-               class="accent-purple-500 w-28" oninput="changeVolume()">
+        <i class="fa-solid fa-volume-high"></i>
+        <input id="volume-slider" type="range" min="0" max="1" step="0.01" value="0.85" 
+               class="accent-[#1DB954] w-28" oninput="changeVolume()">
       </div>
     </div>
   </div>
 
   <!-- Visualizer Modal -->
-  <div id="visualizer-modal" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-[100]">
+  <div id="visualizer-modal" class="hidden fixed inset-0 bg-black/95 flex items-center justify-center z-[999]">
     <div class="text-center">
-      <canvas id="visualizer-canvas" width="600" height="300" class="visualizer rounded-3xl shadow-2xl"></canvas>
-      <button onclick="toggleVisualizerModal()" class="mt-8 px-10 py-4 bg-white/10 rounded-3xl text-lg">Close Visualizer</button>
+      <canvas id="visualizer-canvas" width="720" height="360" class="rounded-3xl shadow-2xl"></canvas>
+      <button onclick="toggleVisualizerModal()" class="mt-8 px-12 py-4 bg-white/10 hover:bg-white/20 rounded-3xl text-lg transition">Close Visualizer</button>
     </div>
   </div>
 
   <!-- Upload Modal -->
-  <div id="upload-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[100]">
-    <div class="glass p-10 rounded-3xl w-full max-w-md text-center">
-      <h3 class="text-3xl font-bold mb-6">Upload to Cloud</h3>
-      <input id="file-input" type="file" accept="audio/*" multiple class="hidden" onchange="handleUpload(event)" />
+  <div id="upload-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[999]">
+    <div class="glass p-12 rounded-3xl w-full max-w-lg text-center">
+      <h3 class="text-3xl font-bold mb-8">Upload to Cloud</h3>
+      <input id="file-input" type="file" accept="audio/*" multiple class="hidden" onchange="handleUpload(event)">
       <button onclick="document.getElementById('file-input').click()" 
-              class="w-full py-16 border-2 border-dashed border-purple-400 rounded-3xl hover:border-purple-500 transition flex flex-col items-center justify-center gap-4">
-        <i class="fa-solid fa-cloud-upload-alt text-6xl text-purple-400"></i>
-        <span class="font-medium">Drop songs here or click to upload</span>
-        <span class="text-xs text-white/50">MP3, WAV, M4A supported</span>
+              class="w-full py-20 border-4 border-dashed border-[#1DB954]/50 hover:border-[#1DB954] rounded-3xl transition flex flex-col items-center">
+        <i class="fa-solid fa-cloud-upload-alt text-7xl green mb-4"></i>
+        <span class="font-medium text-xl">Drop songs or click here</span>
+        <span class="text-sm text-white/50 mt-2">MP3, WAV, M4A • Max 50MB</span>
       </button>
-      <button onclick="hideUploadModal()" class="mt-6 text-white/60">Cancel</button>
+      <button onclick="hideUploadModal()" class="mt-8 text-white/60 hover:text-white">Cancel</button>
     </div>
   </div>
 
   <!-- Login Modal -->
-  <div id="login-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[100]">
-    <div class="glass p-10 rounded-3xl w-full max-w-sm">
-      <h3 class="text-3xl font-bold text-center mb-8">Welcome to Waves Beat</h3>
+  <div id="login-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[999]">
+    <div class="glass p-10 rounded-3xl w-full max-w-sm text-center">
+      <h3 class="text-3xl font-bold mb-8">Welcome to Waves Beat</h3>
       <input id="login-name" type="text" placeholder="Your name" 
-             class="w-full bg-white/10 border border-white/30 rounded-3xl py-4 px-6 text-center text-xl focus:outline-none focus:border-purple-500"/>
-      <button onclick="loginUser()" 
-              class="mt-8 w-full py-5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-3xl font-bold text-lg">Continue</button>
-      <button onclick="hideLoginModal()" class="mt-4 w-full text-white/50">Cancel</button>
+             class="w-full bg-white/10 border border-white/30 rounded-3xl py-5 px-8 text-center text-xl focus:outline-none focus:border-[#1DB954]">
+      <button onclick="loginUser()" class="mt-8 w-full py-5 green-bg text-black font-bold text-lg rounded-3xl">Continue</button>
     </div>
   </div>
 
   <audio id="audio-player" class="hidden"></audio>
 
   <script>
-    // Tailwind script
-    function initTailwind() {
-      // Already loaded via CDN
-    }
-
-    // Variables
     let allSongs = [];
     let userSongs = [];
     let playlists = [];
     let recentlyPlayed = [];
-    let currentSongIndex = -1;
+    let currentIndex = -1;
     let isPlaying = false;
-    let shuffleMode = false;
+    let shuffle = false;
     let repeatMode = 'off'; // off, all, one
-    let currentQueue = [];
     let audio = document.getElementById('audio-player');
     let username = localStorage.getItem('username') || 'Guest';
     let isDark = true;
+    let audioContext, analyser, source, dataArray, canvas, ctx;
 
-    // Demo Cloud Songs (Server based)
     const demoSongs = [
-      { id: 101, title: "Song 1", artist: "SoundHelix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", cover: "https://picsum.photos/id/1015/400/400", duration: "3:45" },
-      { id: 102, title: "Song 2", artist: "SoundHelix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", cover: "https://picsum.photos/id/201/400/400", duration: "4:12" },
-      { id: 103, title: "Song 3", artist: "SoundHelix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", cover: "https://picsum.photos/id/301/400/400", duration: "3:28" },
-      { id: 104, title: "Song 4", artist: "SoundHelix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3", cover: "https://picsum.photos/id/401/400/400", duration: "5:01" },
-      { id: 105, title: "Song 5", artist: "SoundHelix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3", cover: "https://picsum.photos/id/501/400/400", duration: "2:59" },
+      {id:101,title:"Blinding Lights",artist:"The Weeknd",src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",cover:"https://picsum.photos/id/1015/400/400",duration:"3:45"},
+      {id:102,title:"Levitating",artist:"Dua Lipa",src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",cover:"https://picsum.photos/id/201/400/400",duration:"4:12"},
+      {id:103,title:"Stay",artist:"The Kid LAROI",src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",cover:"https://picsum.photos/id/301/400/400",duration:"3:28"},
+      {id:104,title:"Peaches",artist:"Justin Bieber",src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",cover:"https://picsum.photos/id/401/400/400",duration:"5:01"},
+      {id:105,title:"Kiss Me More",artist:"Doja Cat",src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",cover:"https://picsum.photos/id/501/400/400",duration:"2:59"},
     ];
-
-    // Audio Context for Visualizer
-    let audioContext, analyser, dataArray, source, canvas, ctx;
 
     function initVisualizer() {
       canvas = document.getElementById('visualizer-canvas');
@@ -256,73 +228,58 @@
       if (!isPlaying) return;
       requestAnimationFrame(drawVisualizer);
       analyser.getByteFrequencyData(dataArray);
-      
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const barWidth = canvas.width / dataArray.length * 2.5;
-      let x = 0;
-      
+      const barWidth = (canvas.width / dataArray.length) * 2.8;
+      let x = 30;
       for (let i = 0; i < dataArray.length; i++) {
-        const barHeight = (dataArray[i] / 255) * canvas.height * 0.8;
-        ctx.fillStyle = `hsl(${i * 3 + 260}, 100%, 70%)`;
-        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-        x += barWidth + 4;
+        const height = (dataArray[i] / 255) * canvas.height * 0.85;
+        ctx.fillStyle = `hsl(150, 100%, ${50 + (dataArray[i]/3)}%)`;
+        ctx.fillRect(x, canvas.height - height, barWidth, height);
+        x += barWidth + 6;
       }
     }
 
-    // Load everything
     function loadApp() {
       document.getElementById('username-display').textContent = username;
       document.getElementById('greeting-name').textContent = username;
-      
-      allSongs = [...demoSongs];
+
       userSongs = JSON.parse(localStorage.getItem('userSongs')) || [];
       playlists = JSON.parse(localStorage.getItem('playlists')) || [];
-      
-      allSongs = [...allSongs, ...userSongs];
-      
+      allSongs = [...demoSongs, ...userSongs];
+
+      // Initial recently played
+      recentlyPlayed = [101,102,103,104,105];
       renderRecent();
       renderCloudSongs();
       renderLibrary();
       renderPlaylists();
-      
+
       initVisualizer();
-      
-      // Audio events
+
+      audio.volume = 0.85;
       audio.addEventListener('timeupdate', updateProgress);
-      audio.addEventListener('ended', nextSongAuto);
-      audio.volume = 0.8;
-      
-      // Theme
+      audio.addEventListener('ended', () => {
+        if (repeatMode === 'one') { audio.currentTime = 0; audio.play(); }
+        else nextSong();
+      });
+
       if (localStorage.getItem('theme') === 'light') toggleTheme(true);
     }
 
     function renderRecent() {
       const container = document.getElementById('recent-grid');
       container.innerHTML = '';
-      recentlyPlayed.slice(0, 10).forEach(id => {
+      recentlyPlayed.forEach(id => {
         const song = allSongs.find(s => s.id === id);
-        if (!song) return;
-        const div = document.createElement('div');
-        div.className = 'song-card bg-white/5 rounded-3xl overflow-hidden cursor-pointer';
-        div.innerHTML = `
-          <img src="${song.cover}" class="w-full aspect-square object-cover">
-          <div class="p-4">
-            <div class="font-medium truncate">${song.title}</div>
-            <div class="text-xs text-white/50">${song.artist}</div>
-          </div>
-        `;
-        div.onclick = () => playSong(allSongs.indexOf(song));
-        container.appendChild(div);
+        if (song) container.appendChild(createSongCard(song));
       });
     }
 
-    function renderCloudSongs() {
+    function renderCloudSongs(filter = '') {
       const container = document.getElementById('cloud-grid');
       container.innerHTML = '';
-      demoSongs.forEach(song => {
-        const div = createSongCard(song);
-        container.appendChild(div);
-      });
+      demoSongs.filter(s => s.title.toLowerCase().includes(filter) || s.artist.toLowerCase().includes(filter))
+        .forEach(song => container.appendChild(createSongCard(song)));
     }
 
     function createSongCard(song) {
@@ -331,53 +288,56 @@
       div.innerHTML = `
         <img src="${song.cover}" class="w-full aspect-square object-cover">
         <div class="p-4">
-          <div class="font-medium truncate">${song.title}</div>
-          <div class="text-xs text-white/50">${song.artist}</div>
+          <div class="font-semibold truncate">${song.title}</div>
+          <div class="text-xs text-white/60">${song.artist}</div>
         </div>
       `;
       div.onclick = () => playSong(allSongs.findIndex(s => s.id === song.id));
       return div;
     }
 
-    function renderLibrary() {
+    function renderLibrary(filter = '') {
       const container = document.getElementById('library-list');
       container.innerHTML = '';
-      allSongs.forEach((song, index) => {
-        const div = document.createElement('div');
-        div.className = 'flex items-center gap-4 p-4 hover:bg-white/10 rounded-3xl group';
-        div.innerHTML = `
-          <img src="${song.cover}" class="w-12 h-12 rounded-2xl">
-          <div class="flex-1">
-            <div class="font-medium">${song.title}</div>
-            <div class="text-sm text-white/60">${song.artist}</div>
-          </div>
-          <div class="text-xs text-white/50">${song.duration || '—'}</div>
-          <button onclick="event.stopImmediatePropagation(); playSong(${index});" class="opacity-0 group-hover:opacity-100 px-6 py-2 bg-purple-600 rounded-3xl text-sm">Play</button>
-        `;
-        container.appendChild(div);
-      });
+      allSongs.filter(s => s.title.toLowerCase().includes(filter) || s.artist.toLowerCase().includes(filter))
+        .forEach((song, i) => {
+          const div = document.createElement('div');
+          div.className = 'flex items-center gap-5 p-4 hover:bg-white/10 rounded-3xl group cursor-pointer';
+          div.innerHTML = `
+            <img src="${song.cover}" class="w-14 h-14 rounded-2xl">
+            <div class="flex-1 min-w-0">
+              <div class="font-medium truncate">${song.title}</div>
+              <div class="text-sm text-white/60">${song.artist}</div>
+            </div>
+            <div class="text-xs text-white/50">${song.duration}</div>
+            <button onclick="event.stopImmediatePropagation(); playSong(${allSongs.indexOf(song)})" 
+                    class="px-8 py-2.5 bg-[#1DB954] text-black rounded-3xl text-sm font-medium opacity-0 group-hover:opacity-100 transition">Play</button>
+          `;
+          container.appendChild(div);
+        });
     }
 
     function renderPlaylists() {
       const container = document.getElementById('playlists-grid');
       container.innerHTML = '';
-      playlists.forEach((pl, i) => {
+      playlists.forEach((pl, idx) => {
         const div = document.createElement('div');
-        div.className = 'bg-white/5 rounded-3xl p-6 cursor-pointer hover:scale-105 transition';
+        div.className = 'bg-white/5 rounded-3xl p-6 cursor-pointer hover:bg-white/10 transition';
         div.innerHTML = `
-          <div class="w-full h-40 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl mb-4 flex items-center justify-center text-6xl">📜</div>
+          <div class="h-40 bg-gradient-to-br from-[#1DB954] to-emerald-700 rounded-3xl mb-5 flex items-center justify-center text-7xl">📀</div>
           <div class="font-bold text-xl">${pl.name}</div>
-          <div class="text-xs text-white/50">${pl.songs.length} songs</div>
+          <div class="text-sm text-white/50">${pl.songs.length} songs</div>
         `;
-        div.onclick = () => openPlaylist(i);
+        div.onclick = () => openPlaylist(idx);
         container.appendChild(div);
       });
     }
 
     function playSong(index) {
-      currentSongIndex = index;
+      if (index < 0 || index >= allSongs.length) return;
+      currentIndex = index;
       const song = allSongs[index];
-      
+
       audio.src = song.src;
       audio.play().then(() => {
         isPlaying = true;
@@ -386,22 +346,20 @@
         document.getElementById('player-cover').src = song.cover;
         document.getElementById('player-title').textContent = song.title;
         document.getElementById('player-artist').textContent = song.artist;
-        
-        // Add to recently
+
         if (!recentlyPlayed.includes(song.id)) {
           recentlyPlayed.unshift(song.id);
-          if (recentlyPlayed.length > 15) recentlyPlayed.pop();
+          if (recentlyPlayed.length > 20) recentlyPlayed.pop();
           renderRecent();
         }
-        
-        // Visualizer connect
+
         if (!source) {
           source = audioContext.createMediaElementSource(audio);
           source.connect(analyser);
           analyser.connect(audioContext.destination);
         }
         drawVisualizer();
-      });
+      }).catch(() => {});
     }
 
     function togglePlay() {
@@ -409,7 +367,7 @@
         audio.pause();
         isPlaying = false;
         document.getElementById('play-btn').innerHTML = '<i class="fa-solid fa-play"></i>';
-      } else if (currentSongIndex >= 0) {
+      } else if (currentIndex >= 0) {
         audio.play();
         isPlaying = true;
         document.getElementById('play-btn').innerHTML = '<i class="fa-solid fa-pause"></i>';
@@ -418,17 +376,45 @@
     }
 
     function nextSong() {
-      if (currentSongIndex < allSongs.length - 1) {
-        playSong(currentSongIndex + 1);
-      } else if (repeatMode === 'all') {
-        playSong(0);
-      }
+      let next = currentIndex + 1;
+      if (next >= allSongs.length) next = 0;
+      playSong(next);
     }
 
     function prevSong() {
-      if (currentSongIndex > 0) playSong(currentSongIndex - 1);
+      let prev = currentIndex - 1;
+      if (prev < 0) prev = allSongs.length - 1;
+      playSong(prev);
     }
 
-    function nextSongAuto() {
-      if (repeatMode === 'one') {
-        audio.cu
+    function updateProgress() {
+      if (!audio.duration) return;
+      const percent = (audio.currentTime / audio.duration) * 100;
+      document.getElementById('progress-bar').value = percent;
+      document.getElementById('current-time').textContent = formatTime(audio.currentTime);
+      document.getElementById('total-time').textContent = formatTime(audio.duration);
+    }
+
+    function seekAudio() {
+      if (audio.duration) audio.currentTime = (document.getElementById('progress-bar').value / 100) * audio.duration;
+    }
+
+    function changeVolume() {
+      audio.volume = parseFloat(document.getElementById('volume-slider').value);
+    }
+
+    function formatTime(secs) {
+      if (!secs) return "0:00";
+      const m = Math.floor(secs / 60);
+      const s = Math.floor(secs % 60);
+      return `${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function toggleShuffle() {
+      shuffle = !shuffle;
+      document.getElementById('shuffle-btn').style.color = shuffle ? '#1DB954' : '';
+    }
+
+    function toggleRepeat() {
+      const modes = ['off','all','one'];
+      repeatMode = 
