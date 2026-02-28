@@ -1,3 +1,4 @@
+const UNSPLASH_KEY = "f7rgPa7m5QOuti0APoXGZtqUI6oDFFzeYylqRTVm8nY"; // ← ये बदल दो
 // Firebase Config (अपना config डालो - Firebase Console से copy)
 const firebaseConfig = {
   apiKey: "AIzaSy...your-api-key...",
