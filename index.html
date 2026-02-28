@@ -3,23 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wave Beat Ultimate</title>
+<title>Wave Beat Pro MAX</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif;}
-html{scroll-behavior:smooth;}
-body{background:#0f0f0f;color:white;display:flex;height:100vh;overflow:hidden;transition:0.3s;}
-body.light{background:#f5f5f5;color:#111;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:#0f0f0f;color:white;display:flex;height:100vh;overflow:hidden;transition:.3s;}
+body.light{background:#f4f4f4;color:#111;}
 
-.sidebar{width:230px;background:#181818;padding:20px;transition:0.3s;}
-body.light .sidebar{background:#ffffff;}
+.sidebar{width:220px;background:#181818;padding:20px;transition:.3s;}
+body.light .sidebar{background:#fff;}
 
-.logo{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
-.logo svg{width:35px;height:35px;animation:pulse 2s infinite;}
-@keyframes pulse{0%{transform:scale(1);}50%{transform:scale(1.15);}100%{transform:scale(1);}}
+.logo{
+display:flex;align-items:center;gap:10px;margin-bottom:20px;
+}
+.logo svg{width:35px;height:35px;animation:spin 5s linear infinite;}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
 .sidebar button{
-width:100%;margin:6px 0;padding:9px;
+width:100%;margin:6px 0;padding:10px;
 border:none;border-radius:8px;
 background:#222;color:white;cursor:pointer;
 }
@@ -29,37 +30,49 @@ background:#222;color:white;cursor:pointer;
 .page{display:none;}
 .page.active{display:block;}
 
-input{width:100%;padding:10px;margin:6px 0;border:none;border-radius:8px;}
-button.primary{background:#1db954;color:white;padding:10px;border:none;border-radius:8px;cursor:pointer;}
+input{
+width:100%;padding:10px;margin:8px 0;
+border:none;border-radius:8px;
+}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:15px;margin-top:15px;}
-.card{background:#181818;padding:10px;border-radius:10px;text-align:center;cursor:pointer;}
-body.light .card{background:#ffffff;}
-.card img{width:100%;border-radius:8px;margin-bottom:6px;}
+button.primary{
+background:#1db954;color:white;
+padding:10px;border:none;border-radius:8px;
+cursor:pointer;width:100%;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+gap:15px;margin-top:20px;
+}
+
+.card{
+background:#181818;padding:10px;
+border-radius:12px;text-align:center;
+cursor:pointer;transition:.3s;
+}
+.card:hover{transform:scale(1.05);}
+.card img{width:100%;border-radius:8px;margin-bottom:8px;}
 
 .playerBar{
 position:fixed;bottom:0;left:0;width:100%;
-background:#181818;padding:8px;
-display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
+background:#181818;padding:10px;
+display:flex;justify-content:space-between;
+align-items:center;
 }
-body.light .playerBar{background:#ffffff;}
 
-.playerBar img{width:45px;border-radius:6px;}
-
-canvas{width:100%;height:50px;}
-
-.menuBtn{display:none;background:#1db954;border:none;padding:8px;border-radius:6px;margin-bottom:10px;color:white;}
+.menuBtn{display:none;background:#1db954;border:none;padding:8px;border-radius:6px;margin-bottom:15px;color:white;}
 
 @media(max-width:768px){
 body{flex-direction:column;}
-.sidebar{position:absolute;left:-250px;top:0;height:100%;z-index:1000;}
+.sidebar{position:absolute;left:-230px;top:0;height:100%;z-index:1000;}
 .sidebar.active{left:0;}
 .menuBtn{display:block;}
-.playerBar{flex-direction:column;align-items:flex-start;}
 }
+
 </style>
 </head>
-
 <body>
 
 <div class="sidebar" id="sidebar">
@@ -67,36 +80,31 @@ body{flex-direction:column;}
 <svg viewBox="0 0 24 24" fill="#1db954">
 <path d="M9 18V5l12-2v13"/>
 </svg>
-<h2>WaveBeat</h2>
+<h3>WaveBeat Pro</h3>
 </div>
 
 <button onclick="showPage('home')">Home</button>
 <button onclick="showPage('upload')">Upload</button>
 <button onclick="showPage('library')">Library</button>
-<button onclick="showPage('ai')">AI Playlist</button>
-<button onclick="toggleTheme()">Toggle Theme</button>
+<button onclick="smartShuffle()">Smart Shuffle</button>
 <button onclick="logout()">Logout</button>
+<button onclick="toggleTheme()">Toggle Theme</button>
 </div>
 
 <div class="main">
-
 <button class="menuBtn" onclick="toggleMenu()">☰ Menu</button>
 
-<!-- LOGIN -->
 <div id="login" class="page active">
 <h2>Login / Signup</h2>
-<input type="text" id="username" placeholder="Username">
-<input type="password" id="password" placeholder="Password">
-<button class="primary" onclick="login()">Login / Signup</button>
+<input type="text" id="username" placeholder="Enter Username">
+<button class="primary" onclick="login()">Continue</button>
 </div>
 
-<!-- HOME -->
 <div id="home" class="page">
 <h2>Welcome <span id="userDisplay"></span></h2>
-<p>Ultimate Premium Music Experience</p>
+<p>Your Personal Music World</p>
 </div>
 
-<!-- UPLOAD -->
 <div id="upload" class="page">
 <h2>Upload Song</h2>
 <input type="text" id="title" placeholder="Song Title">
@@ -104,36 +112,18 @@ body{flex-direction:column;}
 <button class="primary" onclick="uploadSong()">Upload</button>
 </div>
 
-<!-- LIBRARY -->
 <div id="library" class="page">
 <h2>Your Library</h2>
 <div class="grid" id="songGrid"></div>
 </div>
-
-<!-- AI PLAYLIST -->
-<div id="ai" class="page">
-<h2>AI Auto Playlist</h2>
-<div id="aiList"></div>
-</div>
-
 </div>
 
 <div class="playerBar" id="playerBar" style="display:none;">
-<div style="display:flex;align-items:center;gap:8px;">
-<img id="playerCover">
 <div id="playerTitle"></div>
-</div>
-
 <div>
 <button onclick="prevSong()">⏮</button>
-<button onclick="togglePlay()" id="playBtn">▶</button>
+<button onclick="togglePlay()">▶</button>
 <button onclick="nextSong()">⏭</button>
-<button onclick="likeSong()">❤️</button>
-</div>
-
-<div style="width:100%;">
-<canvas id="visualizer"></canvas>
-<input type="range" id="progress">
 </div>
 </div>
 
@@ -141,150 +131,97 @@ body{flex-direction:column;}
 let currentUser=null;
 let audio=new Audio();
 let currentIndex=0;
-let analyser, ctx, canvas;
 
-function toggleMenu(){document.getElementById("sidebar").classList.toggle("active");}
-function toggleTheme(){document.body.classList.toggle("light");localStorage.setItem("theme",document.body.classList.contains("light"));}
-if(localStorage.getItem("theme")==="true")document.body.classList.add("light");
-
-function login(){
-let u=username.value;
-let p=password.value;
-if(!u||!p)return alert("Enter details");
-localStorage.setItem("user_"+u,p);
-currentUser=u;
-userDisplay.innerText=u;
-showPage("home");
+function toggleMenu(){
+document.getElementById("sidebar").classList.toggle("active");
 }
-
-function logout(){location.reload();}
+function toggleTheme(){
+document.body.classList.toggle("light");
+}
 
 function showPage(id){
 document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
 document.getElementById(id).classList.add('active');
+if(window.innerWidth<768)toggleMenu();
 if(id==="library")loadSongs();
-if(id==="ai")generateAIPlaylist();
 }
 
-function randomGradient(){
-let colors=["#ff0080","#7928ca","#1db954","#ff8c00","#00c6ff"];
-return colors[Math.floor(Math.random()*colors.length)];
+function login(){
+let name=document.getElementById("username").value;
+if(!name)return alert("Enter username");
+currentUser=name;
+localStorage.setItem("currentUser",name);
+document.getElementById("userDisplay").innerText=name;
+showPage("home");
 }
 
-function generateCover(text){
-let c=document.createElement("canvas");
-c.width=300;c.height=300;
-let ctx=c.getContext("2d");
-let g=ctx.createLinearGradient(0,0,300,300);
-g.addColorStop(0,randomGradient());
-g.addColorStop(1,randomGradient());
-ctx.fillStyle=g;
-ctx.fillRect(0,0,300,300);
-ctx.fillStyle="white";
-ctx.font="bold 24px Arial";
-ctx.fillText(text,40,160);
-return c.toDataURL();
+function logout(){
+localStorage.removeItem("currentUser");
+location.reload();
 }
 
 function uploadSong(){
 let title=document.getElementById("title").value;
 let file=document.getElementById("audioFile").files[0];
 if(!title||!file)return alert("Fill all fields");
+
 let reader=new FileReader();
 reader.onload=e=>{
-let songs=JSON.parse(localStorage.getItem("songs_"+currentUser))||[];
-songs.push({id:Date.now(),title,audio:e.target.result,cover:generateCover(title),likes:0});
-localStorage.setItem("songs_"+currentUser,JSON.stringify(songs));
+let songs=JSON.parse(localStorage.getItem(currentUser+"_songs"))||[];
+songs.push({title,audio:e.target.result});
+localStorage.setItem(currentUser+"_songs",JSON.stringify(songs));
 alert("Uploaded!");
 };
 reader.readAsDataURL(file);
 }
 
 function loadSongs(){
-let songs=JSON.parse(localStorage.getItem("songs_"+currentUser))||[];
+let songs=JSON.parse(localStorage.getItem(currentUser+"_songs"))||[];
 let grid=document.getElementById("songGrid");
 grid.innerHTML="";
 songs.forEach((song,i)=>{
 let card=document.createElement("div");
 card.className="card";
-card.innerHTML=`<img src="${song.cover}"><h4>${song.title}</h4>`;
+card.innerHTML=`<h4>${song.title}</h4>`;
 card.onclick=()=>playSong(i);
 grid.appendChild(card);
 });
 }
 
-function generateAIPlaylist(){
-let songs=JSON.parse(localStorage.getItem("songs_"+currentUser))||[];
-let sorted=[...songs].sort((a,b)=>b.likes-a.likes);
-let list=document.getElementById("aiList");
-list.innerHTML="";
-sorted.slice(0,5).forEach(s=>{
-let div=document.createElement("div");
-div.innerText="🎵 "+s.title+" (❤️ "+s.likes+")";
-list.appendChild(div);
-});
-}
-
-function setupVisualizer(){
-canvas=document.getElementById("visualizer");
-ctx=canvas.getContext("2d");
-let audioCtx=new AudioContext();
-analyser=audioCtx.createAnalyser();
-let source=audioCtx.createMediaElementSource(audio);
-source.connect(analyser);
-analyser.connect(audioCtx.destination);
-analyser.fftSize=64;
-draw();
-}
-
-function draw(){
-requestAnimationFrame(draw);
-let bufferLength=analyser.frequencyBinCount;
-let dataArray=new Uint8Array(bufferLength);
-analyser.getByteFrequencyData(dataArray);
-ctx.clearRect(0,0,canvas.width,canvas.height);
-let barWidth=(canvas.width/bufferLength);
-for(let i=0;i<bufferLength;i++){
-let barHeight=dataArray[i];
-ctx.fillStyle="#1db954";
-ctx.fillRect(i*barWidth,canvas.height-barHeight/2,barWidth-2,barHeight/2);
-}
-}
-
 function playSong(index){
-let songs=JSON.parse(localStorage.getItem("songs_"+currentUser))||[];
+let songs=JSON.parse(localStorage.getItem(currentUser+"_songs"))||[];
 currentIndex=index;
 audio.src=songs[index].audio;
 audio.play();
 document.getElementById("playerBar").style.display="flex";
-playerCover.src=songs[index].cover;
-playerTitle.innerText=songs[index].title;
-if(!analyser)setupVisualizer();
+document.getElementById("playerTitle").innerText=songs[index].title;
 }
 
 function togglePlay(){
-if(audio.paused){audio.play();playBtn.innerText="⏸";}
-else{audio.pause();playBtn.innerText="▶";}
+if(audio.paused)audio.play();
+else audio.pause();
 }
 
 function prevSong(){if(currentIndex>0)playSong(currentIndex-1);}
 function nextSong(){
-let songs=JSON.parse(localStorage.getItem("songs_"+currentUser))||[];
+let songs=JSON.parse(localStorage.getItem(currentUser+"_songs"))||[];
 if(currentIndex<songs.length-1)playSong(currentIndex+1);
 }
 
-function likeSong(){
-let songs=JSON.parse(localStorage.getItem("songs_"+currentUser))||[];
-songs[currentIndex].likes++;
-localStorage.setItem("songs_"+currentUser,JSON.stringify(songs));
-alert("Liked!");
+function smartShuffle(){
+let songs=JSON.parse(localStorage.getItem(currentUser+"_songs"))||[];
+if(songs.length<1)return alert("No songs");
+let random=Math.floor(Math.random()*songs.length);
+playSong(random);
 }
 
-audio.addEventListener("timeupdate",()=>{
-progress.value=(audio.currentTime/audio.duration)*100||0;
-});
-progress.oninput=function(){
-audio.currentTime=(progress.value/100)*audio.duration;
+window.onload=function(){
+let savedUser=localStorage.getItem("currentUser");
+if(savedUser){
+currentUser=savedUser;
+document.getElementById("userDisplay").innerText=savedUser;
+showPage("home");
+}
 };
 </script>
 
