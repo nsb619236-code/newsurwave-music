@@ -40,6 +40,55 @@ async function loadAllSongs() {
     alert("Songs load nahi hue – internet check karo");
   }
 }
+function renderPlaylists() {
+  const container = document.getElementById('playlists');
+  container.innerHTML = '';
+  playlists.forEach(pl => {
+    const card = document.createElement('div');
+    card.className = 'card bg-gray-800 p-6 rounded-xl cursor-pointer';
+    card.innerHTML = `
+      <h4 class="font-bold text-xl">${pl.name}</h4>
+      <p class="text-sm text-gray-400">${pl.songs.length} songs</p>
+    `;
+    card.onclick = () => showPlaylistSongs(pl);
+    container.appendChild(card);
+  });
+}
+
+function showPlaylistSongs(playlist) {
+  document.getElementById('playlist-title').textContent = playlist.name;
+  const list = document.getElementById('playlist-songs-list');
+  list.innerHTML = '';
+  playlist.songs.forEach(song => {
+    const div = document.createElement('div');
+    div.className = 'bg-gray-700 p-4 rounded-lg flex justify-between items-center';
+    div.innerHTML = `
+      <div>
+        <p class="font-medium">${song.title}</p>
+        <p class="text-sm text-gray-400">${song.artist}</p>
+      </div>
+      <button onclick="playSong({title: '${song.title}', artist: '${song.artist}', audio: '${song.audio}'})" class="text-cyan-400">
+        <i class="fas fa-play"></i>
+      </button>
+    `;
+    list.appendChild(div);
+  });
+  document.getElementById('playlist-songs').classList.remove('hidden');
+}
+
+// Create new playlist
+function createPlaylist() {
+  const name = prompt("Playlist का नाम डालो:");
+  if (name) {
+    playlists.push({ name, songs: [] });
+    localStorage.setItem('playlists', JSON.stringify(playlists));
+    renderPlaylists();
+    alert("Playlist बन गई!");
+  }
+}
+
+// Initial render
+renderPlaylists();
 // renderSongs function में card HTML में ये add करो
 div.innerHTML = `
   <p class="font-bold">${song.title}</p>
