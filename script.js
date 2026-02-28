@@ -246,3 +246,21 @@ async function uploadSong() {
 window.onload = () => {
   loadAllSongs();
 };
+function addToPlaylist(title, artist, audio) {
+  if (!playlists.length) {
+    alert("पहले कोई playlist बनाओ!");
+    return;
+  }
+
+  // पहली playlist में add कर दो (या prompt से पूछो)
+  const playlistName = prompt("किस playlist में add करना है?", playlists[0].name);
+  const playlist = playlists.find(p => p.name === playlistName);
+
+  if (playlist) {
+    playlist.songs.push({ title, artist, audio });
+    localStorage.setItem('playlists', JSON.stringify(playlists));
+    alert(`"${title}" added to "${playlistName}"!`);
+  } else {
+    alert("Playlist नहीं मिली");
+  }
+}
