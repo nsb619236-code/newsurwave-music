@@ -1,230 +1,150 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WaveBeat X</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waves Beat Music</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #fff;
+    }
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    /* Glassmorphism Card */
+    .glass {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif;}
+    /* Player visualizer bars */
+    .bar {
+      width: 3px;
+      margin: 0 1px;
+      background: #ff4b2b;
+      display: inline-block;
+      animation: bounce 1s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { height: 10px; }
+      50% { height: 30px; }
+    }
 
-body{
-background:#121212;
-color:white;
-display:flex;
-height:100vh;
-overflow:hidden;
-}
-
-/* SIDEBAR */
-.sidebar{
-width:230px;
-background:#000;
-padding:25px 15px;
-display:flex;
-flex-direction:column;
-}
-
-.logo{
-font-size:22px;
-font-weight:700;
-margin-bottom:30px;
-color:#1db954;
-}
-
-.nav button{
-background:none;
-border:none;
-color:#bbb;
-padding:10px;
-text-align:left;
-width:100%;
-font-size:14px;
-border-radius:6px;
-cursor:pointer;
-transition:.3s;
-}
-
-.nav button:hover{
-background:#1db954;
-color:white;
-}
-
-/* MAIN */
-.main{
-flex:1;
-padding:30px;
-overflow-y:auto;
-background:linear-gradient(to bottom,#1e1e1e,#121212);
-}
-
-h1{
-font-size:24px;
-margin-bottom:20px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-gap:20px;
-}
-
-.card{
-background:#181818;
-padding:15px;
-border-radius:12px;
-cursor:pointer;
-transition:.3s;
-}
-
-.card:hover{
-background:#282828;
-transform:translateY(-5px);
-}
-
-.card img{
-width:100%;
-border-radius:8px;
-margin-bottom:10px;
-}
-
-.card h4{
-font-size:14px;
-}
-
-/* PLAYER */
-.player{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-background:#181818;
-padding:12px 20px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-border-top:1px solid #333;
-}
-
-.player-info{
-display:flex;
-align-items:center;
-gap:10px;
-}
-
-.player-info img{
-width:50px;
-border-radius:6px;
-}
-
-.controls button{
-background:none;
-border:none;
-color:white;
-font-size:18px;
-margin:0 8px;
-cursor:pointer;
-}
-
-.controls button:hover{
-color:#1db954;
-}
-
-/* MOBILE */
-@media(max-width:768px){
-.sidebar{
-display:none;
-}
-body{
-flex-direction:column;
-}
-.main{
-padding:20px;
-}
-}
-</style>
+  </style>
 </head>
+<body class="flex flex-col min-h-screen">
 
-<body>
+  <!-- Sidebar -->
+  <aside class="glass w-64 p-6 flex flex-col space-y-6 fixed h-full">
+    <h1 class="text-2xl font-bold mb-4">Waves Beat</h1>
+    <nav class="flex flex-col space-y-4">
+      <a href="#" class="hover:text-yellow-400">Home</a>
+      <a href="#" class="hover:text-yellow-400">Library</a>
+      <a href="#" class="hover:text-yellow-400">Playlists</a>
+      <a href="#" class="hover:text-yellow-400">Upload</a>
+      <a href="#" class="hover:text-yellow-400">Profile</a>
+    </nav>
+  </aside>
 
-<div class="sidebar">
-<div class="logo">🎧 WaveBeat X</div>
-<div class="nav">
-<button>Home</button>
-<button>Search</button>
-<button>Your Library</button>
-<button>Create Playlist</button>
-</div>
-</div>
+  <!-- Main Content -->
+  <main class="ml-64 p-6 flex-1 flex flex-col space-y-6">
 
-<div class="main">
-<h1>Good Evening</h1>
+    <!-- Featured Songs Section -->
+    <section>
+      <h2 class="text-xl font-bold mb-4">Recently Played</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="glass p-4 flex flex-col items-center">
+          <img src="https://via.placeholder.com/150" class="rounded-lg mb-2" alt="Album">
+          <h3 class="font-semibold">Song Title 1</h3>
+          <p class="text-sm text-gray-300">Artist</p>
+        </div>
+        <div class="glass p-4 flex flex-col items-center">
+          <img src="https://via.placeholder.com/150" class="rounded-lg mb-2" alt="Album">
+          <h3 class="font-semibold">Song Title 2</h3>
+          <p class="text-sm text-gray-300">Artist</p>
+        </div>
+      </div>
+    </section>
 
-<div class="grid">
-<div class="card" onclick="play('Song 1')">
-<img src="https://picsum.photos/200?1">
-<h4>Chill Vibes</h4>
-</div>
+    <!-- Upload Section -->
+    <section>
+      <h2 class="text-xl font-bold mb-4">Upload Songs</h2>
+      <input type="file" id="uploadSong" accept="audio/*" class="mb-2 p-2 rounded text-black">
+      <button id="uploadBtn" class="bg-yellow-400 text-black px-4 py-2 rounded hover:bg-yellow-500">Upload</button>
+    </section>
 
-<div class="card" onclick="play('Song 2')">
-<img src="https://picsum.photos/200?2">
-<h4>Workout Hits</h4>
-</div>
+  </main>
 
-<div class="card" onclick="play('Song 3')">
-<img src="https://picsum.photos/200?3">
-<h4>LoFi Mix</h4>
-</div>
+  <!-- Bottom Music Player -->
+  <div class="glass fixed bottom-0 left-0 w-full flex items-center justify-between p-4">
+    <div class="flex items-center space-x-4">
+      <img id="albumCover" src="https://via.placeholder.com/60" class="rounded-lg" alt="Album">
+      <div>
+        <h3 id="songTitle" class="font-bold">No Song</h3>
+        <p id="songArtist" class="text-sm text-gray-300">Unknown</p>
+      </div>
+    </div>
 
-<div class="card" onclick="play('Song 4')">
-<img src="https://picsum.photos/200?4">
-<h4>Party Mode</h4>
-</div>
+    <div class="flex items-center space-x-4">
+      <i id="prevBtn" class="fas fa-backward cursor-pointer hover:text-yellow-400"></i>
+      <i id="playBtn" class="fas fa-play cursor-pointer hover:text-yellow-400"></i>
+      <i id="nextBtn" class="fas fa-forward cursor-pointer hover:text-yellow-400"></i>
+    </div>
 
-<div class="card" onclick="play('Song 5')">
-<img src="https://picsum.photos/200?5">
-<h4>Romantic</h4>
-</div>
+    <div class="flex items-center space-x-2">
+      <input id="volume" type="range" min="0" max="1" step="0.01">
+      <div id="visualizer" class="flex items-end h-6">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+    </div>
+  </div>
 
-<div class="card" onclick="play('Song 6')">
-<img src="https://picsum.photos/200?6">
-<h4>Night Drive</h4>
-</div>
-</div>
-</div>
+  <!-- JS -->
+  <script>
+    const playBtn = document.getElementById('playBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const uploadSong = document.getElementById('uploadSong');
 
-<div class="player">
-<div class="player-info">
-<img id="cover" src="https://picsum.photos/200?7">
-<div id="title">No song playing</div>
-</div>
+    let currentAudio = null;
 
-<div class="controls">
-<button onclick="prev()">⏮</button>
-<button onclick="toggle()">▶</button>
-<button onclick="next()">⏭</button>
-</div>
-</div>
+    playBtn.addEventListener('click', () => {
+      if (!currentAudio) return;
+      if (currentAudio.paused) {
+        currentAudio.play();
+        playBtn.classList.replace('fa-play', 'fa-pause');
+      } else {
+        currentAudio.pause();
+        playBtn.classList.replace('fa-pause', 'fa-play');
+      }
+    });
 
-<script>
-function play(name){
-document.getElementById("title").innerText=name;
-}
+    uploadBtn.addEventListener('click', () => {
+      if (uploadSong.files.length === 0) return alert('Select a song first!');
+      const file = uploadSong.files[0];
+      const url = URL.createObjectURL(file);
 
-function toggle(){
-alert("Audio feature next upgrade 🔥");
-}
-
-function prev(){
-alert("Previous track");
-}
-
-function next(){
-alert("Next track");
-}
-</script>
+      if (currentAudio) currentAudio.pause();
+      currentAudio = new Audio(url);
+      document.getElementById('songTitle').textContent = file.name;
+      document.getElementById('songArtist').textContent = "Unknown Artist";
+      currentAudio.play();
+      playBtn.classList.replace('fa-play', 'fa-pause');
+    });
+  </script>
 
 </body>
 </html>
