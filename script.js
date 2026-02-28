@@ -186,3 +186,56 @@ function switchTab(tab) {
   }
   // Search tab के लिए भी add कर सकते हो
 }
+// Firebase init (head में SDK add है तो ये काम करेगा)
+const firebaseConfig = {
+  // अपना config डालो (Firebase Console से copy)
+  apiKey: "AIzaSy...",
+  authDomain: "your-project.firebaseapp.com",
+  projectId: "your-project-id",
+  storageBucket: "your-project.appspot.com",
+  messagingSenderId: "your-sender-id",
+  appId: "1:your-app-id:web:your-web-id"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// Load songs from Firestore
+async function loadAllSongs() {
+  try {
+    const snapshot = await db.collection('Songs').orderBy('uploadedAt', 'desc').get();
+    const firestoreSongs = [];
+    snapshot.forEach(doc => {
+      firestoreSongs.push({
+        id: doc.id,
+        ...doc.data()
+      });
+    });
+
+    // पुरानी example songs + new Firestore songs merge
+    songs = [...songs, ...firestoreSongs];
+    console.log("Total songs:", songs.length);
+
+    // Render all sections
+    renderSongs('popular-songs-grid', songs);
+    renderSongs('made-for-you', songs.slice(0, 5));
+    renderSongs('library-grid', songs); // Library में भी
+  } catch (error) {
+    console.error("Firestore load error:", error);
+  }
+}
+
+// Upload के बाद refresh
+async function uploadSong() {
+  // ... तुम्हारा upload code (Storage + Firestore add)
+
+  if (success) {
+    alert("Song saved!");
+    await loadAllSongs(); // list update
+  }
+}
+
+// Page load पर call
+window.onload = () => {
+  loadAllSongs();
+};
