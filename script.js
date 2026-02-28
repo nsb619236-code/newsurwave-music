@@ -40,7 +40,14 @@ async function loadAllSongs() {
     alert("Songs load nahi hue – internet check karo");
   }
 }
-
+// renderSongs function में card HTML में ये add करो
+div.innerHTML = `
+  <p class="font-bold">${song.title}</p>
+  <p class="text-sm text-gray-400">${song.artist}</p>
+  <button onclick="addToPlaylist('${song.title}', '${song.artist}', '${song.audio}')" class="mt-2 text-cyan-400 hover:text-cyan-300">
+    <i class="fas fa-plus-circle text-xl"></i> Add to Playlist
+  </button>
+`;
 // Upload Song
 async function uploadSong() {
   const fileInput = document.getElementById('upload-file');
