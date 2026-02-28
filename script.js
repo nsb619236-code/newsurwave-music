@@ -103,10 +103,53 @@ async function uploadSong() {
   const fileInput = document.getElementById('upload-file');
   const file = fileInput.files[0];
 
-  if (!file) return alert("MP3 file चुनो!");
+  if (!file) {
+    alert("MP3 file चुनो!");
+    return;
+  }
 
   const title = document.getElementById('upload-title').value.trim() || "New Song";
   const artist = document.getElementById('upload-artist').value.trim() || "Unknown";
+
+  // Step 1: Unsplash से random music cover generate
+  let coverUrl = "https://picsum.photos/300/300"; // fallback
+
+  try {
+    const res = await fetch(`https://api.unsplash.com/photos/random?query=music,wave,beat&orientation=squarish&client_id=${UNSPLASH_KEY}`);
+    const data = await res.json();
+    if (data.urls?.regular) {
+      coverUrl = data.urls.regular; // high quality image
+      console.log("Unsplash cover:", coverUrl);
+    }
+  } catch (err) {
+    console.log("Unsplash error, using fallback:", err);
+  }
+
+  // Step 2: Local file URL create
+  const songUrl = URL.createObjectURL(file);
+
+  // Step 3: New song object
+  const newSong = {
+    title,
+    artist,
+    audio: songUrl,
+    cover: coverUrl
+  };
+
+  // Add to library / liked songs
+  likedSongs.push(newSong);
+  localStorage.setItem('likedSongs', JSON.stringify(likedSongs));
+
+  alert(`"${title}" by ${artist} uploaded! Cover auto-generated from Unsplash 🎨`);
+
+  // Refresh library view
+  renderLibrary();
+
+  // Clear inputs
+  fileInput.value = '';
+  document.getElementById('upload-title').value = '';
+  document.getElementById('upload-artist').value = '';
+}
 
   try {
     const fileName = `${title}-${artist}-${Date.now()}.mp3`;
