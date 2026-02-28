@@ -99,6 +99,13 @@ div.innerHTML = `
   </button>
 `;
 // Upload Song
+await db.collection('songs').add({
+  title,
+  artist,
+  audio: songUrl, // URL.createObjectURL
+  cover: coverUrl,
+  uploadedAt: new Date()
+});
 async function uploadSong() {
   const fileInput = document.getElementById('upload-file');
   const file = fileInput.files[0];
@@ -356,4 +363,6 @@ function addToPlaylist(title, artist, audio) {
   } else {
     alert("Playlist नहीं मिली");
   }
+  const snapshot = await db.collection('songs').get();
+snapshot.forEach(doc => songs.push(doc.data()));
 }
