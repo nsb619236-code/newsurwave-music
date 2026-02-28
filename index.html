@@ -1,428 +1,276 @@
 <!DOCTYPE html>
 <html lang="hi">
-<head><head>
-  <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#22c55e">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Waves Beat Music</title>
-  
-  <!-- Firebase SDK - ये तीन लाइनें add करो -->
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
-
-  <!-- बाकी तुम्हारा code जैसे Tailwind, Font Awesome आदि -->
+  <title>Wave Beat Music</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-  ...
-</head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Waves Beat Music</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap');
-    
-    :root {
-      --primary: #22c55e;
-      --blue: #3b82f6;
-      --yellow: #facc15;
-      --red: #ef4444;
-    }
-    
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: linear-gradient(135deg, #0a0e17, #1e2937, #0f172a);
-      background-attachment: fixed;
-    }
-    <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(reg => console.log('Service Worker Registered!', reg))
-        .catch(err => console.log('Service Worker Error:', err));
-    });
-  }
-</script>
-    .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 3.8rem;
-      background: linear-gradient(90deg, #3b82f6, #22c55e, #facc15, #ef4444);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 30px rgba(34,197,94,0.5);
-    }
-    
-    .hero {
-      background: linear-gradient(135deg, rgba(59,130,246,0.4), rgba(34,197,94,0.4), rgba(250,204,21,0.3));
-      background-size: 300% 300%;
-      animation: gradientShift 15s ease infinite;
-    }
-    
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    
-    .song-card {
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .song-card:hover {
-      transform: translateY(-12px) scale(1.05);
-      box-shadow: 0 25px 50px -12px rgb(34 197 94 / 0.4);
-    }
-    
-    .rotating {
-      animation: spin 25s linear infinite;
-    }
-    
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    
-    .bottom-player {
-      backdrop-filter: blur(20px);
-    }
-    
-    .modal {
-      animation: modalPop 0.4s ease forwards;
-    }
-    
-    @keyframes modalPop {
-      from { opacity: 0; transform: scale(0.7); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    
-    .nav-link {
-      transition: all 0.3s ease;
-    }
-    
-    .nav-link:hover, .nav-link.active {
-      background: #27272a;
-      color: #22c55e;
-      border-left: 4px solid #22c55e;
-    }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); color: white; min-height: 100vh; }
+    .wave-logo { font-family: 'Playfair Display', serif; font-size: 3.5rem; background: linear-gradient(90deg, #00c6ff, #0072ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .smooth-scroll { scroll-behavior: smooth; }
+    .card { transition: all 0.3s ease; }
+    .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0, 114, 255, 0.3); }
+    .bottom-player { backdrop-filter: blur(12px); }
   </style>
 </head>
-<body class="text-white min-h-screen flex flex-col">
+<body class="smooth-scroll">
 
-  <!-- SIDEBAR -->
-  <div class="fixed left-0 top-0 bottom-0 w-72 bg-zinc-950 border-r border-zinc-800 overflow-y-auto z-50">
-    <div class="p-6">
-      <div class="flex items-center gap-3 mb-10">
-        <div class="text-6xl">🌊</div>
+  <!-- Header / Logo + Top Bar -->
+  <header class="fixed top-0 left-0 right-0 bg-black/70 backdrop-blur-md z-50 border-b border-blue-900/50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <h1 class="wave-logo flex items-center gap-3">
+        <i class="fas fa-wave-square text-5xl text-cyan-400"></i> Wave Beat
+      </h1>
+      <div class="flex items-center gap-6">
+        <button onclick="showLoginModal()" class="px-6 py-2 bg-blue-600 hover:bg-blue-500 rounded-full font-medium">Login</button>
+        <button onclick="showSignupModal()" class="px-6 py-2 bg-cyan-500 hover:bg-cyan-400 text-black rounded-full font-bold">Sign Up Free</button>
+        <button onclick="showSettingsModal()" class="text-2xl text-cyan-400 hover:text-white"><i class="fas fa-cog"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="pt-24 pb-32 px-6 max-w-7xl mx-auto">
+
+    <!-- Hero -->
+    <section class="text-center py-20">
+      <h2 class="text-6xl font-bold mb-6 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Wave Beat Music</h2>
+      <p class="text-xl text-gray-300 mb-10">Feel every beat. Live every wave.</p>
+      <button onclick="playRandom()" class="px-12 py-5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full text-2xl font-bold hover:scale-105 transition">PLAY NOW</button>
+    </section>
+
+    <!-- Upload Section -->
+    <section class="mb-16 bg-gray-900/50 p-8 rounded-3xl border border-blue-800/50">
+      <h3 class="text-3xl font-bold mb-6">Upload Your Song</h3>
+      <input id="upload-file" type="file" accept="audio/*" class="mb-4 block w-full text-sm text-gray-400 file:mr-4 file:py-3 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-cyan-600 file:text-white hover:file:bg-cyan-700">
+      <input id="upload-title" type="text" placeholder="Song Title" class="w-full p-4 mb-4 bg-gray-800 rounded-xl">
+      <input id="upload-artist" type="text" placeholder="Artist Name" class="w-full p-4 mb-6 bg-gray-800 rounded-xl">
+      <button onclick="uploadSong()" class="w-full py-5 bg-cyan-600 hover:bg-cyan-500 rounded-xl font-bold text-lg">Upload Song</button>
+    </section>
+
+    <!-- Library / Liked Songs -->
+    <section class="mb-16">
+      <h3 class="text-3xl font-bold mb-6">Your Library</h3>
+      <div id="library" class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <!-- Dynamically filled -->
+      </div>
+    </section>
+
+    <!-- Playlists -->
+    <section class="mb-16">
+      <h3 class="text-3xl font-bold mb-6 flex justify-between items-center">
+        Playlists
+        <button onclick="createPlaylist()" class="text-cyan-400 hover:text-cyan-300"><i class="fas fa-plus-circle text-3xl"></i></button>
+      </h3>
+      <div id="playlists" class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <!-- Dynamically filled -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Player -->
+  <footer class="fixed bottom-0 left-0 right-0 bg-gray-900/90 backdrop-blur-lg border-t border-blue-900/50 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <img id="player-cover" src="https://picsum.photos/80" class="w-14 h-14 rounded-lg">
         <div>
-          <h1 class="logo tracking-tighter">Waves</h1>
-          <p class="text-emerald-400 text-sm font-medium tracking-widest">BEAT MUSIC</p>
+          <p id="player-title" class="font-medium">Select a song...</p>
+          <p id="player-artist" class="text-sm text-gray-400">—</p>
         </div>
       </div>
-
-      <div class="space-y-2">
-        <a onclick="switchTab(0)" class="nav-link active flex items-center gap-4 px-5 py-4 rounded-2xl text-lg cursor-pointer">
-          <i class="fas fa-home"></i> Home
-        </a>
-        <a onclick="switchTab(1)" class="nav-link flex items-center gap-4 px-5 py-4 rounded-2xl text-lg cursor-pointer">
-          <i class="fas fa-search"></i> Search
-        </a>
-        <a onclick="switchTab(2)" class="nav-link flex items-center gap-4 px-5 py-4 rounded-2xl text-lg cursor-pointer">
-          <i class="fas fa-book"></i> Your Library
-        </a>
+      <div class="flex items-center gap-8">
+        <button onclick="toggleShuffle()"><i class="fas fa-random text-xl"></i></button>
+        <button onclick="prevSong()"><i class="fas fa-backward-step text-2xl"></i></button>
+        <button onclick="togglePlay()" id="play-pause-btn" class="text-4xl"><i class="fas fa-play-circle"></i></button>
+        <button onclick="nextSong()"><i class="fas fa-forward-step text-2xl"></i></button>
+        <button onclick="toggleRepeat()"><i class="fas fa-repeat text-xl"></i></button>
       </div>
-
-      <div class="mt-10">
-        <div class="flex items-center justify-between mb-4">
-          <span class="text-zinc-400 font-medium">PLAYLISTS</span>
-          <button onclick="showUploadModal()" class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
-            <i class="fas fa-plus"></i>
-          </button>
-        </div>
-        <div id="playlist-list" class="text-zinc-400 text-sm space-y-3"></div>
+      <div class="flex items-center gap-4">
+        <button onclick="downloadCurrent()"><i class="fas fa-download text-xl"></i></button>
+        <input type="range" id="volume" min="0" max="100" value="80" class="w-32 accent-cyan-500">
       </div>
     </div>
-  </div>
+  </footer>
 
-  <!-- MAIN CONTENT -->
-  <div class="ml-72 flex-1 flex flex-col min-h-screen">
-    <!-- TOP BAR -->
-    <div class="h-16 bg-zinc-900/80 backdrop-blur-md border-b border-zinc-800 flex items-center px-8 z-40">
-      <div class="flex-1 max-w-xl">
-        <div class="bg-zinc-800 rounded-full py-3 px-6 flex items-center gap-4">
-          <i class="fas fa-search text-zinc-400"></i>
-          <input id="search-input" onkeyup="if(event.key==='Enter') searchSongs()" type="text" 
-                 placeholder="What do you want to play?" class="bg-transparent outline-none flex-1">
-        </div>
-      </div>
-
-      <div class="flex items-center gap-6 ml-auto">
-        <button onclick="showUploadModal()" class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 px-6 py-2 rounded-full font-semibold">
-          <i class="fas fa-cloud-upload-alt"></i> Upload Song
-        </button>
-        <button onclick="showLoginModal()" class="px-6 py-2 font-medium hover:text-emerald-400">Log in</button>
-        <button onclick="showSignupModal()" class="bg-white text-black px-6 py-2 rounded-full font-semibold hover:bg-emerald-400">Sign up free</button>
-        <button onclick="showSettingsModal()" class="text-2xl text-zinc-400 hover:text-white">
-          <i class="fas fa-cog"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- CONTENT AREA -->
-    <div id="main-content" class="flex-1 overflow-y-auto pb-32">
-      <!-- Hero -->
-      <div class="hero h-96 flex items-center px-12 relative overflow-hidden">
-        <div class="max-w-lg z-10">
-          <div class="inline-flex bg-white/10 backdrop-blur-md px-5 py-2 rounded-full text-sm mb-6">
-            TRENDING THIS WEEK 🔥
-          </div>
-          <h1 class="text-7xl font-bold leading-none mb-4">Waves Beat<br>Music</h1>
-          <p class="text-2xl text-emerald-300 mb-8">Feel every beat. Live every wave.</p>
-          <button onclick="playFeatured()" class="bg-white text-black font-bold text-xl px-12 py-6 rounded-2xl flex items-center gap-4 hover:scale-105 transition">
-            <i class="fas fa-play"></i> PLAY NOW
-          </button>
-        </div>
-        <img src="https://picsum.photos/id/1015/1200/600" class="absolute inset-0 w-full h-full object-cover opacity-40" alt="">
-      </div>
-
-      <!-- Made for You -->
-      <div class="px-12 py-10">
-        <h2 class="text-3xl font-bold mb-6">Made for You</h2>
-        <div id="made-for-you" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"></div>
-      </div>
-
-      <!-- Popular Songs -->
-      <div class="px-12">
-        <h2 class="text-3xl font-bold mb-6">Popular Songs Right Now <span class="text-red-500">🔥</span></h2>
-        <div id="popular-songs" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- BOTTOM PLAYER -->
-  <div id="player" class="fixed bottom-0 left-0 right-0 h-20 bg-zinc-900/95 backdrop-blur-xl border-t border-zinc-700 z-50 flex items-center px-4 gap-4">
-    <div class="flex items-center gap-4 w-80">
-      <img id="player-cover" src="https://picsum.photos/id/1015/300/300" class="w-14 h-14 rounded-xl">
-      <div class="min-w-0">
-        <p id="player-title" class="font-medium truncate">Select a song...</p>
-        <p id="player-artist" class="text-xs text-zinc-400 truncate">—</p>
-      </div>
-    </div>
-
-    <div class="flex-1 flex flex-col items-center">
-      <div class="flex items-center gap-6 text-xl">
-        <button onclick="toggleShuffle()" class="text-zinc-400 hover:text-white"><i class="fas fa-random"></i></button>
-        <button onclick="prevSong()" class="text-zinc-400 hover:text-white"><i class="fas fa-step-backward"></i></button>
-        <button onclick="togglePlay()" id="play-btn" class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center hover:scale-110">
-          <i class="fas fa-play text-2xl ml-1"></i>
-        </button>
-        <button onclick="nextSong()" class="text-zinc-400 hover:text-white"><i class="fas fa-step-forward"></i></button>
-        <button onclick="toggleRepeat()" class="text-zinc-400 hover:text-white"><i class="fas fa-redo"></i></button>
-      </div>
-      <div class="w-full max-w-md flex items-center gap-3 text-xs mt-2">
-        <span id="current-time">0:00</span>
-        <div class="flex-1 h-1 bg-zinc-700 rounded-full cursor-pointer" onclick="seek(event)">
-          <div id="progress-bar" class="h-1 w-0 bg-emerald-500 rounded-full"></div>
-        </div>
-        <span id="total-time">0:00</span>
-      </div>
-    </div>
-
-    <div class="flex items-center gap-6 w-80 justify-end">
-      <button onclick="downloadCurrentSong()" class="text-zinc-400 hover:text-emerald-400"><i class="fas fa-download"></i></button>
-      <button onclick="showSettingsModal()" class="text-zinc-400 hover:text-emerald-400"><i class="fas fa-cog"></i></button>
-      <i class="fas fa-volume-up text-zinc-400"></i>
-      <input type="range" id="volume-slider" min="0" max="100" value="80" class="w-28 accent-emerald-500">
-    </div>
-
-    <audio id="audio-player" class="hidden"></audio>
-  </div>
-
-  <!-- Modals (Login, Signup, Upload, Settings) -->
-  <!-- Login Modal -->
-  <div id="login-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[200]">
-    <div class="modal bg-zinc-900 w-full max-w-md rounded-3xl p-10">
-      <h2 class="text-3xl font-bold mb-8">Welcome back</h2>
-      <input id="login-email" type="text" placeholder="Email" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-5 mb-4">
-      <input id="login-pass" type="password" placeholder="Password" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-5 mb-6">
-      <button onclick="performLogin()" class="w-full bg-emerald-500 text-black font-bold py-6 rounded-2xl">LOG IN</button>
-    </div>
-  </div>
-
+  <!-- Modals -->
   <!-- Signup Modal -->
-  <div id="signup-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[200]">
-    <div class="modal bg-zinc-900 w-full max-w-md rounded-3xl p-10">
-      <h2 class="text-3xl font-bold mb-8">Create account</h2>
-      <input id="signup-name" type="text" placeholder="Full Name" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-5 mb-4">
-      <input id="signup-email" type="email" placeholder="Email" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-5 mb-4">
-      <input id="signup-pass" type="password" placeholder="Password" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-5 mb-6">
-      <button onclick="performSignup()" class="w-full bg-white text-black font-bold py-6 rounded-2xl">SIGN UP FREE</button>
+  <div id="signup-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+    <div class="bg-gray-900 p-10 rounded-3xl w-full max-w-md">
+      <h2 class="text-3xl font-bold mb-6">Sign Up Free</h2>
+      <input id="signup-name" type="text" placeholder="Full Name" class="w-full p-4 mb-4 bg-gray-800 rounded-xl">
+      <input id="signup-email" type="email" placeholder="Email" class="w-full p-4 mb-4 bg-gray-800 rounded-xl">
+      <input id="signup-pass" type="password" placeholder="Password" class="w-full p-4 mb-6 bg-gray-800 rounded-xl">
+      <button onclick="signup()" class="w-full py-5 bg-cyan-600 rounded-xl font-bold">Create Account</button>
+      <button onclick="hideSignupModal()" class="mt-4 text-gray-400">Close</button>
     </div>
   </div>
 
-  <!-- Upload Modal -->
-  <div id="upload-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[200]">
-    <div class="modal bg-zinc-900 w-full max-w-md rounded-3xl p-10">
-      <h2 class="text-3xl font-bold mb-8">Upload New Song</h2>
-      <input id="upload-title" type="text" placeholder="Song Title" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-5 mb-4">
-      <input id="upload-artist" type="text" placeholder="Artist" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-5 mb-4">
-      <input id="upload-file" type="file" accept="audio/mp3" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-5 mb-6">
-      <button onclick="uploadSong()" class="w-full bg-gradient-to-r from-emerald-400 to-cyan-400 text-black font-bold py-6 rounded-2xl">UPLOAD NOW</button>
+  <!-- Login Modal -->
+  <div id="login-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+    <div class="bg-gray-900 p-10 rounded-3xl w-full max-w-md">
+      <h2 class="text-3xl font-bold mb-6">Login</h2>
+      <input id="login-email" type="email" placeholder="Email" class="w-full p-4 mb-4 bg-gray-800 rounded-xl">
+      <input id="login-pass" type="password" placeholder="Password" class="w-full p-4 mb-6 bg-gray-800 rounded-xl">
+      <button onclick="login()" class="w-full py-5 bg-cyan-600 rounded-xl font-bold">Login</button>
+      <button onclick="hideLoginModal()" class="mt-4 text-gray-400">Close</button>
     </div>
   </div>
 
   <!-- Settings Modal -->
-  <div id="settings-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[200]">
-    <div class="modal bg-zinc-900 w-full max-w-md rounded-3xl p-10">
-      <h2 class="text-3xl font-bold mb-8">Settings</h2>
+  <div id="settings-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+    <div class="bg-gray-900 p-10 rounded-3xl w-full max-w-md">
+      <h2 class="text-3xl font-bold mb-6">Settings</h2>
       <div class="space-y-6">
         <div class="flex justify-between items-center">
           <span>Dark Mode</span>
-          <input type="checkbox" checked class="w-12 h-6 accent-emerald-500">
+          <input type="checkbox" id="dark-mode" class="w-12 h-6 accent-cyan-500">
         </div>
         <div class="flex justify-between items-center">
           <span>Normalize Volume</span>
-          <input type="checkbox" class="w-12 h-6 accent-emerald-500">
+          <input type="checkbox" id="normalize" class="w-12 h-6 accent-cyan-500">
         </div>
         <div class="flex justify-between items-center">
-          <span>Data Saver</span>
-          <input type="checkbox" class="w-12 h-6 accent-emerald-500">
+          <span>Explicit Content Filter</span>
+          <input type="checkbox" id="explicit-filter" class="w-12 h-6 accent-cyan-500">
         </div>
-        <button onclick="hideSettingsModal()" class="w-full bg-emerald-500 text-black font-bold py-6 rounded-2xl">Save Settings</button>
+        <button onclick="saveSettings()" class="w-full py-5 bg-cyan-600 rounded-xl font-bold">Save Settings</button>
       </div>
+      <button onclick="hideSettingsModal()" class="mt-6 text-gray-400">Close</button>
     </div>
   </div>
 
+  <audio id="audio" class="hidden"></audio>
+
   <script>
-    // Sample Songs (Playable)
-    let songs = [let songs = [
-  { title: "Midnight Drive", artist: "Neon Pulse", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", cover: "https://picsum.photos/id/1015/300/300" },
-  // 2-3 और example songs डाल दो अगर चाहो
-];
-      {
+    // LocalStorage simulation for user, liked songs, playlists
+    let currentUser = JSON.parse(localStorage.getItem('user')) || null;
+    let likedSongs = JSON.parse(localStorage.getItem('likedSongs')) || [];
+    let playlists = JSON.parse(localStorage.getItem('playlists')) || [];
+    let currentSong = null;
 
-    let currentSongIndex = 0;
-    let isPlaying = false;
-    let audio = document.getElementById('audio-player');
+    // Audio player controls
+    const audio = document.getElementById('audio');
+    audio.volume = 0.8;
 
-    // Render functions
-    function renderSongs(containerId, list) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
-      list.forEach((song, i) => {
-        const card = document.createElement('div');
-        card.className = 'song-card bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer';
-        card.innerHTML = `
-          <div class="relative">
-            <img src="${song.cover}" class="w-full aspect-square object-cover">
-            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition">
-              <button onclick="event.stopImmediatePropagation(); playSong(${i});" class="w-14 h-14 bg-white rounded-full flex items-center justify-center">
-                <i class="fas fa-play text-black text-2xl"></i>
-              </button>
-            </div>
-          </div>
-          <div class="p-4">
-            <p class="font-semibold truncate">${song.title}</p>
-            <p class="text-zinc-400 text-sm">${song.artist}</p>
-          </div>
-        `;
-        card.onclick = () => playSong(i);
-        container.appendChild(card);
-      });
-    }
-
-    function playSong(index) {
-      currentSongIndex = index;
-      const song = songs[index];
+    function playSong(song) {
+      currentSong = song;
       audio.src = song.audio;
       audio.play();
-      isPlaying = true;
-      document.getElementById('play-btn').innerHTML = `<i class="fas fa-pause text-2xl"></i>`;
-      document.getElementById('player-cover').src = song.cover;
       document.getElementById('player-title').textContent = song.title;
       document.getElementById('player-artist').textContent = song.artist;
-      document.getElementById('player-cover').classList.add('rotating');
     }
 
     function togglePlay() {
-      if (isPlaying) {
-        audio.pause();
-        document.getElementById('play-btn').innerHTML = `<i class="fas fa-play text-2xl"></i>`;
-        document.getElementById('player-cover').classList.remove('rotating');
-      } else {
-        audio.play();
-        document.getElementById('play-btn').innerHTML = `<i class="fas fa-pause text-2xl"></i>`;
-        document.getElementById('player-cover').classList.add('rotating');
-      }
-      isPlaying = !isPlaying;
+      if (audio.paused) audio.play();
+      else audio.pause();
     }
 
-    function nextSong() { currentSongIndex = (currentSongIndex + 1) % songs.length; playSong(currentSongIndex); }
-    function prevSong() { currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length; playSong(currentSongIndex); }
-
-    function downloadCurrentSong() {
-      const song = songs[currentSongIndex];
-      const link = document.createElement('a');
-      link.href = song.audio;
-      link.download = `${song.title} - ${song.artist}.mp3`;
-      link.click();
+    function downloadCurrent() {
+      if (!currentSong) return alert("No song playing");
+      const a = document.createElement('a');
+      a.href = currentSong.audio;
+      a.download = `${currentSong.title}.mp3`;
+      a.click();
     }
 
-    function showUploadModal() { document.getElementById('upload-modal').classList.remove('hidden'); }
-    function hideUploadModal() { document.getElementById('upload-modal').classList.add('hidden'); }
-
+    // Upload song (local file)
     function uploadSong() {
-      const title = document.getElementById('upload-title').value || "New Song";
-      const artist = document.getElementById('upload-artist').value || "Unknown";
-      const file = document.getElementById('upload-file').files[0];
+      const fileInput = document.getElementById('upload-file');
+      const title = document.getElementById('upload-title').value.trim() || "New Song";
+      const artist = document.getElementById('upload-artist').value.trim() || "Unknown";
 
-      if (!file) return alert("MP3 file चुनो!");
+      if (!fileInput.files[0]) return alert("Select MP3 file");
 
-      const newSong = {
-        id: Date.now(),
-        title,
-        artist,
-        audio: URL.createObjectURL(file),
-        cover: "https://picsum.photos/id/201/300/300"
-      };
-      songs.unshift(newSong);
-      renderSongs('popular-songs', songs);
-      hideUploadModal();
-      alert("Song added successfully!");
+      const file = fileInput.files[0];
+      const url = URL.createObjectURL(file);
+
+      const newSong = { title, artist, audio: url };
+      likedSongs.push(newSong); // Simulation – add to library
+      localStorage.setItem('likedSongs', JSON.stringify(likedSongs));
+      alert("Song uploaded! Check Library.");
+      renderLibrary();
     }
 
-    function showLoginModal() { document.getElementById('login-modal').classList.remove('hidden'); }
+    // Signup simulation
+    function signup() {
+      const name = document.getElementById('signup-name').value.trim();
+      const email = document.getElementById('signup-email').value.trim();
+      const pass = document.getElementById('signup-pass').value.trim();
+
+      if (!name || !email || !pass) return alert("Fill all fields");
+
+      const user = { name, email };
+      localStorage.setItem('user', JSON.stringify(user));
+      currentUser = user;
+      alert("Signed up! Welcome " + name);
+      hideSignupModal();
+    }
+
+    function login() {
+      const email = document.getElementById('login-email').value.trim();
+      const pass = document.getElementById('login-pass').value.trim();
+
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user && user.email === email) {
+        currentUser = user;
+        alert("Logged in! Welcome back " + user.name);
+        hideLoginModal();
+      } else {
+        alert("Invalid credentials");
+      }
+    }
+
+    // Modals show/hide
     function showSignupModal() { document.getElementById('signup-modal').classList.remove('hidden'); }
+    function hideSignupModal() { document.getElementById('signup-modal').classList.add('hidden'); }
+    function showLoginModal() { document.getElementById('login-modal').classList.remove('hidden'); }
+    function hideLoginModal() { document.getElementById('login-modal').classList.add('hidden'); }
     function showSettingsModal() { document.getElementById('settings-modal').classList.remove('hidden'); }
     function hideSettingsModal() { document.getElementById('settings-modal').classList.add('hidden'); }
 
-    function performLogin() { alert("Logged in successfully!"); hideLoginModal(); }
-    function hideLoginModal() { document.getElementById('login-modal').classList.add('hidden'); }
-
-    function performSignup() { alert("Account created!"); hideSignupModal(); }
-    function hideSignupModal() { document.getElementById('signup-modal').classList.add('hidden'); }
-
-    function switchTab(tab) {
-      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-      document.querySelectorAll('.nav-link')[tab].classList.add('active');
+    // Render Library
+    function renderLibrary() {
+      const lib = document.getElementById('library');
+      lib.innerHTML = '';
+      likedSongs.forEach(song => {
+        const div = document.createElement('div');
+        div.className = 'card bg-gray-800 p-4 rounded-xl cursor-pointer';
+        div.innerHTML = `
+          <p class="font-bold">${song.title}</p>
+          <p class="text-sm text-gray-400">${song.artist}</p>
+        `;
+        div.onclick = () => playSong(song);
+        lib.appendChild(div);
+      });
     }
 
-    function searchSongs() {
-      const query = document.getElementById('search-input').value.toLowerCase();
-      const filtered = songs.filter(s => s.title.toLowerCase().includes(query) || s.artist.toLowerCase().includes(query));
-      renderSongs('popular-songs', filtered.length ? filtered : songs);
+    // Create playlist simulation
+    function createPlaylist() {
+      const name = prompt("Playlist Name:");
+      if (name) {
+        playlists.push({ name, songs: [] });
+        localStorage.setItem('playlists', JSON.stringify(playlists));
+        alert("Playlist created!");
+      }
     }
 
-    function playFeatured() { playSong(0); }
+    // Settings simulation
+    function saveSettings() {
+      alert("Settings saved! (Simulation)");
+      hideSettingsModal();
+    }
 
-    // Initialize
-    window.onload = () => {
-      renderSongs('made-for-you', songs.slice(0,5));
-      renderSongs('popular-songs', songs);
-      document.getElementById('volume-slider').addEventListener('input', e => audio.volume = e.target.value/100);
-    };
+    // Initial render
+    renderLibrary();
+
+    // Play random song
+    function playRandom() {
+      if (likedSongs.length > 0) playSong(likedSongs[0]);
+      else alert("Upload some songs first!");
+    }
   </script>
 </body>
 </html>
