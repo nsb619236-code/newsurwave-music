@@ -3,93 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wave Beat Ultra</title>
+<title>Wave Beat Ultimate</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif;}
 html{scroll-behavior:smooth;}
 body{background:#0f0f0f;color:white;display:flex;height:100vh;overflow:hidden;transition:0.3s;}
-body.light{background:#f4f4f4;color:#111;}
+body.light{background:#f5f5f5;color:#111;}
 
-.sidebar{
-width:230px;background:#181818;padding:20px;transition:0.3s;
-}
+.sidebar{width:230px;background:#181818;padding:20px;transition:0.3s;}
 body.light .sidebar{background:#ffffff;}
 
-.logo{
-display:flex;align-items:center;gap:10px;margin-bottom:20px;
-}
-
-.logo svg{
-width:35px;height:35px;animation:pulse 2s infinite;
-}
-
-@keyframes pulse{
-0%{transform:scale(1);}
-50%{transform:scale(1.15);}
-100%{transform:scale(1);}
-}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+.logo svg{width:35px;height:35px;animation:pulse 2s infinite;}
+@keyframes pulse{0%{transform:scale(1);}50%{transform:scale(1.15);}100%{transform:scale(1);}}
 
 .sidebar button{
-width:100%;margin:8px 0;padding:10px;
+width:100%;margin:6px 0;padding:9px;
 border:none;border-radius:8px;
 background:#222;color:white;cursor:pointer;
-transition:0.3s;
 }
-body.light .sidebar button{background:#ddd;color:#111;}
-.sidebar button:hover{background:#1db954;color:white;}
+.sidebar button:hover{background:#1db954;}
 
-.main{
-flex:1;padding:25px;overflow-y:auto;
-}
-
-.page{display:none;animation:fade 0.3s;}
+.main{flex:1;padding:20px;overflow-y:auto;}
+.page{display:none;}
 .page.active{display:block;}
 
-input{
-width:100%;padding:10px;margin:8px 0;
-border:none;border-radius:8px;
-}
+input{width:100%;padding:10px;margin:6px 0;border:none;border-radius:8px;}
+button.primary{background:#1db954;color:white;padding:10px;border:none;border-radius:8px;cursor:pointer;}
 
-button.primary{
-background:#1db954;color:white;
-padding:10px;border:none;border-radius:8px;
-cursor:pointer;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
-gap:15px;margin-top:20px;
-}
-
-.card{
-background:#181818;padding:10px;
-border-radius:12px;text-align:center;
-cursor:pointer;transition:0.3s;
-}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:15px;margin-top:15px;}
+.card{background:#181818;padding:10px;border-radius:10px;text-align:center;cursor:pointer;}
 body.light .card{background:#ffffff;}
-.card:hover{transform:scale(1.05);}
-
-.card img{
-width:100%;border-radius:8px;margin-bottom:8px;
-}
+.card img{width:100%;border-radius:8px;margin-bottom:6px;}
 
 .playerBar{
 position:fixed;bottom:0;left:0;width:100%;
-background:#181818;padding:10px;
-display:flex;flex-wrap:wrap;
-align-items:center;justify-content:space-between;
+background:#181818;padding:8px;
+display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
 }
 body.light .playerBar{background:#ffffff;}
 
-.playerBar img{width:50px;border-radius:6px;}
+.playerBar img{width:45px;border-radius:6px;}
 
-canvas{
-width:100%;height:60px;
-}
+canvas{width:100%;height:50px;}
 
-.menuBtn{display:none;background:#1db954;border:none;padding:8px;border-radius:6px;margin-bottom:15px;color:white;}
+.menuBtn{display:none;background:#1db954;border:none;padding:8px;border-radius:6px;margin-bottom:10px;color:white;}
 
 @media(max-width:768px){
 body{flex-direction:column;}
@@ -98,15 +57,12 @@ body{flex-direction:column;}
 .menuBtn{display:block;}
 .playerBar{flex-direction:column;align-items:flex-start;}
 }
-
-@keyframes fade{from{opacity:0}to{opacity:1}}
 </style>
 </head>
 
 <body>
 
 <div class="sidebar" id="sidebar">
-
 <div class="logo">
 <svg viewBox="0 0 24 24" fill="#1db954">
 <path d="M9 18V5l12-2v13"/>
@@ -117,35 +73,53 @@ body{flex-direction:column;}
 <button onclick="showPage('home')">Home</button>
 <button onclick="showPage('upload')">Upload</button>
 <button onclick="showPage('library')">Library</button>
+<button onclick="showPage('ai')">AI Playlist</button>
 <button onclick="toggleTheme()">Toggle Theme</button>
-
+<button onclick="logout()">Logout</button>
 </div>
 
 <div class="main">
 
 <button class="menuBtn" onclick="toggleMenu()">☰ Menu</button>
 
-<div id="home" class="page active">
-<h1>Wave Beat Ultra</h1>
-<p>Premium Responsive Music Experience</p>
+<!-- LOGIN -->
+<div id="login" class="page active">
+<h2>Login / Signup</h2>
+<input type="text" id="username" placeholder="Username">
+<input type="password" id="password" placeholder="Password">
+<button class="primary" onclick="login()">Login / Signup</button>
 </div>
 
+<!-- HOME -->
+<div id="home" class="page">
+<h2>Welcome <span id="userDisplay"></span></h2>
+<p>Ultimate Premium Music Experience</p>
+</div>
+
+<!-- UPLOAD -->
 <div id="upload" class="page">
-<h1>Upload Song</h1>
+<h2>Upload Song</h2>
 <input type="text" id="title" placeholder="Song Title">
 <input type="file" id="audioFile" accept="audio/*">
 <button class="primary" onclick="uploadSong()">Upload</button>
 </div>
 
+<!-- LIBRARY -->
 <div id="library" class="page">
-<h1>Your Library</h1>
+<h2>Your Library</h2>
 <div class="grid" id="songGrid"></div>
+</div>
+
+<!-- AI PLAYLIST -->
+<div id="ai" class="page">
+<h2>AI Auto Playlist</h2>
+<div id="aiList"></div>
 </div>
 
 </div>
 
 <div class="playerBar" id="playerBar" style="display:none;">
-<div style="display:flex;align-items:center;gap:10px;">
+<div style="display:flex;align-items:center;gap:8px;">
 <img id="playerCover">
 <div id="playerTitle"></div>
 </div>
@@ -154,6 +128,7 @@ body{flex-direction:column;}
 <button onclick="prevSong()">⏮</button>
 <button onclick="togglePlay()" id="playBtn">▶</button>
 <button onclick="nextSong()">⏭</button>
+<button onclick="likeSong()">❤️</button>
 </div>
 
 <div style="width:100%;">
@@ -163,23 +138,32 @@ body{flex-direction:column;}
 </div>
 
 <script>
-let currentIndex=0;
+let currentUser=null;
 let audio=new Audio();
-let ctx, analyser, source, canvas;
+let currentIndex=0;
+let analyser, ctx, canvas;
 
-function toggleMenu(){
-document.getElementById("sidebar").classList.toggle("active");
+function toggleMenu(){document.getElementById("sidebar").classList.toggle("active");}
+function toggleTheme(){document.body.classList.toggle("light");localStorage.setItem("theme",document.body.classList.contains("light"));}
+if(localStorage.getItem("theme")==="true")document.body.classList.add("light");
+
+function login(){
+let u=username.value;
+let p=password.value;
+if(!u||!p)return alert("Enter details");
+localStorage.setItem("user_"+u,p);
+currentUser=u;
+userDisplay.innerText=u;
+showPage("home");
 }
 
-function toggleTheme(){
-document.body.classList.toggle("light");
-}
+function logout(){location.reload();}
 
 function showPage(id){
 document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
 document.getElementById(id).classList.add('active');
-if(window.innerWidth<768)toggleMenu();
 if(id==="library")loadSongs();
+if(id==="ai")generateAIPlaylist();
 }
 
 function randomGradient(){
@@ -188,36 +172,36 @@ return colors[Math.floor(Math.random()*colors.length)];
 }
 
 function generateCover(text){
-let canvas=document.createElement("canvas");
-canvas.width=300;canvas.height=300;
-let ctx=canvas.getContext("2d");
-let grad=ctx.createLinearGradient(0,0,300,300);
-grad.addColorStop(0,randomGradient());
-grad.addColorStop(1,randomGradient());
-ctx.fillStyle=grad;
+let c=document.createElement("canvas");
+c.width=300;c.height=300;
+let ctx=c.getContext("2d");
+let g=ctx.createLinearGradient(0,0,300,300);
+g.addColorStop(0,randomGradient());
+g.addColorStop(1,randomGradient());
+ctx.fillStyle=g;
 ctx.fillRect(0,0,300,300);
 ctx.fillStyle="white";
 ctx.font="bold 24px Arial";
 ctx.fillText(text,40,160);
-return canvas.toDataURL();
+return c.toDataURL();
 }
 
 function uploadSong(){
 let title=document.getElementById("title").value;
 let file=document.getElementById("audioFile").files[0];
-if(!title||!file){alert("Fill all fields");return;}
+if(!title||!file)return alert("Fill all fields");
 let reader=new FileReader();
 reader.onload=e=>{
-let songs=JSON.parse(localStorage.getItem("songs"))||[];
-songs.push({id:Date.now(),title,audio:e.target.result,cover:generateCover(title)});
-localStorage.setItem("songs",JSON.stringify(songs));
+let songs=JSON.parse(localStorage.getItem("songs_"+currentUser))||[];
+songs.push({id:Date.now(),title,audio:e.target.result,cover:generateCover(title),likes:0});
+localStorage.setItem("songs_"+currentUser,JSON.stringify(songs));
 alert("Uploaded!");
 };
 reader.readAsDataURL(file);
 }
 
 function loadSongs(){
-let songs=JSON.parse(localStorage.getItem("songs"))||[];
+let songs=JSON.parse(localStorage.getItem("songs_"+currentUser))||[];
 let grid=document.getElementById("songGrid");
 grid.innerHTML="";
 songs.forEach((song,i)=>{
@@ -229,12 +213,24 @@ grid.appendChild(card);
 });
 }
 
+function generateAIPlaylist(){
+let songs=JSON.parse(localStorage.getItem("songs_"+currentUser))||[];
+let sorted=[...songs].sort((a,b)=>b.likes-a.likes);
+let list=document.getElementById("aiList");
+list.innerHTML="";
+sorted.slice(0,5).forEach(s=>{
+let div=document.createElement("div");
+div.innerText="🎵 "+s.title+" (❤️ "+s.likes+")";
+list.appendChild(div);
+});
+}
+
 function setupVisualizer(){
 canvas=document.getElementById("visualizer");
 ctx=canvas.getContext("2d");
 let audioCtx=new AudioContext();
 analyser=audioCtx.createAnalyser();
-source=audioCtx.createMediaElementSource(audio);
+let source=audioCtx.createMediaElementSource(audio);
 source.connect(analyser);
 analyser.connect(audioCtx.destination);
 analyser.fftSize=64;
@@ -256,13 +252,13 @@ ctx.fillRect(i*barWidth,canvas.height-barHeight/2,barWidth-2,barHeight/2);
 }
 
 function playSong(index){
-let songs=JSON.parse(localStorage.getItem("songs"))||[];
+let songs=JSON.parse(localStorage.getItem("songs_"+currentUser))||[];
 currentIndex=index;
 audio.src=songs[index].audio;
 audio.play();
 document.getElementById("playerBar").style.display="flex";
-document.getElementById("playerCover").src=songs[index].cover;
-document.getElementById("playerTitle").innerText=songs[index].title;
+playerCover.src=songs[index].cover;
+playerTitle.innerText=songs[index].title;
 if(!analyser)setupVisualizer();
 }
 
@@ -273,8 +269,15 @@ else{audio.pause();playBtn.innerText="▶";}
 
 function prevSong(){if(currentIndex>0)playSong(currentIndex-1);}
 function nextSong(){
-let songs=JSON.parse(localStorage.getItem("songs"))||[];
+let songs=JSON.parse(localStorage.getItem("songs_"+currentUser))||[];
 if(currentIndex<songs.length-1)playSong(currentIndex+1);
+}
+
+function likeSong(){
+let songs=JSON.parse(localStorage.getItem("songs_"+currentUser))||[];
+songs[currentIndex].likes++;
+localStorage.setItem("songs_"+currentUser,JSON.stringify(songs));
+alert("Liked!");
 }
 
 audio.addEventListener("timeupdate",()=>{
