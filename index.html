@@ -1,97 +1,384 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <title>Music Hut Beat - Pro</title>
-    <style>
-        :root { --p: #1DB954; --bg: #0b0b0b; --card: #181818; }
-        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; padding-bottom: 100px; }
-        .header { background: linear-gradient(to bottom, #333, var(--bg)); padding: 40px 20px; text-align: center; }
-        .upload-area { border: 2px dashed #444; padding: 20px; margin: 20px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
-        .upload-area:hover { border-color: var(--p); background: #111; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; padding: 20px; }
-        .card { background: var(--card); padding: 15px; border-radius: 8px; transition: 0.3s; cursor: pointer; text-align: center;}
-        .card:hover { background: #282828; transform: translateY(-5px); }
-        .card img { width: 100%; border-radius: 5px; margin-bottom: 10px; }
-        .player { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px; display: flex; align-items: center; border-top: 1px solid #333; z-index: 100;}
-        .controls { flex: 2; text-align: center; }
-        .btn { background: var(--p); border: none; padding: 10px 20px; border-radius: 20px; color: black; font-weight: bold; cursor: pointer; }
-        #progress { width: 60%; cursor: pointer; accent-color: var(--p); }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Music Hut Beat - Free Music Streaming</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --bg: #121212;
+      --text: #ffffff;
+      --primary: #FF3366;
+      --secondary: #00FFFF;
+      --card: #1e1e1e;
+      --hover: #2a2a2a;
+    }
+    [data-theme="light"] {
+      --bg: #f5f5f5;
+      --text: #121212;
+      --card: #ffffff;
+      --hover: #e0e0e0;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: linear-gradient(135deg, var(--primary), #8f00ff);
+      padding: 1rem;
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+    .logo { font-size: 3.5rem; margin-bottom: 0.5rem; }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem;
+      background: var(--card);
+    }
+    nav a { color: var(--text); text-decoration: none; font-weight: bold; }
+    nav a:hover { color: var(--primary); }
+    .search-bar {
+      max-width: 600px;
+      margin: 1.5rem auto;
+      display: flex;
+    }
+    .search-bar input {
+      flex: 1;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 30px 0 0 30px;
+      font-size: 1rem;
+    }
+    .search-bar button {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      background: var(--primary);
+      color: white;
+      border-radius: 0 30px 30px 0;
+      cursor: pointer;
+    }
+    .sections {
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .card:hover { transform: scale(1.05); background: var(--hover); }
+    .card img { width: 100%; height: 180px; object-fit: cover; }
+    .card h3 { padding: 0.8rem; text-align: center; }
+    #player {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card);
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 -5px 15px rgba(0,0,0,0.6);
+      z-index: 100;
+    }
+    #player-controls button {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.8rem;
+      cursor: pointer;
+      margin: 0 0.5rem;
+    }
+    #progress-container {
+      flex: 1;
+      margin: 0 1rem;
+      height: 6px;
+      background: #555;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #progress { height: 100%; width: 0; background: var(--primary); border-radius: 5px; }
+    #volume { width: 100px; }
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 999;
+    }
+    #playlist, #favorites, #recent {
+      margin: 2rem;
+    }
+    .song-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem;
+      background: var(--card);
+      margin: 0.5rem 0;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      header { font-size: 2rem; }
+      .logo { font-size: 2.5rem; }
+      #player { flex-direction: column; gap: 1rem; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>Music Hut Beat</h1>
-    <p>Upload your songs and feel the beat!</p>
-    <div class="upload-area" onclick="document.getElementById('file').click()">
-        <i class="fas fa-plus"></i> Click here to Upload Song (MP3)
-        <input type="file" id="file" hidden accept="audio/*">
-    </div>
-</div>
+  <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
 
-<div class="grid" id="songGrid">
-    </div>
+  <header>
+    <div class="logo">Music Hut Beat</div>
+    <p>Free Music Streaming – No Subscription</p>
+  </header>
 
-<div class="player">
-    <div style="flex:1" id="nowPlaying">Select a song</div>
-    <div class="controls">
-        <button class="btn" id="playBtn">Play</button><br>
-        <input type="range" id="progress" value="0">
-    </div>
-    <div style="flex:1; text-align:right;">
-        Vol: <input type="range" id="vol" style="width:80px" value="100">
-    </div>
-</div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#trending">Trending</a>
+    <a href="#new">New Releases</a>
+    <a href="#hindi">Hindi</a>
+    <a href="#english">English</a>
+    <a href="#playlist">My Playlist</a>
+  </nav>
 
-<script>
-    const audio = new Audio();
-    const fileInput = document.getElementById('file');
-    const songGrid = document.getElementById('songGrid');
-    const playBtn = document.getElementById('playBtn');
-    const progress = document.getElementById('progress');
-    const nowPlaying = document.getElementById('nowPlaying');
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search songs, artists, albums, genres..." onkeyup="searchSongs()"/>
+    <button><i class="fas fa-search"></i></button>
+  </div>
 
-    // 1. Upload & Display
-    fileInput.onchange = (e) => {
-        const file = e.target.files[0];
-        if(!file) return;
-        
-        const url = URL.createObjectURL(file);
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-            <img src="https://via.placeholder.com/150/1DB954/FFFFFF?text=Music">
-            <b>${file.name.substring(0, 15)}...</b>
-        `;
-        card.onclick = () => {
-            audio.src = url;
-            audio.play();
-            nowPlaying.innerText = "Playing: " + file.name;
-            playBtn.innerText = "Pause";
-        };
-        songGrid.appendChild(card);
+  <section id="home" class="sections">
+    <!-- Trending, New, Categories cards will be added via JS -->
+  </section>
+
+  <section id="player">
+    <div style="display:flex; align-items:center; gap:1rem;">
+      <img id="currentCover" src="" alt="Cover" style="width:60px; height:60px; border-radius:8px;"/>
+      <div>
+        <h4 id="currentTitle">Select a song</h4>
+        <small id="currentArtist"></small>
+      </div>
+    </div>
+    <div id="player-controls">
+      <button onclick="prevSong()"><i class="fas fa-backward"></i></button>
+      <button id="playPauseBtn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
+      <button onclick="nextSong()"><i class="fas fa-forward"></i></button>
+      <button onclick="shuffleToggle()"><i class="fas fa-random"></i></button>
+      <button onclick="repeatToggle()"><i class="fas fa-redo"></i></button>
+    </div>
+    <div id="progress-container" onclick="seek(event)">
+      <div id="progress"></div>
+    </div>
+    <span id="time">0:00 / 0:00</span>
+    <input type="range" id="volume" min="0" max="1" step="0.01" value="1" onchange="setVolume(this.value)"/>
+  </section>
+
+  <section id="playlist">
+    <h2>My Playlist</h2>
+    <div id="playlistSongs"></div>
+  </section>
+
+  <section id="favorites">
+    <h2>Favorites</h2>
+    <div id="favSongs"></div>
+  </section>
+
+  <audio id="audio"></audio>
+
+  <script>
+    // Sample Songs Data (replace with your own or API later)
+    const songs = [
+      { title: "Song 1", artist: "Artist A", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", genre: "Pop", cover: "https://via.placeholder.com/150/ff3366/fff?text=Song1" },
+      { title: "Song 2", artist: "Artist B", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", genre: "Hip-Hop", cover: "https://via.placeholder.com/150/00ffff/000?text=Song2" },
+      { title: "Hindi Classic", artist: "Singer X", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", genre: "Hindi", cover: "https://via.placeholder.com/150/ff3366/fff?text=Hindi" },
+      // Add 50+ more songs here for demo, categories etc.
+    ];
+
+    let currentIndex = 0;
+    let isPlaying = false;
+    let shuffle = false;
+    let repeat = false;
+    let playlist = [];
+    let favorites = [];
+    let recent = [];
+
+    const audio = document.getElementById("audio");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+
+    function loadSong(index) {
+      const song = songs[index];
+      document.getElementById("currentTitle").textContent = song.title;
+      document.getElementById("currentArtist").textContent = song.artist;
+      document.getElementById("currentCover").src = song.cover;
+      audio.src = song.src;
+      audio.load();
+      if (isPlaying) audio.play();
+      addToRecent(song);
+    }
+
+    function togglePlay() {
+      if (isPlaying) {
+        audio.pause();
+        playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+      } else {
+        audio.play();
+        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      }
+      isPlaying = !isPlaying;
+    }
+
+    function nextSong() {
+      currentIndex = shuffle ? Math.floor(Math.random() * songs.length) : (currentIndex + 1) % songs.length;
+      loadSong(currentIndex);
+      togglePlay();
+    }
+
+    function prevSong() {
+      currentIndex = (currentIndex - 1 + songs.length) % songs.length;
+      loadSong(currentIndex);
+      togglePlay();
+    }
+
+    function shuffleToggle() { shuffle = !shuffle; }
+    function repeatToggle() { repeat = !repeat; }
+
+    audio.onended = () => {
+      if (repeat) {
+        audio.currentTime = 0;
+        audio.play();
+      } else {
+        nextSong();
+      }
     };
 
-    // 2. Play/Pause
-    playBtn.onclick = () => {
-        if(audio.paused) { audio.play(); playBtn.innerText = "Pause"; }
-        else { audio.pause(); playBtn.innerText = "Play"; }
-    };
+    function setVolume(val) { audio.volume = val; }
 
-    // 3. Progress Bar Update
+    function seek(e) {
+      const width = document.getElementById("progress-container").clientWidth;
+      const clickX = e.offsetX;
+      const duration = audio.duration;
+      audio.currentTime = (clickX / width) * duration;
+    }
+
     audio.ontimeupdate = () => {
-        progress.value = (audio.currentTime / audio.duration) * 100 || 0;
-    };
-    progress.oninput = () => {
-        audio.currentTime = (progress.value / 100) * audio.duration;
+      const progress = (audio.currentTime / audio.duration) * 100;
+      document.getElementById("progress").style.width = progress + "%";
+      const cur = formatTime(audio.currentTime);
+      const dur = formatTime(audio.duration);
+      document.getElementById("time").textContent = `${cur} / ${dur}`;
     };
 
-    // 4. Volume
-    document.getElementById('vol').oninput = (e) => {
-        audio.volume = e.target.value / 100;
-    };
-</script>
+    function formatTime(time) {
+      const min = Math.floor(time / 60);
+      const sec = Math.floor(time % 60);
+      return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+    }
 
+    function addToPlaylist(song) {
+      if (!playlist.some(s => s.title === song.title)) {
+        playlist.push(song);
+        renderPlaylist();
+      }
+    }
+
+    function addToFav(song) {
+      if (!favorites.some(s => s.title === song.title)) {
+        favorites.push(song);
+        renderFavorites();
+      }
+    }
+
+    function addToRecent(song) {
+      recent = recent.filter(s => s.title !== song.title);
+      recent.unshift(song);
+      if (recent.length > 10) recent.pop();
+      renderRecent();
+    }
+
+    function renderPlaylist() {
+      const container = document.getElementById("playlistSongs");
+      container.innerHTML = "";
+      playlist.forEach((song, i) => {
+        const div = document.createElement("div");
+        div.className = "song-item";
+        div.innerHTML = `${song.title} - ${song.artist} <button onclick="playFromPlaylist(${i})">Play</button>`;
+        container.appendChild(div);
+      });
+    }
+
+    function renderFavorites() {
+      // Similar to renderPlaylist
+    }
+
+    function renderRecent() {
+      // Similar
+    }
+
+    function playFromPlaylist(i) {
+      currentIndex = songs.findIndex(s => s.title === playlist[i].title);
+      loadSong(currentIndex);
+      togglePlay();
+    }
+
+    function searchSongs() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      // Filter songs and show results (you can create a results section)
+      console.log("Searching for:", query);
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute("data-theme");
+      html.setAttribute("data-theme", current === "dark" ? "light" : "dark");
+    }
+
+    // Initial load
+    loadSong(0);
+
+    // Dynamically add sections (trending, new, hindi etc.) – for demo using same songs
+    const sections = document.querySelector(".sections");
+    ["Trending Songs", "New Releases", "Hindi Songs", "English Songs", "Pop", "Hip-Hop"].forEach(title => {
+      const sec = document.createElement("div");
+      sec.innerHTML = `<h2>${title}</h2>`;
+      const grid = document.createElement("div");
+      grid.className = "sections";
+      songs.slice(0,6).forEach((song, i) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${song.cover}" alt="${song.title}">
+          <h3>${song.title}</h3>
+          <p>${song.artist}</p>
+          <button onclick="addToPlaylist(songs[${i}])">+ Playlist</button>
+          <button onclick="addToFav(songs[${i}])">Like</button>
+        `;
+        grid.appendChild(card);
+      });
+      sec.appendChild(grid);
+      sections.appendChild(sec);
+    });
+  </script>
 </body>
 </html>
