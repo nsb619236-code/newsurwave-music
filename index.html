@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MusicWave Style Music</title>
-
-<!-- Google Font -->
+<title>Wave Music</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -17,151 +15,115 @@ font-family:'Poppins',sans-serif;
 }
 
 body{
+display:flex;
 background:linear-gradient(135deg,#0f0f0f,#1c1c1c);
 color:white;
-overflow-x:hidden;
+height:100vh;
+overflow:hidden;
 }
 
-/* Header */
-header{
+/* Sidebar */
+.sidebar{
+width:220px;
+background:#111;
+padding:20px;
 display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px 30px;
-background:rgba(0,0,0,0.6);
-backdrop-filter:blur(10px);
-position:sticky;
-top:0;
-z-index:1000;
+flex-direction:column;
 }
 
 .logo{
-font-size:24px;
+font-size:22px;
 font-weight:700;
-color:#ff1f3d;
+color:#00f2ff;
+margin-bottom:30px;
 }
 
-nav a{
-color:white;
+.sidebar a{
+color:#ccc;
 text-decoration:none;
-margin:0 15px;
+margin:10px 0;
 font-size:14px;
 transition:0.3s;
 }
 
-nav a:hover{
-color:#ff1f3d;
+.sidebar a:hover{
+color:#00f2ff;
 }
 
-.btn{
-padding:8px 18px;
-background:#ff1f3d;
-border:none;
-border-radius:20px;
-color:white;
-cursor:pointer;
-transition:0.3s;
-}
-
-.btn:hover{
-background:#ff3b5c;
-}
-
-/* Hero */
-.hero{
-height:80vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
+/* Main */
+.main{
+flex:1;
 padding:20px;
+overflow-y:auto;
 }
 
-.hero h1{
-font-size:42px;
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
 margin-bottom:20px;
 }
 
-.hero p{
-max-width:500px;
-margin-bottom:25px;
-color:#bbb;
-}
-
-/* Song Section */
-.section{
-padding:50px 30px;
-}
-
-.section h2{
-margin-bottom:30px;
-font-size:22px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-gap:20px;
-}
-
-.card{
-background:#181818;
-border-radius:15px;
-padding:15px;
-transition:0.3s;
+.upload-btn{
+background:#00f2ff;
+border:none;
+padding:8px 15px;
+border-radius:20px;
 cursor:pointer;
+font-weight:600;
 }
 
-.card:hover{
-transform:translateY(-8px);
-background:#222;
+/* Song List */
+.song-list{
+margin-top:20px;
 }
 
-.card img{
-width:100%;
+.song{
+background:#181818;
+padding:12px;
 border-radius:10px;
 margin-bottom:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+cursor:pointer;
+transition:0.3s;
 }
 
-.card h4{
-font-size:14px;
-margin-bottom:5px;
-}
-
-.card p{
-font-size:12px;
-color:#aaa;
+.song:hover{
+background:#222;
 }
 
 /* Player */
 .player{
 position:fixed;
 bottom:0;
-width:100%;
+left:220px;
+right:0;
 background:#111;
-padding:15px;
+padding:10px 20px;
 display:flex;
-justify-content:space-between;
 align-items:center;
+justify-content:space-between;
 }
 
-.player-controls button{
-background:none;
-border:none;
-color:white;
-font-size:18px;
-margin:0 10px;
-cursor:pointer;
+audio{
+width:60%;
 }
 
 /* Responsive */
 @media(max-width:768px){
-nav{
+.sidebar{
+width:70px;
+}
+.sidebar a{
 display:none;
 }
-.hero h1{
-font-size:30px;
+.logo{
+font-size:16px;
+}
+.player{
+left:70px;
 }
 }
 </style>
@@ -169,62 +131,60 @@ font-size:30px;
 
 <body>
 
-<header>
-<div class="logo">Gaana</div>
-<nav>
+<div class="sidebar">
+<div class="logo">Wave Music</div>
 <a href="#">Home</a>
 <a href="#">Trending</a>
-<a href="#">Albums</a>
-<a href="#">Radio</a>
-</nav>
-<button class="btn">Login</button>
-</header>
-
-<section class="hero">
-<h1>Unlimited Music, Anytime</h1>
-<p>Stream latest songs, trending albums and your favorite artists in HD quality.</p>
-<button class="btn">Start Listening</button>
-</section>
-
-<section class="section">
-<h2>Trending Songs</h2>
-<div class="grid">
-
-<div class="card">
-<img src="https://picsum.photos/200?1">
-<h4>Top Hit 1</h4>
-<p>Artist Name</p>
+<a href="#">Library</a>
+<a href="#">Playlist</a>
 </div>
 
-<div class="card">
-<img src="https://picsum.photos/200?2">
-<h4>Top Hit 2</h4>
-<p>Artist Name</p>
+<div class="main">
+
+<div class="header">
+<h2>Your Music</h2>
+<label class="upload-btn">
+Upload Song
+<input type="file" id="fileInput" accept="audio/*" hidden>
+</label>
 </div>
 
-<div class="card">
-<img src="https://picsum.photos/200?3">
-<h4>Top Hit 3</h4>
-<p>Artist Name</p>
-</div>
-
-<div class="card">
-<img src="https://picsum.photos/200?4">
-<h4>Top Hit 4</h4>
-<p>Artist Name</p>
+<div class="song-list" id="songList">
+<!-- Uploaded songs will appear here -->
 </div>
 
 </div>
-</section>
 
 <div class="player">
-<div>Now Playing: Song Name</div>
-<div class="player-controls">
-<button>⏮</button>
-<button>▶</button>
-<button>⏭</button>
+<div id="nowPlaying">No song selected</div>
+<audio id="audioPlayer" controls></audio>
 </div>
-</div>
+
+<script>
+const fileInput = document.getElementById("fileInput");
+const songList = document.getElementById("songList");
+const audioPlayer = document.getElementById("audioPlayer");
+const nowPlaying = document.getElementById("nowPlaying");
+
+fileInput.addEventListener("change", function(){
+const file = this.files[0];
+if(file){
+const url = URL.createObjectURL(file);
+
+const songDiv = document.createElement("div");
+songDiv.classList.add("song");
+songDiv.innerHTML = `<span>${file.name}</span><span>▶</span>`;
+
+songDiv.onclick = function(){
+audioPlayer.src = url;
+audioPlayer.play();
+nowPlaying.innerText = "Now Playing: " + file.name;
+};
+
+songList.appendChild(songDiv);
+}
+});
+</script>
 
 </body>
 </html>
