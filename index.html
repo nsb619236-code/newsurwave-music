@@ -1,190 +1,346 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wave Music</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
-}
-
-body{
-display:flex;
-background:linear-gradient(135deg,#0f0f0f,#1c1c1c);
-color:white;
-height:100vh;
-overflow:hidden;
-}
-
-/* Sidebar */
-.sidebar{
-width:220px;
-background:#111;
-padding:20px;
-display:flex;
-flex-direction:column;
-}
-
-.logo{
-font-size:22px;
-font-weight:700;
-color:#00f2ff;
-margin-bottom:30px;
-}
-
-.sidebar a{
-color:#ccc;
-text-decoration:none;
-margin:10px 0;
-font-size:14px;
-transition:0.3s;
-}
-
-.sidebar a:hover{
-color:#00f2ff;
-}
-
-/* Main */
-.main{
-flex:1;
-padding:20px;
-overflow-y:auto;
-}
-
-.header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
-}
-
-.upload-btn{
-background:#00f2ff;
-border:none;
-padding:8px 15px;
-border-radius:20px;
-cursor:pointer;
-font-weight:600;
-}
-
-/* Song List */
-.song-list{
-margin-top:20px;
-}
-
-.song{
-background:#181818;
-padding:12px;
-border-radius:10px;
-margin-bottom:10px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-cursor:pointer;
-transition:0.3s;
-}
-
-.song:hover{
-background:#222;
-}
-
-/* Player */
-.player{
-position:fixed;
-bottom:0;
-left:220px;
-right:0;
-background:#111;
-padding:10px 20px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-}
-
-audio{
-width:60%;
-}
-
-/* Responsive */
-@media(max-width:768px){
-.sidebar{
-width:70px;
-}
-.sidebar a{
-display:none;
-}
-.logo{
-font-size:16px;
-}
-.player{
-left:70px;
-}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SurVibe – Sur Ka Naya Vibe</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --bg: #0a0a1f;
+      --text: #e0e0ff;
+      --primary: #ff2e63;
+      --secondary: #00f2ea;
+      --card: #1a1a3a;
+      --hover: #2a2a5a;
+      --gradient: linear-gradient(135deg, #ff2e63, #00f2ea, #8a2be2);
+    }
+    [data-theme="light"] {
+      --bg: #f0f4ff;
+      --text: #1a1a3f;
+      --card: #ffffff;
+      --hover: #e0e8ff;
+      --gradient: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      background: var(--gradient);
+      background-size: 300% 300%;
+      animation: gradientFlow 12s ease infinite;
+    }
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    header {
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+      padding: 1.5rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .logo {
+      font-size: 3.5rem;
+      font-weight: 900;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(255,46,99,0.6);
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+    }
+    nav button {
+      background: var(--card);
+      border: none;
+      color: var(--text);
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    nav button.active { background: var(--primary); color: white; }
+    .search-bar {
+      max-width: 600px;
+      margin: 1rem auto;
+      position: relative;
+    }
+    #searchInput {
+      width: 100%;
+      padding: 1rem 3rem 1rem 1.5rem;
+      border-radius: 50px;
+      border: none;
+      background: var(--card);
+      color: var(--text);
+      font-size: 1.1rem;
+    }
+    .search-icon { position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--primary); }
+    .container { padding: 1rem; max-width: 1200px; margin: auto; }
+    .section-title { font-size: 1.8rem; margin: 2rem 0 1rem; color: var(--secondary); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .card:hover { transform: translateY(-8px); box-shadow: 0 10px 30px rgba(255,46,99,0.3); }
+    .card img { width: 100%; height: 180px; object-fit: cover; }
+    .card-info { padding: 1rem; text-align: center; }
+    #player {
+      position: fixed;
+      bottom: 0;
+      left: 0; right: 0;
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 -10px 30px rgba(0,0,0,0.6);
+      z-index: 99;
+    }
+    #player img { width: 60px; height: 60px; border-radius: 12px; }
+    #player-controls button {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.8rem;
+      margin: 0 0.8rem;
+      cursor: pointer;
+    }
+    #progress-container {
+      flex: 1;
+      height: 6px;
+      background: #444;
+      border-radius: 3px;
+      margin: 0 1rem;
+      cursor: pointer;
+    }
+    #progress { height: 100%; width: 0; background: var(--primary); border-radius: 3px; }
+    .theme-toggle { position: fixed; top: 1rem; right: 1rem; background: var(--primary); color: white; border: none; padding: 0.8rem; border-radius: 50%; cursor: pointer; z-index: 100; }
+    .premium-banner {
+      background: linear-gradient(90deg, #ff2e63, #8a2be2);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin: 1rem;
+      border-radius: 12px;
+      font-weight: bold;
+    }
+    @media (max-width: 768px) {
+      #player { flex-direction: column; gap: 1rem; }
+      .logo { font-size: 2.5rem; }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="sidebar">
-<div class="logo">Wave Music</div>
-<a href="#">Home</a>
-<a href="#">Trending</a>
-<a href="#">Library</a>
-<a href="#">Playlist</a>
-</div>
+  <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
 
-<div class="main">
+  <header>
+    <div class="logo">SurVibe</div>
+    <p>Sur Ka Naya Vibe – Free Music Streaming</p>
+  </header>
 
-<div class="header">
-<h2>Your Music</h2>
-<label class="upload-btn">
-Upload Song
-<input type="file" id="fileInput" accept="audio/*" hidden>
-</label>
-</div>
+  <nav>
+    <button class="active" onclick="showSection('home')">Home</button>
+    <button onclick="showSection('trending')">Trending</button>
+    <button onclick="showSection('charts')">Top Charts</button>
+    <button onclick="showSection('new')">New Releases</button>
+    <button onclick="showSection('playlists')">My Playlists</button>
+    <button onclick="showSection('favorites')">Favorites</button>
+  </nav>
 
-<div class="song-list" id="songList">
-<!-- Uploaded songs will appear here -->
-</div>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search songs, artists, albums..." oninput="searchSongs()"/>
+    <i class="fas fa-search search-icon"></i>
+  </div>
 
-</div>
+  <div class="premium-banner">Get SurVibe Plus – Ad-free, Unlimited Downloads, HD Audio!</div>
 
-<div class="player">
-<div id="nowPlaying">No song selected</div>
-<audio id="audioPlayer" controls></audio>
-</div>
+  <div class="container" id="content">
+    <!-- Sections loaded via JS -->
+  </div>
 
-<script>
-const fileInput = document.getElementById("fileInput");
-const songList = document.getElementById("songList");
-const audioPlayer = document.getElementById("audioPlayer");
-const nowPlaying = document.getElementById("nowPlaying");
+  <div id="player">
+    <img id="currentCover" src="https://via.placeholder.com/60/ff2e63/fff?text=Sur" alt="Cover"/>
+    <div style="flex:1; margin:0 1rem;">
+      <h4 id="currentTitle">Select a song</h4>
+      <small id="currentArtist"></small>
+    </div>
+    <div id="player-controls">
+      <button onclick="prevSong()"><i class="fas fa-backward"></i></button>
+      <button id="playPause" onclick="togglePlay()"><i class="fas fa-play"></i></button>
+      <button onclick="nextSong()"><i class="fas fa-forward"></i></button>
+      <button onclick="toggleShuffle()"><i class="fas fa-random"></i></button>
+      <button onclick="toggleRepeat()"><i class="fas fa-redo"></i></button>
+    </div>
+    <div id="progress-container" onclick="seek(event)">
+      <div id="progress"></div>
+    </div>
+    <span id="time">0:00 / 0:00</span>
+    <input type="range" id="volume" min="0" max="1" step="0.01" value="1" onchange="setVolume(this.value)"/>
+  </div>
 
-fileInput.addEventListener("change", function(){
-const file = this.files[0];
-if(file){
-const url = URL.createObjectURL(file);
+  <audio id="audio"></audio>
 
-const songDiv = document.createElement("div");
-songDiv.classList.add("song");
-songDiv.innerHTML = `<span>${file.name}</span><span>▶</span>`;
+  <script>
+    // Dummy Songs Data (replace with real API later)
+    const songs = [
+      { id:1, title:"Tum Hi Ho", artist:"Arijit Singh", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", cover:"https://source.unsplash.com/random/300x300/?music,hindi", genre:"Hindi", mood:"Romantic" },
+      { id:2, title:"Shape of You", artist:"Ed Sheeran", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", cover:"https://source.unsplash.com/random/300x300/?music,pop", genre:"English", mood:"Upbeat" },
+      { id:3, title:"Levitating", artist:"Dua Lipa", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", cover:"https://source.unsplash.com/random/300x300/?music,dance", genre:"English", mood:"Dance" },
+      // Add 20-30 more for demo (Hindi, Punjabi, Tamil etc.)
+    ];
 
-songDiv.onclick = function(){
-audioPlayer.src = url;
-audioPlayer.play();
-nowPlaying.innerText = "Now Playing: " + file.name;
-};
+    let currentSong = null;
+    let isPlaying = false;
+    let shuffle = false;
+    let repeat = false;
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    let playlists = JSON.parse(localStorage.getItem('playlists')) || { "My Favorites": favorites };
+    let recentlyPlayed = JSON.parse(localStorage.getItem('recentlyPlayed')) || [];
 
-songList.appendChild(songDiv);
-}
-});
-</script>
+    const audio = document.getElementById('audio');
+    const playPauseBtn = document.getElementById('playPause');
 
+    function loadSong(song) {
+      currentSong = song;
+      document.getElementById('currentTitle').textContent = song.title;
+      document.getElementById('currentArtist').textContent = song.artist;
+      document.getElementById('currentCover').src = song.cover;
+      audio.src = song.src;
+      audio.load();
+      if (isPlaying) audio.play();
+      addToRecent(song);
+    }
+
+    function togglePlay() {
+      if (isPlaying) {
+        audio.pause();
+        playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+      } else {
+        audio.play();
+        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      }
+      isPlaying = !isPlaying;
+    }
+
+    function nextSong() {
+      let index = songs.findIndex(s => s.id === currentSong.id);
+      index = shuffle ? Math.floor(Math.random() * songs.length) : (index + 1) % songs.length;
+      loadSong(songs[index]);
+      togglePlay();
+    }
+
+    function prevSong() {
+      let index = songs.findIndex(s => s.id === currentSong.id);
+      index = (index - 1 + songs.length) % songs.length;
+      loadSong(songs[index]);
+      togglePlay();
+    }
+
+    function setVolume(val) { audio.volume = val; }
+
+    function seek(e) {
+      const width = document.getElementById('progress-container').clientWidth;
+      audio.currentTime = (e.offsetX / width) * audio.duration;
+    }
+
+    audio.ontimeupdate = () => {
+      if (!audio.duration) return;
+      const prog = (audio.currentTime / audio.duration) * 100;
+      document.getElementById('progress').style.width = prog + '%';
+      document.getElementById('time').textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+    };
+
+    function formatTime(s) {
+      let min = Math.floor(s / 60);
+      let sec = Math.floor(s % 60);
+      return min + ':' + (sec < 10 ? '0' : '') + sec;
+    }
+
+    function toggleShuffle() { shuffle = !shuffle; }
+    function toggleRepeat() { repeat = !repeat; }
+
+    audio.onended = () => {
+      if (repeat) audio.play();
+      else nextSong();
+    };
+
+    function addToFavorites(song) {
+      if (!favorites.some(s => s.id === song.id)) {
+        favorites.push(song);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+      }
+    }
+
+    function addToRecent(song) {
+      recentlyPlayed = recentlyPlayed.filter(s => s.id !== song.id);
+      recentlyPlayed.unshift(song);
+      if (recentlyPlayed.length > 10) recentlyPlayed.pop();
+      localStorage.setItem('recentlyPlayed', JSON.stringify(recentlyPlayed));
+    }
+
+    function searchSongs() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = songs.filter(s => s.title.toLowerCase().includes(query) || s.artist.toLowerCase().includes(query));
+      renderGrid(filtered, 'Search Results');
+    }
+
+    function renderGrid(songList, title) {
+      let html = `<h2 class="section-title">${title}</h2><div class="grid">`;
+      songList.forEach(song => {
+        html += `
+          <div class="card" onclick="loadSong(${JSON.stringify(song)}); togglePlay()">
+            <img src="${song.cover}" alt="${song.title}">
+            <div class="card-info">
+              <h3>${song.title}</h3>
+              <p>${song.artist}</p>
+              <button onclick="event.stopPropagation(); addToFavorites(${JSON.stringify(song)})">Like</button>
+            </div>
+          </div>`;
+      });
+      html += `</div>`;
+      document.getElementById('content').innerHTML = html;
+    }
+
+    function showSection(section) {
+      document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      if (section === 'home') {
+        renderGrid(songs.slice(0,12), 'Recommended for You');
+      } else if (section === 'favorites') {
+        renderGrid(favorites, 'Liked Songs');
+      } // Add more sections like trending, charts etc. with filtered songs
+    }
+
+    function toggleTheme() {
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    // Initial load
+    showSection('home');
+    loadSong(songs[0]);
+  </script>
 </body>
 </html>
