@@ -1,192 +1,207 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>WaveHut • Premium Music</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WaveHut • Your Music</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
-    /* Same premium styles as before – glass, rotate, etc. */
-    body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(to bottom right, #1e1b4b, #0f172a); color: white; }
-    .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
-    .song-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(234,179,8,0.2); }
-    #player.playing .album-art { animation: spin 20s linear infinite; }
+    body { background: linear-gradient(to bottom right, #0f172a, #1e293b); color: white; font-family: 'Segoe UI', sans-serif; }
+    .glass { background: rgba(255,255,255,0.07); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.12); }
+    .card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(234,179,8,0.25); }
+    #player.playing .album { animation: spin 18s linear infinite; }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <!-- Top bar same as before -->
-  <header class="fixed top-0 w-full glass z-50 h-16 flex items-center px-6 justify-between">
-    <div class="flex items-center gap-3">
-      <span class="text-3xl font-bold text-yellow-400">WaveHut</span>
+  <!-- Header -->
+  <header class="fixed top-0 w-full glass z-50 h-16 flex items-center justify-between px-6">
+    <div class="text-3xl font-bold tracking-tight">
+      <span class="text-yellow-400">Wave</span>Hut
     </div>
-    <div class="flex items-center gap-6">
-      <button onclick="document.getElementById('upload-input').click()" class="bg-yellow-500 text-black px-5 py-2 rounded-full font-bold">Upload</button>
-      <input type="file" id="upload-input" accept="audio/*" class="hidden" onchange="handleUpload(event)">
-    </div>
+    <button onclick="document.getElementById('file').click()" 
+            class="bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-6 py-2 rounded-full font-semibold shadow-lg flex items-center gap-2 hover:scale-105 transition">
+      <i class="fas fa-cloud-upload-alt"></i> Upload Song
+    </button>
+    <input type="file" id="file" accept="audio/*" class="hidden" onchange="uploadSong(event)">
   </header>
 
-  <main class="flex-1 pt-20 pb-32 px-6 overflow-y-auto">
-    <h1 class="text-5xl font-bold text-center mb-10">Your Music Library</h1>
-    <div id="song-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
-    <p id="status" class="text-center mt-10 text-xl text-yellow-300">Upload some songs to start playing 🔥</p>
+  <!-- Main -->
+  <main class="flex-1 pt-20 pb-32 px-6 md:px-12 overflow-y-auto">
+    <h1 class="text-5xl md:text-6xl font-extrabold text-center mb-12 tracking-tight leading-tight">
+      Your Personal<br><span class="text-yellow-400">Music Hub</span>
+    </h1>
+
+    <div id="songs" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+
+    <div id="empty" class="text-center mt-20 text-xl text-gray-400">
+      <i class="fas fa-music text-6xl mb-6 block text-yellow-400 opacity-50"></i>
+      No songs yet...<br>Upload your favorite MP3s to start!
+    </div>
   </main>
 
   <!-- Player -->
-  <footer id="player" class="fixed bottom-0 w-full glass h-24 flex items-center px-6 z-50">
-    <div class="flex items-center gap-4 flex-1">
-      <div class="w-16 h-16 rounded-xl overflow-hidden album-art bg-gray-800">
-        <img id="cover" src="https://picsum.photos/200" class="w-full h-full object-cover">
+  <footer id="player" class="fixed bottom-0 w-full glass h-24 flex items-center px-6 md:px-12 z-50">
+    <div class="flex items-center gap-5 flex-1 min-w-0">
+      <div id="album" class="w-14 h-14 md:w-16 md:h-16 rounded-xl overflow-hidden shadow-2xl album bg-gray-800">
+        <img id="cover" src="https://picsum.photos/200?random=1" class="w-full h-full object-cover">
       </div>
-      <div class="min-w-0">
-        <div id="title" class="font-bold truncate">No song selected</div>
-        <div id="artist" class="text-sm text-gray-400 truncate">Upload to play</div>
+      <div class="min-w-0 flex-1">
+        <div id="songTitle" class="font-semibold text-lg truncate">Select a song</div>
+        <div id="songArtist" class="text-sm text-gray-400 truncate">Upload to play</div>
       </div>
     </div>
 
-    <div class="flex flex-col items-center flex-1">
-      <div class="flex gap-8 text-3xl mb-2">
-        <button onclick="prev()"><i class="fas fa-backward-step"></i></button>
-        <button id="playBtn" onclick="togglePlay()" class="text-yellow-400"><i class="fas fa-play-circle"></i></button>
-        <button onclick="next()"><i class="fas fa-forward-step"></i></button>
+    <div class="flex flex-col items-center gap-2 flex-1 max-w-md mx-6">
+      <div class="flex items-center gap-6 md:gap-10 text-3xl text-gray-300">
+        <button onclick="prevSong()"><i class="fas fa-backward-step"></i></button>
+        <button id="playPause" onclick="toggle()" class="text-yellow-400 text-5xl">
+          <i class="fas fa-play-circle"></i>
+        </button>
+        <button onclick="nextSong()"><i class="fas fa-forward-step"></i></button>
       </div>
-      <div class="w-full flex items-center gap-3 text-sm">
-        <span id="currTime">0:00</span>
-        <div class="flex-1 h-1 bg-gray-600 rounded-full">
-          <div id="progress" class="h-full w-0 bg-yellow-400 rounded-full"></div>
+
+      <div class="w-full flex items-center gap-3 text-xs text-gray-400">
+        <span id="timeCurrent">0:00</span>
+        <div class="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
+          <div id="prog" class="h-full w-0 bg-gradient-to-r from-yellow-400 to-amber-300 transition-all duration-300"></div>
         </div>
-        <span id="dur">0:00</span>
+        <span id="timeTotal">0:00</span>
       </div>
     </div>
   </footer>
 
-  <audio id="audio"></audio>
+  <audio id="audioPlayer"></audio>
 
   <script>
-    let songs = JSON.parse(localStorage.getItem('mySongs')) || [];
-    let currentIndex = -1;
-    const audio = document.getElementById('audio');
-    let isPlaying = false;
+    let mySongs = JSON.parse(localStorage.getItem('myWaveSongs')) || [];
+    let current = -1;
+    const audio = document.getElementById('audioPlayer');
+    let playing = false;
 
-    function saveSongs() {
-      localStorage.setItem('mySongs', JSON.stringify(songs));
-      renderSongs();
+    function save() {
+      localStorage.setItem('myWaveSongs', JSON.stringify(mySongs));
+      showSongs();
     }
 
-    function handleUpload(e) {
+    function uploadSong(e) {
       const file = e.target.files[0];
       if (!file || !file.type.startsWith('audio/')) {
-        alert("Sirf audio file upload karo bhai!");
+        alert("Only audio files (MP3, WAV etc.) allowed!");
         return;
       }
 
       const url = URL.createObjectURL(file);
-      const newSong = {
+      const song = {
         id: Date.now(),
         title: file.name.replace(/\.[^/.]+$/, ""),
-        artist: "You",
+        artist: "Uploaded by you",
         src: url,
-        cover: "https://picsum.photos/200?random=" + Date.now()
+        cover: "https://picsum.photos/300?random=" + Date.now()
       };
 
-      songs.unshift(newSong);
-      saveSongs();
-      document.getElementById('status').textContent = `"${newSong.title}" uploaded! Tap to play.`;
-      playSong(0); // Auto play first uploaded
+      mySongs.unshift(song);
+      save();
+      document.getElementById('empty').style.display = 'none';
+      playThis(0);
     }
 
-    function renderSongs() {
-      const grid = document.getElementById('song-grid');
-      grid.innerHTML = '';
-      if (songs.length === 0) {
-        grid.innerHTML = '<p class="col-span-full text-center text-xl text-gray-400">No songs yet – Upload some MP3s!</p>';
+    function showSongs() {
+      const container = document.getElementById('songs');
+      container.innerHTML = '';
+
+      if (mySongs.length === 0) {
+        document.getElementById('empty').style.display = 'block';
         return;
       }
 
-      songs.forEach((song, index) => {
+      document.getElementById('empty').style.display = 'none';
+
+      mySongs.forEach((s, i) => {
         const card = document.createElement('div');
-        card.className = 'glass rounded-2xl overflow-hidden cursor-pointer hover:scale-105 transition';
+        card.className = 'glass rounded-2xl overflow-hidden cursor-pointer card transition-all duration-300';
         card.innerHTML = `
-          <img src="${song.cover}" class="w-full aspect-square object-cover">
+          <img src="${s.cover}" class="w-full aspect-square object-cover">
           <div class="p-4">
-            <div class="font-bold truncate">${song.title}</div>
-            <div class="text-sm text-gray-300">${song.artist}</div>
+            <div class="font-semibold truncate">${s.title}</div>
+            <div class="text-sm text-gray-400 truncate">${s.artist}</div>
           </div>
         `;
-        card.onclick = () => playSong(index);
-        grid.appendChild(card);
+        card.onclick = () => playThis(i);
+        container.appendChild(card);
       });
     }
 
-    function playSong(index) {
-      if (index < 0 || index >= songs.length) return;
-      currentIndex = index;
-      const song = songs[index];
+    function playThis(idx) {
+      if (idx < 0 || idx >= mySongs.length) return;
+      current = idx;
+      const s = mySongs[idx];
 
-      audio.src = song.src;
-      document.getElementById('cover').src = song.cover;
-      document.getElementById('title').textContent = song.title;
-      document.getElementById('artist').textContent = song.artist;
+      audio.src = s.src;
+      document.getElementById('cover').src = s.cover;
+      document.getElementById('songTitle').textContent = s.title;
+      document.getElementById('songArtist').textContent = s.artist;
 
       audio.play().then(() => {
-        isPlaying = true;
-        document.getElementById('playBtn').innerHTML = '<i class="fas fa-pause-circle"></i>';
+        playing = true;
+        document.getElementById('playPause').innerHTML = '<i class="fas fa-pause-circle"></i>';
         document.getElementById('player').classList.add('playing');
       }).catch(err => {
-        console.error("Play error:", err);
-        alert("Play nahi ho raha – console kholo (F12) aur error batao, ya song dubara upload try karo.");
+        console.error("Play failed:", err);
+        alert("Playback issue – Try another song or check console (F12). Browser may block first play.");
       });
     }
 
-    function togglePlay() {
-      if (currentIndex === -1) {
-        if (songs.length > 0) playSong(0);
-        else alert("Pehle song upload karo!");
+    function toggle() {
+      if (current === -1) {
+        if (mySongs.length > 0) playThis(0);
+        else alert("Upload a song first!");
         return;
       }
 
-      if (isPlaying) {
+      if (playing) {
         audio.pause();
-        isPlaying = false;
-        document.getElementById('playBtn').innerHTML = '<i class="fas fa-play-circle"></i>';
+        playing = false;
+        document.getElementById('playPause').innerHTML = '<i class="fas fa-play-circle"></i>';
         document.getElementById('player').classList.remove('playing');
       } else {
         audio.play();
-        isPlaying = true;
-        document.getElementById('playBtn').innerHTML = '<i class="fas fa-pause-circle"></i>';
+        playing = true;
+        document.getElementById('playPause').innerHTML = '<i class="fas fa-pause-circle"></i>';
         document.getElementById('player').classList.add('playing');
       }
     }
 
-    function next() {
-      if (currentIndex < songs.length - 1) playSong(currentIndex + 1);
+    function nextSong() {
+      if (current < mySongs.length - 1) playThis(current + 1);
     }
 
-    function prev() {
-      if (currentIndex > 0) playSong(currentIndex - 1);
+    function prevSong() {
+      if (current > 0) playThis(current - 1);
     }
 
     audio.ontimeupdate = () => {
       if (!audio.duration) return;
-      const pct = (audio.currentTime / audio.duration) * 100;
-      document.getElementById('progress').style.width = pct + '%';
-      document.getElementById('currTime').textContent = formatTime(audio.currentTime);
-      document.getElementById('dur').textContent = formatTime(audio.duration);
+      const percent = (audio.currentTime / audio.duration) * 100;
+      document.getElementById('prog').style.width = percent + '%';
+      document.getElementById('timeCurrent').textContent = format(audio.currentTime);
+      document.getElementById('timeTotal').textContent = format(audio.duration);
     };
 
-    function formatTime(sec) {
-      const m = Math.floor(sec / 60);
-      const s = Math.floor(sec % 60);
-      return `${m}:${s < 10 ? '0' : ''}${s}`;
+    function format(t) {
+      if (!t) return '0:00';
+      let m = Math.floor(t / 60);
+      let s = Math.floor(t % 60);
+      return m + ':' + (s < 10 ? '0' : '') + s;
     }
 
-    // Init
-    renderSongs();
-    if (songs.length > 0) playSong(0); // Auto start if songs exist
+    // Start
+    showSongs();
+    if (mySongs.length > 0) playThis(0);
 
-    console.log("WaveHut Fixed Version Loaded – Upload kar ke try karo!");
+    console.log("WaveHut Dubara Ready! Upload kar ke enjoy karo 🎶");
   </script>
 </body>
 </html>
