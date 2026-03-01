@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Music Hut Beat • Multi Upload</title>
+  <title>Music Hut Beat • Scroll Fixed</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
+    html, body { height: 100%; margin: 0; padding: 0; }
     body { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; }
     .glass { background: rgba(30,41,59,0.65); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.09); }
     .card { transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1); }
@@ -15,12 +16,14 @@
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     .progress { height: 5px; background: linear-gradient(to right, #eab308 var(--progress,0%), #4b5563 var(--progress,0%)); }
     .nav-active { color: #eab308; border-left: 4px solid #eab308; background: rgba(234,179,8,0.12); }
+    
+    main { -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col overflow-hidden">
+<body class="flex flex-col">
 
   <!-- Header -->
-  <header class="fixed top-0 w-full glass z-50 h-16 flex items-center px-4 md:px-8 justify-between">
+  <header class="fixed top-0 left-0 right-0 z-50 glass h-16 flex items-center px-4 md:px-8 justify-between border-b border-white/10">
     <div class="flex items-center gap-3">
       <button id="menu-btn" class="lg:hidden text-2xl"><i class="fas fa-bars"></i></button>
       <span class="text-2xl font-bold tracking-tighter text-yellow-400">Music Hut Beat</span>
@@ -34,27 +37,24 @@
     </div>
   </header>
 
-  <div class="flex flex-1 pt-16">
+  <div class="flex flex-1 pt-16 overflow-hidden">
     <!-- Sidebar -->
-    <aside id="sidebar" class="w-64 glass border-r border-white/10 h-[calc(100vh-4rem)] overflow-y-auto fixed lg:static z-40 -translate-x-full lg:translate-x-0 transition-transform">
+    <aside id="sidebar" class="w-64 glass border-r border-white/10 h-full overflow-y-auto fixed lg:static z-40 -translate-x-full lg:translate-x-0 transition-transform">
       <div class="p-4 space-y-2">
-        <div onclick="setView('discover')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer nav-active">
-          <i class="fas fa-compass"></i> Discover
-        </div>
-        <div onclick="setView('library')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer">
+        <div onclick="setView('library')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer nav-active">
           <i class="fas fa-music"></i> Library
         </div>
       </div>
     </aside>
 
-    <!-- Main -->
-    <main class="flex-1 overflow-y-auto pb-32 px-4 md:px-8">
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto pb-32 px-4 md:px-8" style="height: calc(100vh - 64px);">
       <div id="library-view" class="view">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 my-8">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mt-8 mb-6">
           <h1 class="text-4xl md:text-5xl font-bold">Your Library</h1>
           <input id="search-lib" onkeyup="filterLibrary()" placeholder="Search songs..." class="w-full md:w-72 bg-white/10 px-4 py-2.5 rounded-full border border-white/20 focus:border-yellow-400 outline-none">
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6" id="library-songs"></div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 pb-8" id="library-songs"></div>
       </div>
     </main>
   </div>
@@ -101,7 +101,7 @@
     let currentIdx = -1;
     let isPlay = false;
     let shuffle = false;
-    let repeat = 0; // 0 off, 1 one, 2 all
+    let repeat = 0;
     const audio = document.getElementById('audio');
     let vizCtx;
 
@@ -129,10 +129,8 @@
 
       if (added > 0) {
         save();
-        alert(`${added} song(s) added successfully!`);
+        alert(`${added} song${added > 1 ? 's' : ''} added! Scroll down to see them.`);
         if (currentIdx === -1 && songs.length > 0) playIdx(0);
-      } else {
-        alert("No valid audio files selected.");
       }
     }
 
@@ -140,9 +138,9 @@
       const grid = document.getElementById('library-songs');
       grid.innerHTML = songs.length ? '' : '<p class="col-span-full text-center py-16 text-gray-400 text-xl">No songs yet — upload multiple MP3s!</p>';
 
-      const searchTerm = document.getElementById('search-lib').value.toLowerCase();
+      const term = document.getElementById('search-lib').value.toLowerCase();
       const filtered = songs.filter(s => 
-        s.title.toLowerCase().includes(searchTerm) || s.artist.toLowerCase().includes(searchTerm)
+        s.title.toLowerCase().includes(term) || s.artist.toLowerCase().includes(term)
       );
 
       filtered.forEach((s, i) => {
@@ -307,7 +305,7 @@
 
     if (songs.length > 0 && currentIdx === -1) playIdx(0);
 
-    console.log("Modern Multi-Upload Music Hut Beat Ready! Ek saath kitne bhi gaane daal sakte ho 🎶");
+    console.log("Scroll issue fixed! Multiple upload + smooth scrolling ready 🎶");
   </script>
 </body>
 </html>
