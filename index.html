@@ -3,54 +3,115 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>WaveHut • Music Player</title>
+  <title>WaveHut • Premium Music</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  
-  <meta name="theme-color" content="#0f172a"/>
+  <meta name="theme-color" content="#1e1b4b"/>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Space+Grotesk:wght@500;600;700&display=swap');
+    
+    :root { --primary: 234 179 8; }
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .logo-font { font-family: 'Space Grotesk', sans-serif; }
+    
     html, body { height: 100%; overscroll-behavior: none; }
-    body { -webkit-tap-highlight-color: transparent; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
-    #sidebar { transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); }
+    body { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
+    
+    #sidebar { transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1); }
     @media (max-width: 768px) { #sidebar { transform: translateX(-100%); } #sidebar.open { transform: translateX(0); } }
-    .song-card { transition: all 0.2s ease; }
-    .song-card:active { transform: scale(0.97); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
-    #player { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
-    input[type="range"] { accent-color: #eab308; }
-    .tab-active { color: #eab308; border-bottom: 3px solid #eab308; }
+    
+    .glass { background: rgba(255,255,255,0.06); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    .song-card { transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); }
+    .song-card:hover { transform: translateY(-12px) scale(1.04); box-shadow: 0 30px 60px -15px rgb(234 179 8 / 0.3); }
+    .song-card:active { transform: scale(0.96); }
+    
+    #player { backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+    .album-art { transition: transform 0.4s ease; }
+    .playing .album-art { animation: rotate 25s linear infinite; }
+    
+    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    
+    .progress-bar { transition: width 0.1s linear; }
+    .tab-active { border-bottom: 3px solid rgb(234 179 8); color: white; }
+    
+    .visualizer-bar { transition: height 0.05s ease; }
   </style>
 </head>
-<body class="bg-gradient-to-b from-slate-950 to-black text-slate-100 min-h-screen flex flex-col">
+<body class="bg-gradient-to-br from-indigo-950 via-slate-950 to-black text-slate-100 min-h-screen flex flex-col overflow-hidden">
 
-  <!-- Top Bar -->
-  <header class="fixed top-0 left-0 right-0 z-50 bg-slate-900/90 backdrop-blur-lg border-b border-slate-800/50">
-    <div class="flex items-center justify-between px-4 h-14">
+  <!-- Top Bar - Premium -->
+  <header class="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10">
+    <div class="max-w-screen-2xl mx-auto flex items-center justify-between px-6 h-16">
+      <!-- Logo -->
       <div class="flex items-center gap-3">
-        <button id="menu-btn" class="text-2xl md:hidden"><i class="fas fa-bars"></i></button>
-        <div class="text-2xl font-bold tracking-tight"><span class="text-yellow-400">Wave</span>Hut</div>
+        <button id="menu-btn" class="md:hidden text-2xl text-white/70"><i class="fas fa-bars"></i></button>
+        <div class="flex items-center gap-2.5">
+          <!-- SVG Premium Logo -->
+          <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 21 Q12 8 21 15 Q30 22 36 12" stroke="#eab308" stroke-width="5" stroke-linecap="round"/>
+            <path d="M10 28 Q18 18 26 28 Q34 38 38 25" stroke="#eab308" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+            <circle cx="21" cy="21" r="6" fill="#eab308"/>
+            <rect x="15" y="30" width="12" height="8" rx="2" fill="#eab308"/>
+          </svg>
+          <div>
+            <span class="logo-font text-3xl font-bold tracking-tighter text-white">Wave</span>
+            <span class="logo-font text-3xl font-bold tracking-tighter text-yellow-400">Hut</span>
+          </div>
+        </div>
       </div>
-      <div class="flex items-center gap-4">
-        <button id="theme-toggle" class="text-xl"><i class="fas fa-moon"></i></button>
-        <div id="user-name" class="text-sm font-medium cursor-pointer" onclick="showLogin()">Guest</div>
-        <button onclick="document.getElementById('upload-input').click()" class="bg-yellow-500 text-slate-900 px-4 py-1.5 rounded-full text-sm font-semibold flex items-center gap-2 active:scale-95">
-          <i class="fas fa-cloud-upload-alt"></i> Upload
+
+      <!-- Search -->
+      <div class="flex-1 max-w-xl mx-8">
+        <div class="relative">
+          <input id="search-input" 
+                 onkeyup="filterSongs()"
+                 type="text" 
+                 placeholder="Search songs, artists, albums..." 
+                 class="w-full bg-white/5 border border-white/10 focus:border-yellow-400 rounded-3xl py-3.5 pl-14 text-sm placeholder:text-white/40 focus:outline-none">
+          <i class="fas fa-search absolute left-6 top-1/2 -translate-y-1/2 text-white/40"></i>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <button onclick="toggleTheme()" id="theme-btn" class="text-2xl text-white/70 hover:text-white transition">
+          <i class="fas fa-moon"></i>
+        </button>
+        <div onclick="showLoginModal()" id="user-pill" 
+             class="flex items-center gap-3 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-3xl cursor-pointer transition">
+          <div class="w-7 h-7 bg-yellow-400 rounded-2xl flex items-center justify-center text-xs font-bold text-slate-950">K</div>
+          <span id="username-display" class="font-medium text-sm">Ksb</span>
+        </div>
+        <button onclick="document.getElementById('upload-input').click()" 
+                class="bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 px-6 py-2.5 rounded-3xl font-semibold flex items-center gap-2 shadow-lg shadow-yellow-500/30 hover:shadow-xl transition active:scale-95">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <span>Upload</span>
         </button>
         <input type="file" id="upload-input" accept="audio/*" class="hidden" onchange="handleUpload(event)">
       </div>
     </div>
   </header>
 
-  <div class="flex flex-1 pt-14">
-
+  <div class="flex flex-1 pt-16 overflow-hidden">
     <!-- Sidebar -->
-    <aside id="sidebar" class="w-64 bg-slate-900/95 border-r border-slate-800 fixed md:static h-[calc(100%-3.5rem)] overflow-y-auto z-40 md:translate-x-0">
-      <div class="p-5 space-y-6">
+    <aside id="sidebar" class="w-72 glass border-r border-white/10 h-[calc(100vh-4rem)] overflow-y-auto fixed md:static z-40 md:translate-x-0">
+      <div class="p-6 space-y-8">
         <div>
-          <h3 class="uppercase text-xs tracking-wider text-slate-500 mb-3 font-semibold">Navigation</h3>
-          <div class="space-y-1">
-            <div onclick="switchTab('discover')" class="tab px-4 py-3 rounded-xl hover:bg-slate-800 cursor-pointer flex items-center gap-3 active:bg-slate-700 tab-active"><i class="fas fa-home w-5"></i> Discover</div>
-            <div onclick="switchTab('library')" class="tab px-4 py-3 rounded-xl hover:bg-slate-800 cursor-pointer flex items-center gap-3 active:bg-slate-700"><i class="fas fa-music w-5"></i> My Library</div>
-            <div onclick="switchTab('playlists')" class="tab px-4 py-3 rounded-xl hover:bg-slate-800 cursor-pointer flex items-center gap-3 active:bg-slate-700"><i class="fas fa-list w-5"></i> Playlists</div>
+          <h3 class="text-xs uppercase tracking-widest text-white/40 mb-4 font-medium">MENU</h3>
+          <div onclick="switchTab(0)" class="nav-item flex items-center gap-4 px-5 py-4 rounded-3xl cursor-pointer text-white hover:bg-white/5 active:bg-white/10 tab-active">
+            <i class="fas fa-fire text-xl"></i>
+            <span class="font-semibold">Discover</span>
+          </div>
+          <div onclick="switchTab(1)" class="nav-item flex items-center gap-4 px-5 py-4 rounded-3xl cursor-pointer text-white/70 hover:bg-white/5 active:bg-white/10">
+            <i class="fas fa-heart text-xl"></i>
+            <span class="font-semibold">Favorites</span>
+          </div>
+          <div onclick="switchTab(2)" class="nav-item flex items-center gap-4 px-5 py-4 rounded-3xl cursor-pointer text-white/70 hover:bg-white/5 active:bg-white/10">
+            <i class="fas fa-list text-xl"></i>
+            <span class="font-semibold">Playlists</span>
+          </div>
+          <div onclick="switchTab(3)" class="nav-item flex items-center gap-4 px-5 py-4 rounded-3xl cursor-pointer text-white/70 hover:bg-white/5 active:bg-white/10">
+            <i class="fas fa-music text-xl"></i>
+            <span class="font-semibold">My Library</span>
           </div>
         </div>
       </div>
@@ -58,297 +119,278 @@
 
     <!-- Main Content -->
     <main class="flex-1 overflow-y-auto pb-32">
-      <div class="p-5 md:p-8">
+      <div class="max-w-screen-2xl mx-auto p-6 md:p-10">
 
-        <!-- Login Modal (simple) -->
-        <div id="login-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-          <div class="bg-slate-900 p-8 rounded-2xl w-full max-w-sm">
-            <h2 class="text-2xl font-bold mb-6 text-center">Welcome to WaveHut</h2>
-            <input id="username-input" type="text" placeholder="Enter your name" class="w-full p-4 bg-slate-800 rounded-xl mb-4 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-            <button onclick="login()" class="w-full bg-yellow-500 text-slate-900 py-4 rounded-xl font-bold active:scale-95">Continue</button>
-            <button onclick="document.getElementById('login-modal').classList.add('hidden')" class="mt-4 w-full text-slate-400">Cancel</button>
-          </div>
-        </div>
-
-        <!-- Discover Tab -->
-        <div id="discover" class="tab-content">
-          <div class="relative rounded-3xl overflow-hidden h-80 bg-gradient-to-br from-purple-950 to-indigo-950 mb-10">
-            <div class="absolute inset-0 bg-black/40"></div>
-            <div class="relative z-10 p-8 flex flex-col justify-end h-full">
-              <h1 class="text-5xl font-extrabold mb-4">Improve Your Music Taste</h1>
-              <p class="text-slate-300 mb-6">Join millions exploring great sounds</p>
-              <button onclick="playRandom()" class="w-fit bg-white text-black px-8 py-4 rounded-full font-bold flex items-center gap-3 active:scale-95"><i class="fas fa-play"></i> Start Now</button>
+        <!-- Hero -->
+        <div class="glass rounded-4xl overflow-hidden relative h-96 flex items-center mb-12">
+          <div class="absolute inset-0 bg-gradient-to-r from-indigo-600/70 via-purple-600/40 to-transparent"></div>
+          <div class="relative z-10 pl-12 max-w-md">
+            <div class="inline-flex items-center gap-2 bg-white/10 px-5 py-2 rounded-3xl text-sm mb-6">
+              <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+              Trending Worldwide
             </div>
+            <h1 class="text-6xl leading-none font-bold tracking-tighter logo-font">Improve Your<br>Music Taste</h1>
+            <p class="mt-6 text-lg text-white/70">Millions of songs. Zero ads. Pure vibes.</p>
+            <button onclick="playRandom()" 
+                    class="mt-10 bg-white text-slate-950 px-10 py-5 rounded-3xl font-bold text-lg flex items-center gap-4 hover:scale-105 transition">
+              <i class="fas fa-play"></i> Start Listening Free
+            </button>
           </div>
-
-          <h2 class="text-3xl font-bold mb-6">Popular Right Now</h2>
-          <div id="popular-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5"></div>
+          <img src="https://picsum.photos/id/1015/900/600" class="absolute right-0 bottom-0 h-full object-cover opacity-80" alt="">
         </div>
 
-        <!-- Library Tab -->
-        <div id="library" class="tab-content hidden">
-          <h2 class="text-3xl font-bold mb-6">My Library</h2>
-          <div id="library-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5"></div>
+        <!-- Discover Grid -->
+        <div id="discover-tab">
+          <div class="flex justify-between items-end mb-8">
+            <h2 class="text-4xl font-bold tracking-tight">Popular Right Now</h2>
+            <span onclick="alert('Full chart coming soon 🔥')" class="text-yellow-400 cursor-pointer flex items-center gap-2 text-sm font-medium">See All <i class="fas fa-arrow-right"></i></span>
+          </div>
+          <div id="popular-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6"></div>
+        </div>
+
+        <!-- Favorites Tab -->
+        <div id="favorites-tab" class="hidden">
+          <h2 class="text-4xl font-bold tracking-tight mb-8">Your Favorites ❤️</h2>
+          <div id="favorites-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
         </div>
 
         <!-- Playlists Tab -->
-        <div id="playlists" class="tab-content hidden">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-3xl font-bold">My Playlists</h2>
-            <button onclick="createPlaylist()" class="bg-slate-700 hover:bg-slate-600 px-5 py-2 rounded-full flex items-center gap-2"><i class="fas fa-plus"></i> New Playlist</button>
+        <div id="playlists-tab" class="hidden">
+          <div class="flex justify-between mb-8">
+            <h2 class="text-4xl font-bold tracking-tight">My Playlists</h2>
+            <button onclick="createPlaylist()" class="flex items-center gap-3 bg-white/10 hover:bg-white/20 px-8 py-4 rounded-3xl">
+              <i class="fas fa-plus"></i> New Playlist
+            </button>
           </div>
-          <div id="playlists-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5"></div>
+          <div id="playlists-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+        </div>
+
+        <!-- Library Tab -->
+        <div id="library-tab" class="hidden">
+          <h2 class="text-4xl font-bold tracking-tight mb-8">My Library</h2>
+          <div id="library-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
         </div>
       </div>
     </main>
   </div>
 
-  <!-- Bottom Player -->
-  <footer id="player" class="fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-xl border-t border-slate-700 h-24 flex items-center px-4 md:px-8 z-50">
-    <div class="flex items-center gap-4 flex-1 min-w-0">
-      <img id="player-cover" src="https://picsum.photos/80" class="w-14 h-14 rounded-xl object-cover">
+  <!-- Premium Bottom Player -->
+  <footer id="player" class="fixed bottom-0 left-0 right-0 glass border-t border-white/10 h-24 z-50 flex items-center px-6">
+    <div class="flex items-center gap-5 w-80">
+      <div id="player-album" onclick="togglePlay()" class="w-16 h-16 rounded-2xl overflow-hidden ring-2 ring-white/20 cursor-pointer album-art">
+        <img id="player-cover" src="https://picsum.photos/id/1015/300" class="w-full h-full object-cover">
+      </div>
       <div class="min-w-0">
-        <div id="player-title" class="font-semibold truncate">Select a song</div>
-        <div id="player-artist" class="text-slate-400 text-sm truncate">—</div>
+        <div id="player-title" class="font-semibold text-base truncate">Select a song to play</div>
+        <div id="player-artist" class="text-sm text-white/60 truncate">—</div>
       </div>
+      <button onclick="toggleLikeCurrent()" class="ml-auto text-2xl text-white/50 hover:text-red-400 transition">
+        <i id="player-heart" class="far fa-heart"></i>
+      </button>
     </div>
 
-    <div class="flex flex-col items-center flex-1 mx-6">
-      <div class="flex gap-6 md:gap-10 text-2xl text-slate-300 mb-2">
-        <button id="shuffle" onclick="toggleShuffle()"><i class="fas fa-random"></i></button>
-        <button onclick="prevSong()"><i class="fas fa-backward-step"></i></button>
-        <button id="play-pause" onclick="togglePlay()" class="text-4xl text-yellow-400"><i class="fas fa-play-circle"></i></button>
-        <button onclick="nextSong()"><i class="fas fa-forward-step"></i></button>
-        <button id="repeat" onclick="toggleRepeat()"><i class="fas fa-repeat"></i></button>
+    <div class="flex-1 flex flex-col items-center gap-2 max-w-md mx-10">
+      <div class="flex items-center gap-8 text-2xl text-white/70">
+        <button onclick="toggleShuffle()" id="shuffle-btn"><i class="fas fa-random"></i></button>
+        <button onclick="prevSong()"><i class="fas fa-step-backward"></i></button>
+        <button onclick="togglePlay()" id="play-main-btn" 
+                class="w-14 h-14 bg-yellow-400 rounded-2xl flex items-center justify-center text-slate-950 shadow-2xl shadow-yellow-500/50">
+          <i id="play-icon" class="fas fa-play text-3xl ml-0.5"></i>
+        </button>
+        <button onclick="nextSong()"><i class="fas fa-step-forward"></i></button>
+        <button onclick="toggleRepeat()" id="repeat-btn"><i class="fas fa-redo"></i></button>
       </div>
-      <div class="w-full flex items-center gap-3 text-xs text-slate-400">
+
+      <div class="w-full flex items-center gap-3 text-xs text-white/50">
         <span id="current-time">0:00</span>
-        <div id="progress-bar" class="flex-1 h-1.5 bg-slate-700 rounded-full cursor-pointer relative">
-          <div id="progress-fill" class="absolute h-full w-0 bg-yellow-400 rounded-full"></div>
+        <div onclick="seek(event)" id="progress-container" class="flex-1 h-1 bg-white/20 rounded-full relative cursor-pointer">
+          <div id="progress-fill" class="h-1 bg-gradient-to-r from-yellow-400 to-amber-300 rounded-full w-0"></div>
         </div>
-        <span id="duration">0:00</span>
+        <span id="total-time">0:00</span>
       </div>
     </div>
 
-    <div class="hidden md:flex items-center gap-4">
-      <canvas id="viz" width="100" height="30"></canvas>
-      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8" class="w-32">
+    <div class="flex items-center gap-8 text-white/70">
+      <canvas id="visualizer" width="110" height="38" class="opacity-90"></canvas>
+      <div class="flex items-center gap-4">
+        <i class="fas fa-volume-up"></i>
+        <input type="range" id="volume-slider" min="0" max="100" value="85" class="w-28 accent-yellow-400">
+      </div>
     </div>
   </footer>
 
-  <audio id="audio"></audio>
+  <!-- Login Modal -->
+  <div id="login-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[100]">
+    <div class="glass p-10 rounded-3xl w-full max-w-sm">
+      <h2 class="text-3xl font-bold text-center mb-8">Welcome to WaveHut</h2>
+      <input id="username-input" type="text" placeholder="Your name" value="Ksb"
+             class="w-full py-5 px-6 bg-white/10 rounded-3xl text-lg mb-6 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+      <button onclick="doLogin()" class="w-full py-5 bg-yellow-400 text-slate-950 rounded-3xl font-bold text-xl">Continue</button>
+    </div>
+  </div>
+
+  <audio id="main-audio" preload="metadata"></audio>
 
   <script>
-    // ─── Data ────────────────────────────────────────────────────────────
-    let songs = [
-      {id:1,title:"Energetic Rock",artist:"SoundHelix",src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",cover:"https://picsum.photos/id/1015/300"},
-      {id:2,title:"Dreamy Ambient",artist:"SoundHelix",src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",cover:"https://picsum.photos/id/237/300"},
-      {id:3,title:"Chill Beats",artist:"SoundHelix",src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",cover:"https://picsum.photos/id/1005/300"},
-      {id:4,title:"Upbeat Pop",artist:"SoundHelix",src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",cover:"https://picsum.photos/id/870/300"},
-      {id:5,title:"Epic Journey",artist:"SoundHelix",src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",cover:"https://picsum.photos/id/180/300"}
+    // ==================== DATA & STATE ====================
+    let allSongs = [
+      {id:1,title:"Fairy Tales",artist:"The Moment",src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",cover:"https://picsum.photos/id/1015/600"},
+      {id:2,title:"Midnight Drive",artist:"Neon Collective",src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",cover:"https://picsum.photos/id/201/600"},
+      {id:3,title:"Ocean Breeze",artist:"Lofi Kings",src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",cover:"https://picsum.photos/id/133/600"},
+      {id:4,title:"Thunder",artist:"Electric Pulse",src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",cover:"https://picsum.photos/id/870/600"},
+      {id:5,title:"Golden Hour",artist:"Sunset Collective",src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",cover:"https://picsum.photos/id/1005/600"},
     ];
 
-    let myLibrary = JSON.parse(localStorage.getItem('myLibrary')) || [];
-    let playlists = JSON.parse(localStorage.getItem('playlists')) || [];
-    let currentUser = localStorage.getItem('username') || 'Guest';
+    let myLibrary = JSON.parse(localStorage.getItem('wave_library')) || [];
+    let favorites = JSON.parse(localStorage.getItem('wave_favorites')) || [];
+    let playlists = JSON.parse(localStorage.getItem('wave_playlists')) || [];
+    let currentUser = localStorage.getItem('wave_username') || "Ksb";
+
     let currentIndex = 0;
     let isPlaying = false;
-    let shuffle = false;
-    let repeat = false;
+    let isShuffle = false;
+    let repeatMode = 0; // 0 off, 1 one, 2 all
+    let audio = document.getElementById('main-audio');
 
-    const audio = document.getElementById('audio');
-
-    // ─── Functions ───────────────────────────────────────────────────────
-    function saveData() {
-      localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
-      localStorage.setItem('playlists', JSON.stringify(playlists));
+    // ==================== SAVE ====================
+    function saveAll() {
+      localStorage.setItem('wave_library', JSON.stringify(myLibrary));
+      localStorage.setItem('wave_favorites', JSON.stringify(favorites));
+      localStorage.setItem('wave_playlists', JSON.stringify(playlists));
+      localStorage.setItem('wave_username', currentUser);
     }
 
-    function handleUpload(e) {
-      const file = e.target.files[0];
-      if (!file || !file.type.startsWith('audio/')) return alert('Only audio files allowed!');
-      
-      const url = URL.createObjectURL(file);
-      const newSong = {
-        id: Date.now(),
-        title: file.name.replace(/\.[^/.]+$/, ""),
-        artist: currentUser || 'You',
-        src: url,
-        cover: 'https://picsum.photos/300?random=' + Date.now(),
-        uploaded: true
-      };
-      
-      myLibrary.push(newSong);
-      songs.push(newSong); // also add to global for search/play
-      saveData();
-      renderLibrary();
-      alert('Song uploaded! Check My Library.');
-    }
-
-    function renderSongs(containerId, songList) {
-      const grid = document.getElementById(containerId);
-      grid.innerHTML = '';
-      songList.forEach(s => {
-        const card = document.createElement('div');
-        card.className = 'song-card bg-slate-800/60 rounded-2xl overflow-hidden cursor-pointer';
-        card.innerHTML = `
+    // ==================== RENDER ====================
+    function renderGrid(containerId, songList) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      songList.forEach(song => {
+        const isFav = favorites.some(f => f.id === song.id);
+        const div = document.createElement('div');
+        div.className = `song-card glass rounded-3xl overflow-hidden cursor-pointer`;
+        div.innerHTML = `
           <div class="relative">
-            <img src="${s.cover}" class="w-full aspect-square object-cover">
-            <div class="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 bg-black/40 transition">
-              <button onclick="playSong(${s.id}); event.stopPropagation()" class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center"><i class="fas fa-play text-slate-900 ml-1"></i></button>
-            </div>
+            <img src="${song.cover}" class="w-full aspect-square object-cover">
+            <button onclick="event.stopImmediatePropagation(); playSong(${song.id});" 
+                    class="absolute bottom-4 right-4 w-11 h-11 bg-white rounded-2xl flex items-center justify-center shadow-2xl">
+              <i class="fas fa-play text-slate-950 ml-0.5"></i>
+            </button>
           </div>
-          <div class="p-3">
-            <div class="font-semibold truncate">${s.title}</div>
-            <div class="text-sm text-slate-400 truncate">${s.artist}</div>
+          <div class="p-5">
+            <div class="font-semibold text-lg leading-none mb-1">${song.title}</div>
+            <div class="text-white/60 text-sm">${song.artist}</div>
+            <button onclick="event.stopImmediatePropagation(); toggleFavorite(${song.id});" 
+                    class="absolute top-5 right-5 text-2xl ${isFav ? 'text-red-400' : 'text-white/30'}">
+              <i class="${isFav ? 'fas' : 'far'} fa-heart"></i>
+            </button>
           </div>
         `;
-        card.onclick = () => playSong(s.id);
-        grid.appendChild(card);
+        div.onclick = () => playSong(song.id);
+        container.appendChild(div);
       });
-    }
-
-    function renderLibrary() {
-      renderSongs('library-grid', myLibrary);
     }
 
     function renderPlaylists() {
-      const grid = document.getElementById('playlists-grid');
-      grid.innerHTML = '';
-      playlists.forEach(pl => {
+      const container = document.getElementById('playlists-grid');
+      container.innerHTML = '';
+      playlists.forEach((pl, i) => {
         const div = document.createElement('div');
-        div.className = 'bg-slate-800/60 rounded-2xl p-4 cursor-pointer hover:bg-slate-700';
-        div.innerHTML = `
-          <div class="font-bold mb-1">${pl.name}</div>
-          <div class="text-sm text-slate-400">${pl.songs.length} songs</div>
-        `;
+        div.className = `glass rounded-3xl p-6 cursor-pointer hover:ring-2 hover:ring-yellow-400/30`;
+        div.innerHTML = `<div class="font-bold text-2xl mb-2">${pl.name}</div><div class="text-white/50">${pl.songs.length} songs</div>`;
         div.onclick = () => playPlaylist(pl);
-        grid.appendChild(div);
+        container.appendChild(div);
       });
     }
 
+    // ==================== PLAYBACK ====================
     function playSong(id) {
-      const song = songs.find(s => s.id === id);
+      const song = allSongs.concat(myLibrary).find(s => s.id === id);
       if (!song) return;
-      
-      currentIndex = songs.indexOf(song);
+      currentIndex = allSongs.concat(myLibrary).findIndex(s => s.id === id);
       audio.src = song.src;
       document.getElementById('player-cover').src = song.cover;
       document.getElementById('player-title').textContent = song.title;
       document.getElementById('player-artist').textContent = song.artist;
+      updatePlayerHeart();
       
-      audio.play().catch(() => alert('Tap play again (browser policy)'));
+      audio.play().catch(() => {});
       isPlaying = true;
-      document.getElementById('play-pause').innerHTML = '<i class="fas fa-pause-circle"></i>';
+      document.getElementById('play-icon').classList.replace('fa-play', 'fa-pause');
+      document.getElementById('player').classList.add('playing');
+      initVisualizer();
     }
 
     function togglePlay() {
-      if (!audio.src) return playSong(songs[0].id);
+      if (!audio.src) return playSong(allSongs[0].id);
       if (isPlaying) {
         audio.pause();
         isPlaying = false;
-        document.getElementById('play-pause').innerHTML = '<i class="fas fa-play-circle"></i>';
+        document.getElementById('play-icon').classList.replace('fa-pause', 'fa-play');
+        document.getElementById('player').classList.remove('playing');
       } else {
         audio.play();
         isPlaying = true;
-        document.getElementById('play-pause').innerHTML = '<i class="fas fa-pause-circle"></i>';
+        document.getElementById('play-icon').classList.replace('fa-play', 'fa-pause');
+        document.getElementById('player').classList.add('playing');
       }
     }
 
     function nextSong() {
-      currentIndex = (currentIndex + 1) % songs.length;
-      playSong(songs[currentIndex].id);
+      currentIndex = (currentIndex + 1) % (allSongs.length + myLibrary.length);
+      const all = allSongs.concat(myLibrary);
+      playSong(all[currentIndex].id);
     }
 
     function prevSong() {
-      currentIndex = (currentIndex - 1 + songs.length) % songs.length;
-      playSong(songs[currentIndex].id);
+      currentIndex = (currentIndex - 1 + (allSongs.length + myLibrary.length)) % (allSongs.length + myLibrary.length);
+      const all = allSongs.concat(myLibrary);
+      playSong(all[currentIndex].id);
+    }
+
+    function toggleFavorite(id) {
+      const song = allSongs.concat(myLibrary).find(s => s.id === id);
+      if (!song) return;
+      const idx = favorites.findIndex(f => f.id === id);
+      if (idx > -1) favorites.splice(idx, 1);
+      else favorites.push(song);
+      saveAll();
+      renderAllGrids();
+      updatePlayerHeart();
+    }
+
+    function toggleLikeCurrent() {
+      const currentSong = allSongs.concat(myLibrary).find((_, i) => i === currentIndex);
+      if (currentSong) toggleFavorite(currentSong.id);
+    }
+
+    function updatePlayerHeart() {
+      const currentSong = allSongs.concat(myLibrary)[currentIndex];
+      if (!currentSong) return;
+      const isFav = favorites.some(f => f.id === currentSong.id);
+      document.getElementById('player-heart').className = isFav ? 'fas fa-heart text-red-400' : 'far fa-heart';
     }
 
     function playRandom() {
-      const rand = Math.floor(Math.random() * songs.length);
-      playSong(songs[rand].id);
-    }
-
-    function switchTab(tab) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.getElementById(tab).classList.remove('hidden');
-      
-      document.querySelectorAll('.tab').forEach(el => el.classList.remove('tab-active'));
-      event.target?.classList.add('tab-active');
-      
-      if (tab === 'library') renderLibrary();
-      if (tab === 'playlists') renderPlaylists();
-    }
-
-    function showLogin() {
-      document.getElementById('login-modal').classList.remove('hidden');
-    }
-
-    function login() {
-      const name = document.getElementById('username-input').value.trim() || 'User';
-      localStorage.setItem('username', name);
-      currentUser = name;
-      document.getElementById('user-name').textContent = name;
-      document.getElementById('login-modal').classList.add('hidden');
-    }
-
-    function createPlaylist() {
-      if (currentUser === 'Guest') return alert('Login first!');
-      const name = prompt('Playlist name?');
-      if (!name) return;
-      playlists.push({name, songs: []});
-      saveData();
-      renderPlaylists();
+      const all = allSongs.concat(myLibrary);
+      const rand = Math.floor(Math.random() * all.length);
+      playSong(all[rand].id);
     }
 
     function playPlaylist(pl) {
-      if (pl.songs.length === 0) return alert('Add songs first (coming soon)!');
-      // For now play first song
-      const firstId = pl.songs[0];
-      playSong(firstId);
+      if (pl.songs.length === 0) return alert("Add songs to this playlist first (feature coming soon!)");
+      playSong(pl.songs[0]);
     }
 
-    function toggleShuffle() { shuffle = !shuffle; document.getElementById('shuffle').style.color = shuffle ? '#eab308' : ''; }
-    function toggleRepeat() { repeat = !repeat; document.getElementById('repeat').style.color = repeat ? '#eab308' : ''; }
-
-    // Progress & Time
-    audio.ontimeupdate = () => {
-      if (!audio.duration) return;
-      const pct = (audio.currentTime / audio.duration) * 100;
-      document.getElementById('progress-fill').style.width = pct + '%';
-      document.getElementById('current-time').textContent = formatTime(audio.currentTime);
-      document.getElementById('duration').textContent = formatTime(audio.duration);
-    };
-
-    audio.onended = () => {
-      if (repeat) playSong(songs[currentIndex].id);
-      else nextSong();
-    };
-
-    document.getElementById('progress-bar').onclick = e => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const pos = (e.clientX - rect.left) / rect.width;
-      audio.currentTime = pos * audio.duration;
-    };
-
-    document.getElementById('volume').oninput = e => audio.volume = e.target.value;
-
-    function formatTime(sec) {
-      if (!sec) return '0:00';
-      const m = Math.floor(sec / 60);
-      const s = Math.floor(sec % 60);
-      return `${m}:${s.toString().padStart(2,'0')}`;
+    function createPlaylist() {
+      const name = prompt("New playlist name?");
+      if (!name) return;
+      playlists.push({id: Date.now(), name, songs: []});
+      saveAll();
+      renderPlaylists();
     }
 
-    // Init
-    document.getElementById('user-name').textContent = currentUser;
-    renderSongs('popular-grid', songs);
-    switchTab('discover');
-    document.getElementById('menu-btn').onclick = () => document.getElementById('sidebar').classList.toggle('open');
-    document.getElementById('theme-toggle').onclick = () => document.documentElement.classList.toggle('dark');
-
-    console.log('WaveHut Pro Loaded ✓ Upload + Playlists + Account working');
-  </script>
-</body>
-</html>
+    // ==================== UPLOAD ====================
+    function handleUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
