@@ -7,20 +7,21 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
     :root {
-      --bg: #0a0a1f;
-      --text: #e0e0ff;
-      --primary: #ff2e63;
-      --secondary: #00f2ea;
-      --card: #1a1a3a;
-      --hover: #2a2a5a;
-      --gradient: linear-gradient(135deg, #ff2e63, #00f2ea, #8a2be2);
+      --bg: #0d1a0d;               /* Dark green-black */
+      --text: #f0f0e0;
+      --primary: #ffeb3b;          /* Bright yellow */
+      --secondary: #4caf50;        /* Neon green */
+      --card: #1e2e1e;
+      --hover: #2e4e2e;
+      --gradient: linear-gradient(135deg, #0d1a0d, #1e3a1e, #0d1a0d);
+      --sidebar-bg: #0f220f;
     }
     [data-theme="light"] {
-      --bg: #f0f4ff;
-      --text: #1a1a3f;
+      --bg: #f5fff5;
+      --text: #1a2e1a;
       --card: #ffffff;
-      --hover: #e0e8ff;
-      --gradient: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
+      --hover: #e8f5e9;
+      --gradient: linear-gradient(135deg, #e8f5e9, #c8e6c9, #a5d6a7);
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
@@ -29,160 +30,228 @@
       color: var(--text);
       min-height: 100vh;
       background: var(--gradient);
-      background-size: 300% 300%;
-      animation: gradientFlow 12s ease infinite;
+      background-size: 400% 400%;
+      animation: gradientFlow 15s ease infinite;
     }
     @keyframes gradientFlow {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-    header {
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(10px);
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+    aside {
+      width: 240px;
+      background: var(--sidebar-bg);
       padding: 1.5rem;
+      border-right: 1px solid var(--hover);
+      position: fixed;
+      height: 100%;
+      overflow-y: auto;
+    }
+    aside h3 { color: var(--primary); margin-bottom: 1.5rem; font-size: 1.4rem; }
+    aside button, aside label {
+      display: block;
+      width: 100%;
+      padding: 0.9rem;
+      margin: 0.6rem 0;
+      background: var(--card);
+      border: none;
+      border-radius: 10px;
+      color: var(--text);
+      cursor: pointer;
+      font-weight: bold;
+      text-align: left;
+    }
+    aside button:hover, aside label:hover { background: var(--hover); }
+    aside input[type="file"] { display: none; }
+    main {
+      margin-left: 240px;
+      flex: 1;
+      padding: 1.5rem;
+    }
+    header {
       text-align: center;
+      padding: 1.5rem 0;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(8px);
       position: sticky;
       top: 0;
-      z-index: 100;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      z-index: 10;
     }
     .logo {
-      font-size: 3.5rem;
+      font-size: 3.8rem;
       font-weight: 900;
-      background: var(--gradient);
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px rgba(255,46,99,0.6);
+      text-shadow: 0 0 15px rgba(76,175,80,0.5);
     }
     nav {
       display: flex;
       justify-content: center;
-      gap: 1.5rem;
-      margin: 1rem 0;
+      gap: 1.8rem;
+      margin: 1.2rem 0;
       flex-wrap: wrap;
     }
     nav button {
       background: var(--card);
       border: none;
       color: var(--text);
-      padding: 0.8rem 1.5rem;
+      padding: 0.8rem 1.6rem;
       border-radius: 30px;
       cursor: pointer;
       font-weight: bold;
     }
-    nav button.active { background: var(--primary); color: white; }
+    nav button.active { background: var(--secondary); color: black; }
     .search-bar {
-      max-width: 600px;
-      margin: 1rem auto;
+      max-width: 700px;
+      margin: 1.2rem auto;
       position: relative;
     }
     #searchInput {
       width: 100%;
-      padding: 1rem 3rem 1rem 1.5rem;
+      padding: 1rem 4rem 1rem 1.5rem;
       border-radius: 50px;
       border: none;
       background: var(--card);
       color: var(--text);
       font-size: 1.1rem;
     }
-    .search-icon { position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--primary); }
-    .container { padding: 1rem; max-width: 1200px; margin: auto; }
-    .section-title { font-size: 1.8rem; margin: 2rem 0 1rem; color: var(--secondary); }
+    .search-icon { position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 1.4rem; }
+    .container { max-width: 1300px; margin: auto; }
+    .section-title { font-size: 2rem; margin: 2.5rem 0 1.2rem; color: var(--primary); text-shadow: 0 0 10px rgba(255,235,59,0.4); }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.8rem;
     }
     .card {
       background: var(--card);
       border-radius: 16px;
       overflow: hidden;
-      transition: 0.3s;
+      transition: 0.4s;
       cursor: pointer;
+      border: 1px solid var(--hover);
     }
-    .card:hover { transform: translateY(-8px); box-shadow: 0 10px 30px rgba(255,46,99,0.3); }
-    .card img { width: 100%; height: 180px; object-fit: cover; }
-    .card-info { padding: 1rem; text-align: center; }
+    .card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(76,175,80,0.3); }
+    .card img { width: 100%; height: 200px; object-fit: cover; }
+    .card-info { padding: 1.2rem; text-align: center; }
     #player {
       position: fixed;
       bottom: 0;
-      left: 0; right: 0;
+      left: 240px;
+      right: 0;
       background: var(--card);
-      backdrop-filter: blur(10px);
-      padding: 1rem;
+      backdrop-filter: blur(12px);
+      padding: 1.2rem 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 -10px 30px rgba(0,0,0,0.6);
+      box-shadow: 0 -8px 25px rgba(0,0,0,0.7);
       z-index: 99;
+      border-top: 1px solid var(--secondary);
     }
-    #player img { width: 60px; height: 60px; border-radius: 12px; }
+    #player img { width: 70px; height: 70px; border-radius: 14px; box-shadow: 0 0 15px var(--primary); }
     #player-controls button {
       background: none;
       border: none;
       color: var(--text);
-      font-size: 1.8rem;
-      margin: 0 0.8rem;
-      cursor: pointer;
-    }
-    #progress-container {
-      flex: 1;
-      height: 6px;
-      background: #444;
-      border-radius: 3px;
+      font-size: 2rem;
       margin: 0 1rem;
       cursor: pointer;
+      transition: 0.3s;
     }
-    #progress { height: 100%; width: 0; background: var(--primary); border-radius: 3px; }
-    .theme-toggle { position: fixed; top: 1rem; right: 1rem; background: var(--primary); color: white; border: none; padding: 0.8rem; border-radius: 50%; cursor: pointer; z-index: 100; }
-    .premium-banner {
-      background: linear-gradient(90deg, #ff2e63, #8a2be2);
+    #player-controls button:hover { color: var(--primary); transform: scale(1.15); }
+    #progress-container {
+      flex: 1;
+      height: 8px;
+      background: #333;
+      border-radius: 4px;
+      margin: 0 1.5rem;
+      cursor: pointer;
+    }
+    #progress { height: 100%; width: 0; background: var(--primary); border-radius: 4px; }
+    .theme-toggle {
+      position: fixed;
+      top: 1.2rem;
+      right: 1.5rem;
+      background: var(--secondary);
       color: white;
-      text-align: center;
+      border: none;
       padding: 1rem;
-      margin: 1rem;
-      border-radius: 12px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: 0 0 15px var(--primary);
+    }
+    .premium-banner {
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+      color: black;
+      text-align: center;
+      padding: 1.2rem;
+      margin: 1.5rem 0;
+      border-radius: 14px;
       font-weight: bold;
+      font-size: 1.2rem;
+    }
+    @media (max-width: 992px) {
+      aside { width: 200px; }
+      main, #player { margin-left: 200px; }
     }
     @media (max-width: 768px) {
-      #player { flex-direction: column; gap: 1rem; }
-      .logo { font-size: 2.5rem; }
+      .layout { flex-direction: column; }
+      aside { position: relative; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--hover); }
+      main, #player { margin-left: 0; }
+      #player { left: 0; }
+      .logo { font-size: 2.8rem; }
     }
   </style>
 </head>
 <body>
 
-  <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+  <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
 
-  <header>
-    <div class="logo">SurVibe</div>
-    <p>Sur Ka Naya Vibe – Free Music Streaming</p>
-  </header>
+  <div class="layout">
+    <aside>
+      <h3>SurVibe</h3>
+      <button onclick="showSection('home')">Home</button>
+      <button onclick="showSection('trending')">Trending</button>
+      <button onclick="showSection('charts')">Top Charts</button>
+      <button onclick="showSection('new')">New Releases</button>
+      <button onclick="showSection('favorites')">Favorites</button>
+      <button onclick="showSection('playlists')">My Playlists</button>
 
-  <nav>
-    <button class="active" onclick="showSection('home')">Home</button>
-    <button onclick="showSection('trending')">Trending</button>
-    <button onclick="showSection('charts')">Top Charts</button>
-    <button onclick="showSection('new')">New Releases</button>
-    <button onclick="showSection('playlists')">My Playlists</button>
-    <button onclick="showSection('favorites')">Favorites</button>
-  </nav>
+      <label for="uploadSongs" style="margin-top: 2rem; background: var(--secondary); color: black; text-align: center;">
+        <i class="fas fa-cloud-upload-alt"></i> Upload Songs
+      </label>
+      <input type="file" id="uploadSongs" accept="audio/*" multiple onchange="handleUpload(event)"/>
+    </aside>
 
-  <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="Search songs, artists, albums..." oninput="searchSongs()"/>
-    <i class="fas fa-search search-icon"></i>
-  </div>
+    <main>
+      <header>
+        <div class="logo">SurVibe</div>
+        <p>Sur Ka Naya Vibe – Free Streaming & Upload</p>
+      </header>
 
-  <div class="premium-banner">Get SurVibe Plus – Ad-free, Unlimited Downloads, HD Audio!</div>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search songs, artists..." oninput="searchSongs()"/>
+        <i class="fas fa-search search-icon"></i>
+      </div>
 
-  <div class="container" id="content">
-    <!-- Sections loaded via JS -->
+      <div class="premium-banner">Upgrade to SurVibe Plus – Ad-Free, HD Audio & Unlimited Uploads!</div>
+
+      <div class="container" id="content">
+        <!-- Dynamic content here -->
+      </div>
+    </main>
   </div>
 
   <div id="player">
-    <img id="currentCover" src="https://via.placeholder.com/60/ff2e63/fff?text=Sur" alt="Cover"/>
-    <div style="flex:1; margin:0 1rem;">
+    <img id="currentCover" src="https://source.unsplash.com/random/70x70/?music,neon" alt="Cover"/>
+    <div style="flex:1; margin:0 1.5rem; min-width:180px;">
       <h4 id="currentTitle">Select a song</h4>
       <small id="currentArtist"></small>
     </div>
@@ -197,18 +266,17 @@
       <div id="progress"></div>
     </div>
     <span id="time">0:00 / 0:00</span>
-    <input type="range" id="volume" min="0" max="1" step="0.01" value="1" onchange="setVolume(this.value)"/>
+    <input type="range" id="volume" min="0" max="1" step="0.01" value="0.9" onchange="audio.volume = this.value"/>
   </div>
 
   <audio id="audio"></audio>
 
   <script>
-    // Dummy Songs Data (replace with real API later)
-    const songs = [
-      { id:1, title:"Tum Hi Ho", artist:"Arijit Singh", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", cover:"https://source.unsplash.com/random/300x300/?music,hindi", genre:"Hindi", mood:"Romantic" },
-      { id:2, title:"Shape of You", artist:"Ed Sheeran", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", cover:"https://source.unsplash.com/random/300x300/?music,pop", genre:"English", mood:"Upbeat" },
-      { id:3, title:"Levitating", artist:"Dua Lipa", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", cover:"https://source.unsplash.com/random/300x300/?music,dance", genre:"English", mood:"Dance" },
-      // Add 20-30 more for demo (Hindi, Punjabi, Tamil etc.)
+    // Sample songs (add more as needed)
+    let songs = [
+      { id:1, title:"Tum Hi Ho", artist:"Arijit Singh", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", cover:"https://source.unsplash.com/random/300x300/?music,hindi,green", genre:"Hindi" },
+      { id:2, title:"Shape of You", artist:"Ed Sheeran", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", cover:"https://source.unsplash.com/random/300x300/?music,pop,yellow", genre:"English" },
+      { id:3, title:"Levitating", artist:"Dua Lipa", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", cover:"https://source.unsplash.com/random/300x300/?music,dance,neon", genre:"English" },
     ];
 
     let currentSong = null;
@@ -216,8 +284,6 @@
     let shuffle = false;
     let repeat = false;
     let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    let playlists = JSON.parse(localStorage.getItem('playlists')) || { "My Favorites": favorites };
-    let recentlyPlayed = JSON.parse(localStorage.getItem('recentlyPlayed')) || [];
 
     const audio = document.getElementById('audio');
     const playPauseBtn = document.getElementById('playPause');
@@ -229,8 +295,7 @@
       document.getElementById('currentCover').src = song.cover;
       audio.src = song.src;
       audio.load();
-      if (isPlaying) audio.play();
-      addToRecent(song);
+      if (isPlaying) audio.play().catch(()=>{});
     }
 
     function togglePlay() {
@@ -238,27 +303,18 @@
         audio.pause();
         playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
       } else {
-        audio.play();
+        audio.play().catch(()=>{});
         playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
       }
       isPlaying = !isPlaying;
     }
 
-    function nextSong() {
-      let index = songs.findIndex(s => s.id === currentSong.id);
-      index = shuffle ? Math.floor(Math.random() * songs.length) : (index + 1) % songs.length;
-      loadSong(songs[index]);
-      togglePlay();
-    }
+    function nextSong() { /* similar to before */ let idx = songs.indexOf(currentSong); idx = (idx + 1) % songs.length; loadSong(songs[idx]); togglePlay(); }
+    function prevSong() { let idx = songs.indexOf(currentSong); idx = (idx - 1 + songs.length) % songs.length; loadSong(songs[idx]); togglePlay(); }
+    function toggleShuffle() { shuffle = !shuffle; }
+    function toggleRepeat() { repeat = !repeat; }
 
-    function prevSong() {
-      let index = songs.findIndex(s => s.id === currentSong.id);
-      index = (index - 1 + songs.length) % songs.length;
-      loadSong(songs[index]);
-      togglePlay();
-    }
-
-    function setVolume(val) { audio.volume = val; }
+    audio.onended = () => { if (repeat) audio.play(); else nextSong(); };
 
     function seek(e) {
       const width = document.getElementById('progress-container').clientWidth;
@@ -273,18 +329,10 @@
     };
 
     function formatTime(s) {
-      let min = Math.floor(s / 60);
+      let m = Math.floor(s / 60);
       let sec = Math.floor(s % 60);
-      return min + ':' + (sec < 10 ? '0' : '') + sec;
+      return m + ':' + (sec < 10 ? '0' : '') + sec;
     }
-
-    function toggleShuffle() { shuffle = !shuffle; }
-    function toggleRepeat() { repeat = !repeat; }
-
-    audio.onended = () => {
-      if (repeat) audio.play();
-      else nextSong();
-    };
 
     function addToFavorites(song) {
       if (!favorites.some(s => s.id === song.id)) {
@@ -293,22 +341,34 @@
       }
     }
 
-    function addToRecent(song) {
-      recentlyPlayed = recentlyPlayed.filter(s => s.id !== song.id);
-      recentlyPlayed.unshift(song);
-      if (recentlyPlayed.length > 10) recentlyPlayed.pop();
-      localStorage.setItem('recentlyPlayed', JSON.stringify(recentlyPlayed));
+    function handleUpload(e) {
+      const files = e.target.files;
+      for (let file of files) {
+        if (file.type.startsWith('audio/')) {
+          const url = URL.createObjectURL(file);
+          const newSong = {
+            id: Date.now() + Math.random(),
+            title: file.name.replace(/\.[^/.]+$/, ""),
+            artist: "Uploaded",
+            src: url,
+            cover: "https://source.unsplash.com/random/300x300/?music,upload,green",
+            genre: "Uploaded"
+          };
+          songs.push(newSong);
+          alert(file.name + " uploaded! Now play from Home or search.");
+        }
+      }
     }
 
     function searchSongs() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = songs.filter(s => s.title.toLowerCase().includes(query) || s.artist.toLowerCase().includes(query));
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = songs.filter(s => s.title.toLowerCase().includes(q) || s.artist.toLowerCase().includes(q));
       renderGrid(filtered, 'Search Results');
     }
 
-    function renderGrid(songList, title) {
+    function renderGrid(list, title) {
       let html = `<h2 class="section-title">${title}</h2><div class="grid">`;
-      songList.forEach(song => {
+      list.forEach(song => {
         html += `
           <div class="card" onclick="loadSong(${JSON.stringify(song)}); togglePlay()">
             <img src="${song.cover}" alt="${song.title}">
@@ -319,27 +379,24 @@
             </div>
           </div>`;
       });
-      html += `</div>`;
+      html += '</div>';
       document.getElementById('content').innerHTML = html;
     }
 
-    function showSection(section) {
-      document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+    function showSection(sec) {
+      document.querySelectorAll('nav button, aside button').forEach(b => b.classList.remove('active'));
       event.target.classList.add('active');
-      if (section === 'home') {
-        renderGrid(songs.slice(0,12), 'Recommended for You');
-      } else if (section === 'favorites') {
-        renderGrid(favorites, 'Liked Songs');
-      } // Add more sections like trending, charts etc. with filtered songs
+      if (sec === 'home' || sec === 'trending') renderGrid(songs, 'Recommended & Trending');
+      else if (sec === 'favorites') renderGrid(favorites, 'Liked Songs');
+      else renderGrid(songs.filter(s => s.genre === sec.charAt(0).toUpperCase() + sec.slice(1)), sec.charAt(0).toUpperCase() + sec.slice(1) + ' Songs');
     }
 
     function toggleTheme() {
-      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
     }
 
-    // Initial load
-    showSection('home');
+    // Start
+    renderGrid(songs, 'Recommended for You');
     loadSong(songs[0]);
   </script>
 </body>
