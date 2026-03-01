@@ -372,6 +372,33 @@
       currentIndex = allSongs.findIndex(s => s.id === song.id);
       loadSong(currentIndex);
       togglePlay();
+      const songs = [
+  { 
+    id: 'demo1', 
+    title: "Demo Pop", 
+    artist: "Artist A", 
+    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", 
+    genre: "Pop", 
+    cover: "https://thumbs.dreamstime.com/b/glowing-headphones-colorful-sound-waves-dark-stylish-emit-audio-setting-symbolizing-immersive-music-passion-377765422.jpg"  // vibrant neon wala
+  },
+  { 
+    id: 'demo2', 
+    title: "Hip-Hop Beat", 
+    artist: "Artist B", 
+    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", 
+    genre: "Hip-Hop", 
+    cover: "https://thumbs.dreamstime.com/b/vibrant-image-headphones-surrounded-colorful-splashes-smoke-402858624.jpg"  // colorful splash
+  },
+  { 
+    id: 'demo3', 
+    title: "Hindi Melody", 
+    artist: "Singer X", 
+    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", 
+    genre: "Hindi", 
+    cover: "https://thumbs.dreamstime.com/b/glowing-headphones-colorful-sound-waves-dark-stylish-emit-audio-setting-symbolizing-immersive-music-passion-377765409.jpg"  // glowing waves
+  },
+  // Add more if you want
+];
     }
 
     function playFromPlaylist(i) {
