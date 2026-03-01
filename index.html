@@ -1,393 +1,116 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Waves Beat Music</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Waves Beat Music%22,%22short_name%22:%22WavesBeat%22,%22start_url%22:%.%22,%22display%22:%22standalone%22,%22background_color%22:%22#000%22,%22theme_color%22:%22#1DB954%22,%22icons%22:[{%22src%22:%22https://picsum.photos/id/1015/192/192%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22}]}">
-  <meta name="theme-color" content="#1DB954">
-  <style>
-    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(to bottom right, #000, #0f0f0f); }
-    .spotify-green { color: #1DB954; }
-    .spotify-bg { background: #1DB954; }
-    .glass { background: rgba(18,18,18,0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
-    .song-card:hover { transform: translateY(-6px); box-shadow: 0 15px 35px rgba(29,185,84,0.2); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Hut Beat Music - Ultimate Player</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="text-white min-h-screen pb-32">
+<body class="dark-theme">
 
-<div class="flex h-screen">
-  <!-- Sidebar -->
-  <aside class="w-72 bg-black/95 border-r border-zinc-900 flex flex-col lg:w-72 transition-all">
-    <div class="p-6 flex items-center gap-3 border-b border-zinc-900">
-      <div class="w-11 h-11 spotify-bg rounded-xl flex-center text-3xl shadow-lg">🌊</div>
-      <h1 class="text-2xl font-bold">Waves Beat</h1>
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">
+                <i class="fas fa-bolt"></i> <span>Music Hut</span>
+            </div>
+            <nav class="menu">
+                <div class="menu-item active" onclick="showSection('home')"><i class="fas fa-home"></i> Home</div>
+                <div class="menu-item" onclick="showSection('library')"><i class="fas fa-compact-disc"></i> Library</div>
+                <div class="menu-item" onclick="showSection('upload')"><i class="fas fa-cloud-upload-alt"></i> Upload</div>
+            </nav>
+            <div class="playlists-section">
+                <h4>YOUR PLAYLISTS</h4>
+                <div id="playlist-list">
+                    </div>
+                <button class="btn-text" onclick="createPlaylist()"><i class="fas fa-plus"></i> New Playlist</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="glass-header">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search for beats...">
+                </div>
+                <div class="user-actions">
+                    <button id="theme-toggle" class="icon-btn"><i class="fas fa-moon"></i></button>
+                    <div class="profile">
+                        <span id="username-display">Guest</span>
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                </div>
+            </header>
+
+            <section id="home-section" class="content-section">
+                <h2 class="section-title">Recently Played</h2>
+                <div class="grid-container" id="recent-grid"></div>
+
+                <h2 class="section-title">Trending Now</h2>
+                <div class="grid-container" id="trending-grid"></div>
+            </section>
+
+            <section id="library-section" class="content-section hidden">
+                <h2 class="section-title">Your Music Library</h2>
+                <div class="song-list-header">
+                    <span># Title</span>
+                    <span>Album</span>
+                    <span><i class="far fa-clock"></i></span>
+                </div>
+                <div id="library-list"></div>
+            </section>
+
+            <section id="upload-section" class="content-section hidden">
+                <div class="upload-card">
+                    <i class="fas fa-file-audio"></i>
+                    <h3>Upload Local Beat</h3>
+                    <input type="file" id="audio-upload" accept="audio/*" hidden>
+                    <button class="btn-primary" onclick="document.getElementById('audio-upload').click()">Choose File</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="player-bar">
+            <div class="song-detail">
+                <div class="album-art-mini animate-pulse" id="player-art">
+                    <i class="fas fa-music"></i>
+                </div>
+                <div class="song-meta">
+                    <marquee behavior="scroll" direction="left" id="current-title">Welcome to Music Hut</marquee>
+                    <span id="current-artist">Select a song</span>
+                </div>
+                <i class="far fa-heart heart-icon"></i>
+            </div>
+
+            <div class="player-core">
+                <div class="core-controls">
+                    <i class="fas fa-random" id="shuffle-btn"></i>
+                    <i class="fas fa-step-backward" id="prev-btn"></i>
+                    <div class="play-trigger" id="master-play">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <i class="fas fa-step-forward" id="next-btn"></i>
+                    <i class="fas fa-redo" id="repeat-btn"></i>
+                </div>
+                <div class="progress-area">
+                    <span id="current-time">0:00</span>
+                    <div class="progress-wrapper">
+                        <input type="range" id="seek-slider" value="0" max="100">
+                    </div>
+                    <span id="duration">0:00</span>
+                </div>
+            </div>
+
+            <div class="extra-controls">
+                <i class="fas fa-list-ul"></i>
+                <i class="fas fa-volume-up" id="vol-icon"></i>
+                <input type="range" id="volume-slider" value="80" max="100">
+            </div>
+        </footer>
     </div>
-    <nav class="flex-1 p-5 space-y-3 overflow-y-auto">
-      <button onclick="showView('home')" class="nav-btn w-full text-left px-5 py-3 rounded-xl flex items-center gap-4 bg-zinc-800/50 spotify-green">
-        <i class="fa-solid fa-home"></i> Home
-      </button>
-      <button onclick="showView('library')" class="nav-btn w-full text-left px-5 py-3 rounded-xl flex items-center gap-4 hover:bg-zinc-800/50">
-        <i class="fa-solid fa-music"></i> Library
-      </button>
-      <button onclick="showView('playlists')" class="nav-btn w-full text-left px-5 py-3 rounded-xl flex items-center gap-4 hover:bg-zinc-800/50">
-        <i class="fa-solid fa-list"></i> Playlists
-      </button>
-      <button onclick="openUpload()" class="w-full mt-8 py-4 spotify-bg rounded-xl font-bold flex items-center justify-center gap-3 hover:brightness-110">
-        <i class="fa-solid fa-cloud-upload-alt"></i> Upload Songs
-      </button>
-    </nav>
-    <div class="p-6 border-t border-zinc-900 flex items-center gap-4 cursor-pointer" onclick="openLogin()">
-      <div class="w-10 h-10 spotify-bg rounded-full flex-center">👤</div>
-      <div id="userDisplay" class="font-medium">Guest</div>
-    </div>
-  </aside>
 
-  <!-- Main -->
-  <main class="flex-1 overflow-y-auto p-6">
-    <header class="flex items-center justify-between mb-8">
-      <h1 class="text-4xl font-bold">Good evening, <span id="greet" class="spotify-green">Guest</span></h1>
-      <button onclick="toggleTheme()" class="text-2xl"><i id="themeIcon" class="fa-solid fa-moon"></i></button>
-    </header>
+    <div class="bg-gradient"></div>
 
-    <div id="view-home">
-      <h2 class="text-2xl font-semibold mb-4">Your Recent Uploads</h2>
-      <div id="homeGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
-    </div>
-
-    <div id="view-library" class="hidden">
-      <h2 class="text-3xl font-bold mb-6">Your Library</h2>
-      <div id="libList" class="space-y-3"></div>
-    </div>
-
-    <div id="view-playlists" class="hidden">
-      <div class="flex justify-between mb-6">
-        <h2 class="text-3xl font-bold">Playlists</h2>
-        <button onclick="createPlaylist()" class="spotify-bg px-6 py-3 rounded-xl flex items-center gap-2">
-          <i class="fa-solid fa-plus"></i> New
-        </button>
-      </div>
-      <div id="plistList" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
-    </div>
-  </main>
-</div>
-
-<!-- Bottom Player -->
-<div class="fixed bottom-0 left-0 right-0 h-28 glass flex items-center px-6 z-50 border-t border-zinc-900">
-  <div class="flex items-center gap-4 w-72">
-    <img id="coverImg" src="https://picsum.photos/80" class="w-16 h-16 rounded-xl object-cover" alt="cover">
-    <div class="min-w-0">
-      <div id="title" class="font-semibold truncate">Select a song</div>
-      <div id="artist" class="text-sm text-zinc-400">—</div>
-    </div>
-  </div>
-
-  <div class="flex-1 flex flex-col items-center">
-    <div class="flex gap-8 text-2xl mb-2">
-      <button id="shuffle" onclick="toggleShuffle()" class="hover:spotify-green"><i class="fa-solid fa-shuffle"></i></button>
-      <button onclick="prev()"><i class="fa-solid fa-backward-step"></i></button>
-      <button id="playPauseBtn" onclick="togglePlay()" class="w-14 h-14 spotify-bg rounded-full flex-center text-black shadow-xl">
-        <i class="fa-solid fa-play"></i>
-      </button>
-      <button onclick="next()"><i class="fa-solid fa-forward-step"></i></button>
-      <button id="repeat" onclick="toggleRepeat()" class="hover:spotify-green"><i class="fa-solid fa-repeat"></i></button>
-    </div>
-    <div class="w-full max-w-xl flex items-center gap-3 text-sm">
-      <span id="curr">0:00</span>
-      <input id="seekBar" type="range" class="flex-1 accent-[#1DB954]" value="0" oninput="seek()"/>
-      <span id="dur">0:00</span>
-    </div>
-  </div>
-
-  <div class="w-72 flex justify-end items-center gap-6">
-    <button onclick="toggleViz()" class="text-xl hover:spotify-green"><i class="fa-solid fa-waveform"></i></button>
-    <input id="volBar" type="range" min="0" max="1" step="0.01" value="0.8" class="w-32 accent-[#1DB954]" oninput="setVol()"/>
-  </div>
-</div>
-
-<!-- Modals -->
-<div id="uploadModal" class="hidden fixed inset-0 bg-black/90 flex-center z-50">
-  <div class="glass p-12 rounded-2xl max-w-lg w-full text-center">
-    <h2 class="text-3xl font-bold spotify-green mb-8">Upload Your Songs</h2>
-    <input id="uploadInput" type="file" accept="audio/*" multiple class="hidden" onchange="uploadSongs(event)"/>
-    <button onclick="document.getElementById('uploadInput').click()" class="w-full py-24 border-4 border-dashed border-[#1DB954] rounded-2xl hover:border-[#1ed760] transition">
-      <i class="fa-solid fa-cloud-upload-alt text-8xl spotify-green mb-6"></i>
-      <p class="text-xl">Click or drop MP3 files here</p>
-    </button>
-    <button onclick="closeModal('uploadModal')" class="mt-8 text-zinc-400">Cancel</button>
-  </div>
-</div>
-
-<div id="loginModal" class="hidden fixed inset-0 bg-black/90 flex-center z-50">
-  <div class="glass p-10 rounded-2xl max-w-sm w-full">
-    <h2 class="text-3xl font-bold mb-8 text-center">Welcome</h2>
-    <input id="nameInput" type="text" placeholder="Your name" class="w-full py-4 px-6 bg-zinc-900 border border-zinc-700 rounded-full text-center focus:border-[#1DB954] outline-none"/>
-    <button onclick="saveName()" class="mt-6 w-full spotify-bg py-4 rounded-full font-bold">Start Listening</button>
-  </div>
-</div>
-
-<div id="vizModal" class="hidden fixed inset-0 bg-black/95 flex-center z-50">
-  <canvas id="canvas" width="900" height="400" class="rounded-2xl shadow-2xl"></canvas>
-  <button onclick="closeModal('vizModal')" class="mt-8 px-12 py-4 bg-zinc-800 rounded-full">Close</button>
-</div>
-
-<audio id="player"></audio>
-
-<script>
-const player = document.getElementById('player');
-let songs = JSON.parse(localStorage.getItem('wavesSongs')) || [];
-let current = -1;
-let shuffleOn = false, repeatMode = 'off';
-let username = localStorage.getItem('wavesName') || 'Guest';
-let isDark = localStorage.getItem('wavesDark') !== 'false';
-
-document.getElementById('userDisplay').textContent = username;
-document.getElementById('greet').textContent = username;
-document.documentElement.classList.toggle('dark', isDark);
-document.getElementById('themeIcon').classList.toggle('fa-sun', !isDark);
-document.getElementById('themeIcon').classList.toggle('fa-moon', isDark);
-
-let audioCtx, analyser, source, dataArr, vizActive = false;
-
-function initCtx() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 128;
-    dataArr = new Uint8Array(analyser.frequencyBinCount);
-  }
-  audioCtx.resume();
-}
-
-function connectSrc() {
-  if (source) source.disconnect();
-  source = audioCtx.createMediaElementSource(player);
-  source.connect(analyser);
-  analyser.connect(audioCtx.destination);
-}
-
-function drawViz() {
-  if (!vizActive || player.paused) return;
-  requestAnimationFrame(drawViz);
-  analyser.getByteFrequencyData(dataArr);
-  const c = document.getElementById('canvas').getContext('2d');
-  c.fillStyle = 'rgba(0,0,0,0.6)';
-  c.fillRect(0,0,900,400);
-  let x = 0;
-  for (let i = 0; i < dataArr.length; i++) {
-    const h = dataArr[i] / 255 * 400;
-    c.fillStyle = `hsl(${i*3 + 120}, 100%, 60%)`;
-    c.fillRect(x, 400 - h, 6, h);
-    x += 10;
-  }
-}
-
-function play(idx) {
-  if (idx < 0 || idx >= songs.length) return;
-  current = idx;
-  const s = songs[idx];
-  player.src = s.src;
-  player.play().catch(e => console.log(e));
-  document.getElementById('playPauseBtn').innerHTML = '<i class="fa-solid fa-pause"></i>';
-  document.getElementById('coverImg').src = s.cover || 'https://picsum.photos/80';
-  document.getElementById('title').textContent = s.title;
-  document.getElementById('artist').textContent = s.artist || 'Uploaded';
-  initCtx();
-  connectSrc();
-  vizActive = true;
-  drawViz();
-  saveRecent(idx);
-}
-
-function togglePlay() {
-  initCtx();
-  if (player.paused) {
-    player.play();
-    document.getElementById('playPauseBtn').innerHTML = '<i class="fa-solid fa-pause"></i>';
-    vizActive = true;
-    drawViz();
-  } else {
-    player.pause();
-    document.getElementById('playPauseBtn').innerHTML = '<i class="fa-solid fa-play"></i>';
-    vizActive = false;
-  }
-}
-
-player.ontimeupdate = () => {
-  if (!player.duration) return;
-  document.getElementById('seekBar').value = (player.currentTime / player.duration) * 100;
-  document.getElementById('curr').textContent = format(player.currentTime);
-  document.getElementById('dur').textContent = format(player.duration);
-};
-
-player.onended = () => {
-  if (repeatMode === 'one') player.currentTime = 0, player.play();
-  else next();
-};
-
-function seek() {
-  player.currentTime = (document.getElementById('seekBar').value / 100) * player.duration;
-}
-
-function setVol() {
-  player.volume = document.getElementById('volBar').value;
-}
-
-function format(t) {
-  const m = Math.floor(t / 60);
-  const s = Math.floor(t % 60);
-  return `${m}:${s < 10 ? '0' : ''}${s}`;
-}
-
-function next() {
-  let nxt = current + 1;
-  if (nxt >= songs.length) nxt = 0;
-  play(nxt);
-}
-
-function prev() {
-  let prv = current - 1;
-  if (prv < 0) prv = songs.length - 1;
-  play(prv);
-}
-
-function toggleShuffle() {
-  shuffleOn = !shuffleOn;
-  document.getElementById('shuffle').classList.toggle('spotify-green', shuffleOn);
-}
-
-function toggleRepeat() {
-  if (repeatMode === 'off') repeatMode = 'all', document.getElementById('repeat').classList.add('spotify-green');
-  else if (repeatMode === 'all') repeatMode = 'one', document.getElementById('repeat').innerHTML = '<i class="fa-solid fa-repeat"></i><span class="text-xs ml-1">1</span>';
-  else repeatMode = 'off', document.getElementById('repeat').innerHTML = '<i class="fa-solid fa-repeat"></i>', document.getElementById('repeat').classList.remove('spotify-green');
-}
-
-function uploadSongs(e) {
-  Array.from(e.target.files).forEach(file => {
-    if (!file.type.startsWith('audio/')) return;
-    const url = URL.createObjectURL(file);
-    const temp = new Audio(url);
-    temp.onloadedmetadata = () => {
-      songs.push({
-        id: Date.now(),
-        title: file.name.replace(/\.[^/.]+$/, ""),
-        artist: file.name.split('-')[0] || "You",
-        src: url,
-        cover: "https://picsum.photos/seed/" + Date.now() + "/300",
-        duration: format(temp.duration)
-      });
-      localStorage.setItem('wavesSongs', JSON.stringify(songs));
-      renderAll();
-      closeModal('uploadModal');
-      if (songs.length === 1) play(0);
-    };
-  });
-}
-
-function deleteSong(id) {
-  songs = songs.filter(s => s.id !== id);
-  localStorage.setItem('wavesSongs', JSON.stringify(songs));
-  renderAll();
-}
-
-function saveRecent(idx) {
-  let rec = JSON.parse(localStorage.getItem('wavesRecent')) || [];
-  rec = rec.filter(i => i !== idx);
-  rec.unshift(idx);
-  if (rec.length > 8) rec.pop();
-  localStorage.setItem('wavesRecent', JSON.stringify(rec));
-  renderHome();
-}
-
-function renderHome() {
-  const rec = JSON.parse(localStorage.getItem('wavesRecent')) || [];
-  const cont = document.getElementById('homeGrid');
-  cont.innerHTML = '';
-  rec.forEach(i => {
-    const s = songs.find(s => s.id === songs[i]?.id) || songs[i];
-    if (!s) return;
-    const card = document.createElement('div');
-    card.className = 'song-card bg-zinc-900/60 rounded-xl overflow-hidden cursor-pointer';
-    card.innerHTML = `<img src="${s.cover}" class="w-full aspect-square object-cover"><div class="p-3"><div class="truncate font-medium">${s.title}</div><div class="text-sm text-zinc-400">${s.artist}</div></div>`;
-    card.onclick = () => play(songs.indexOf(s));
-    cont.appendChild(card);
-  });
-}
-
-function renderLibrary() {
-  const cont = document.getElementById('libList');
-  cont.innerHTML = '';
-  songs.forEach((s, i) => {
-    const row = document.createElement('div');
-    row.className = 'flex items-center gap-4 p-4 bg-zinc-900/50 rounded-xl hover:bg-zinc-800 song-card';
-    row.innerHTML = `
-      <img src="${s.cover}" class="w-14 h-14 rounded-lg">
-      <div class="flex-1">
-        <div class="font-medium">${s.title}</div>
-        <div class="text-sm text-zinc-400">${s.artist}</div>
-      </div>
-      <div class="text-sm text-zinc-500">${s.duration || '--:--'}</div>
-      <button onclick="event.stopPropagation(); play(${i})" class="px-6 py-2 spotify-bg text-black rounded-full text-sm">Play</button>
-      <button onclick="event.stopPropagation(); deleteSong(${s.id})" class="text-red-400"><i class="fa-solid fa-trash"></i></button>
-    `;
-    row.onclick = () => play(i);
-    cont.appendChild(row);
-  });
-}
-
-function renderAll() {
-  renderHome();
-  renderLibrary();
-  // Playlists basic - add more logic if needed
-  document.getElementById('plistList').innerHTML = '<p class="text-zinc-400 text-center py-10">Create playlists to organize your music (coming soon with backend)</p>';
-}
-
-function showView(v) {
-  document.querySelectorAll('[id^="view-"]').forEach(el => el.classList.add('hidden'));
-  document.getElementById(`view-${v}`).classList.remove('hidden');
-}
-
-function openUpload() { document.getElementById('uploadModal').classList.remove('hidden'); }
-function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-
-function openLogin() { document.getElementById('loginModal').classList.remove('hidden'); }
-function saveName() {
-  username = document.getElementById('nameInput').value.trim() || 'Guest';
-  localStorage.setItem('wavesName', username);
-  document.getElementById('userDisplay').textContent = username;
-  document.getElementById('greet').textContent = username;
-  closeModal('loginModal');
-}
-
-function toggleTheme() {
-  isDark = !isDark;
-  document.documentElement.classList.toggle('dark', isDark);
-  document.getElementById('themeIcon').classList.toggle('fa-moon', isDark);
-  document.getElementById('themeIcon').classList.toggle('fa-sun', !isDark);
-  localStorage.setItem('wavesDark', isDark);
-}
-
-function toggleViz() {
-  const m = document.getElementById('vizModal');
-  m.classList.toggle('hidden');
-  vizActive = !m.classList.contains('hidden') && !player.paused;
-  if (vizActive) drawViz();
-}
-
-function createPlaylist() { alert('Playlist creation ready - add songs drag-drop in future backend version!'); }
-
-// Keyboard
-document.addEventListener('keydown', e => {
-  if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
-  if (e.code === 'ArrowRight') next();
-  if (e.code === 'ArrowLeft') prev();
-});
-
-// Start
-renderAll();
-showView('home');
-</script>
+    <script src="script.js"></script>
 </body>
 </html>
