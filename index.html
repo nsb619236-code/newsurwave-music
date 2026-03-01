@@ -1,403 +1,387 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="hi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SurVibe – Sur Ka Naya Vibe</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <style>
-    :root {
-      --bg: #0d1a0d;               /* Dark green-black */
-      --text: #f0f0e0;
-      --primary: #ffeb3b;          /* Bright yellow */
-      --secondary: #4caf50;        /* Neon green */
-      --card: #1e2e1e;
-      --hover: #2e4e2e;
-      --gradient: linear-gradient(135deg, #0d1a0d, #1e3a1e, #0d1a0d);
-      --sidebar-bg: #0f220f;
-    }
-    [data-theme="light"] {
-      --bg: #f5fff5;
-      --text: #1a2e1a;
-      --card: #ffffff;
-      --hover: #e8f5e9;
-      --gradient: linear-gradient(135deg, #e8f5e9, #c8e6c9, #a5d6a7);
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      background: var(--gradient);
-      background-size: 400% 400%;
-      animation: gradientFlow 15s ease infinite;
-    }
-    @keyframes gradientFlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .layout {
-      display: flex;
-      min-height: 100vh;
-    }
-    aside {
-      width: 240px;
-      background: var(--sidebar-bg);
-      padding: 1.5rem;
-      border-right: 1px solid var(--hover);
-      position: fixed;
-      height: 100%;
-      overflow-y: auto;
-    }
-    aside h3 { color: var(--primary); margin-bottom: 1.5rem; font-size: 1.4rem; }
-    aside button, aside label {
-      display: block;
-      width: 100%;
-      padding: 0.9rem;
-      margin: 0.6rem 0;
-      background: var(--card);
-      border: none;
-      border-radius: 10px;
-      color: var(--text);
-      cursor: pointer;
-      font-weight: bold;
-      text-align: left;
-    }
-    aside button:hover, aside label:hover { background: var(--hover); }
-    aside input[type="file"] { display: none; }
-    main {
-      margin-left: 240px;
-      flex: 1;
-      padding: 1.5rem;
-    }
-    header {
-      text-align: center;
-      padding: 1.5rem 0;
-      background: rgba(0,0,0,0.3);
-      backdrop-filter: blur(8px);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .logo {
-      font-size: 3.8rem;
-      font-weight: 900;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 15px rgba(76,175,80,0.5);
-    }
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 1.8rem;
-      margin: 1.2rem 0;
-      flex-wrap: wrap;
-    }
-    nav button {
-      background: var(--card);
-      border: none;
-      color: var(--text);
-      padding: 0.8rem 1.6rem;
-      border-radius: 30px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    nav button.active { background: var(--secondary); color: black; }
-    .search-bar {
-      max-width: 700px;
-      margin: 1.2rem auto;
-      position: relative;
-    }
-    #searchInput {
-      width: 100%;
-      padding: 1rem 4rem 1rem 1.5rem;
-      border-radius: 50px;
-      border: none;
-      background: var(--card);
-      color: var(--text);
-      font-size: 1.1rem;
-    }
-    .search-icon { position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 1.4rem; }
-    .container { max-width: 1300px; margin: auto; }
-    .section-title { font-size: 2rem; margin: 2.5rem 0 1.2rem; color: var(--primary); text-shadow: 0 0 10px rgba(255,235,59,0.4); }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 1.8rem;
-    }
-    .card {
-      background: var(--card);
-      border-radius: 16px;
-      overflow: hidden;
-      transition: 0.4s;
-      cursor: pointer;
-      border: 1px solid var(--hover);
-    }
-    .card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(76,175,80,0.3); }
-    .card img { width: 100%; height: 200px; object-fit: cover; }
-    .card-info { padding: 1.2rem; text-align: center; }
-    #player {
-      position: fixed;
-      bottom: 0;
-      left: 240px;
-      right: 0;
-      background: var(--card);
-      backdrop-filter: blur(12px);
-      padding: 1.2rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 -8px 25px rgba(0,0,0,0.7);
-      z-index: 99;
-      border-top: 1px solid var(--secondary);
-    }
-    #player img { width: 70px; height: 70px; border-radius: 14px; box-shadow: 0 0 15px var(--primary); }
-    #player-controls button {
-      background: none;
-      border: none;
-      color: var(--text);
-      font-size: 2rem;
-      margin: 0 1rem;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    #player-controls button:hover { color: var(--primary); transform: scale(1.15); }
-    #progress-container {
-      flex: 1;
-      height: 8px;
-      background: #333;
-      border-radius: 4px;
-      margin: 0 1.5rem;
-      cursor: pointer;
-    }
-    #progress { height: 100%; width: 0; background: var(--primary); border-radius: 4px; }
-    .theme-toggle {
-      position: fixed;
-      top: 1.2rem;
-      right: 1.5rem;
-      background: var(--secondary);
-      color: white;
-      border: none;
-      padding: 1rem;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 100;
-      box-shadow: 0 0 15px var(--primary);
-    }
-    .premium-banner {
-      background: linear-gradient(90deg, var(--secondary), var(--primary));
-      color: black;
-      text-align: center;
-      padding: 1.2rem;
-      margin: 1.5rem 0;
-      border-radius: 14px;
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
-    @media (max-width: 992px) {
-      aside { width: 200px; }
-      main, #player { margin-left: 200px; }
-    }
-    @media (max-width: 768px) {
-      .layout { flex-direction: column; }
-      aside { position: relative; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--hover); }
-      main, #player { margin-left: 0; }
-      #player { left: 0; }
-      .logo { font-size: 2.8rem; }
-    }
-  </style>
-</head>
-<body>
-
-  <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
-
-  <div class="layout">
-    <aside>
-      <h3>SurVibe</h3>
-      <button onclick="showSection('home')">Home</button>
-      <button onclick="showSection('trending')">Trending</button>
-      <button onclick="showSection('charts')">Top Charts</button>
-      <button onclick="showSection('new')">New Releases</button>
-      <button onclick="showSection('favorites')">Favorites</button>
-      <button onclick="showSection('playlists')">My Playlists</button>
-
-      <label for="uploadSongs" style="margin-top: 2rem; background: var(--secondary); color: black; text-align: center;">
-        <i class="fas fa-cloud-upload-alt"></i> Upload Songs
-      </label>
-      <input type="file" id="uploadSongs" accept="audio/*" multiple onchange="handleUpload(event)"/>
-    </aside>
-
-    <main>
-      <header>
-        <div class="logo">SurVibe</div>
-        <p>Sur Ka Naya Vibe – Free Streaming & Upload</p>
-      </header>
-
-      <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Search songs, artists..." oninput="searchSongs()"/>
-        <i class="fas fa-search search-icon"></i>
-      </div>
-
-      <div class="premium-banner">Upgrade to SurVibe Plus – Ad-Free, HD Audio & Unlimited Uploads!</div>
-
-      <div class="container" id="content">
-        <!-- Dynamic content here -->
-      </div>
-    </main>
-  </div>
-
-  <div id="player">
-    <img id="currentCover" src="https://source.unsplash.com/random/70x70/?music,neon" alt="Cover"/>
-    <div style="flex:1; margin:0 1.5rem; min-width:180px;">
-      <h4 id="currentTitle">Select a song</h4>
-      <small id="currentArtist"></small>
-    </div>
-    <div id="player-controls">
-      <button onclick="prevSong()"><i class="fas fa-backward"></i></button>
-      <button id="playPause" onclick="togglePlay()"><i class="fas fa-play"></i></button>
-      <button onclick="nextSong()"><i class="fas fa-forward"></i></button>
-      <button onclick="toggleShuffle()"><i class="fas fa-random"></i></button>
-      <button onclick="toggleRepeat()"><i class="fas fa-redo"></i></button>
-    </div>
-    <div id="progress-container" onclick="seek(event)">
-      <div id="progress"></div>
-    </div>
-    <span id="time">0:00 / 0:00</span>
-    <input type="range" id="volume" min="0" max="1" step="0.01" value="0.9" onchange="audio.volume = this.value"/>
-  </div>
-
-  <audio id="audio"></audio>
-
-  <script>
-    // Sample songs (add more as needed)
-    let songs = [
-      { id:1, title:"Tum Hi Ho", artist:"Arijit Singh", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", cover:"https://source.unsplash.com/random/300x300/?music,hindi,green", genre:"Hindi" },
-      { id:2, title:"Shape of You", artist:"Ed Sheeran", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", cover:"https://source.unsplash.com/random/300x300/?music,pop,yellow", genre:"English" },
-      { id:3, title:"Levitating", artist:"Dua Lipa", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", cover:"https://source.unsplash.com/random/300x300/?music,dance,neon", genre:"English" },
-    ];
-
-    let currentSong = null;
-    let isPlaying = false;
-    let shuffle = false;
-    let repeat = false;
-    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-
-    const audio = document.getElementById('audio');
-    const playPauseBtn = document.getElementById('playPause');
-
-    function loadSong(song) {
-      currentSong = song;
-      document.getElementById('currentTitle').textContent = song.title;
-      document.getElementById('currentArtist').textContent = song.artist;
-      document.getElementById('currentCover').src = song.cover;
-      audio.src = song.src;
-      audio.load();
-      if (isPlaying) audio.play().catch(()=>{});
-    }
-
-    function togglePlay() {
-      if (isPlaying) {
-        audio.pause();
-        playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-      } else {
-        audio.play().catch(()=>{});
-        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-      }
-      isPlaying = !isPlaying;
-    }
-
-    function nextSong() { /* similar to before */ let idx = songs.indexOf(currentSong); idx = (idx + 1) % songs.length; loadSong(songs[idx]); togglePlay(); }
-    function prevSong() { let idx = songs.indexOf(currentSong); idx = (idx - 1 + songs.length) % songs.length; loadSong(songs[idx]); togglePlay(); }
-    function toggleShuffle() { shuffle = !shuffle; }
-    function toggleRepeat() { repeat = !repeat; }
-
-    audio.onended = () => { if (repeat) audio.play(); else nextSong(); };
-
-    function seek(e) {
-      const width = document.getElementById('progress-container').clientWidth;
-      audio.currentTime = (e.offsetX / width) * audio.duration;
-    }
-
-    audio.ontimeupdate = () => {
-      if (!audio.duration) return;
-      const prog = (audio.currentTime / audio.duration) * 100;
-      document.getElementById('progress').style.width = prog + '%';
-      document.getElementById('time').textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
-    };
-
-    function formatTime(s) {
-      let m = Math.floor(s / 60);
-      let sec = Math.floor(s % 60);
-      return m + ':' + (sec < 10 ? '0' : '') + sec;
-    }
-
-    function addToFavorites(song) {
-      if (!favorites.some(s => s.id === song.id)) {
-        favorites.push(song);
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-      }
-    }
-
-    function handleUpload(e) {
-      const files = e.target.files;
-      for (let file of files) {
-        if (file.type.startsWith('audio/')) {
-          const url = URL.createObjectURL(file);
-          const newSong = {
-            id: Date.now() + Math.random(),
-            title: file.name.replace(/\.[^/.]+$/, ""),
-            artist: "Uploaded",
-            src: url,
-            cover: "https://source.unsplash.com/random/300x300/?music,upload,green",
-            genre: "Uploaded"
-          };
-          songs.push(newSong);
-          alert(file.name + " uploaded! Now play from Home or search.");
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wave Music Hut</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiV2F2ZSBNdXNpYyBIdXQiLCJzaG9ydF9uYW1lIjoiV2F2ZSIsInN0YXJ0X3VybCI6Ii8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMTgxODFiIiwidGhlbWVfY29sb3IiOiIjMTgxODFiIiwiaWNvbnMiOlt7InNyYyI6Imh0dHBzOi8vcGljc3VtLnBob3Rvcy9pZC8xMDE1LzE5Mi8xOTIiLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiimage/pngIn1dfQ==">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --primary: 234 179 8;
         }
-      }
-    }
-
-    function searchSongs() {
-      const q = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = songs.filter(s => s.title.toLowerCase().includes(q) || s.artist.toLowerCase().includes(q));
-      renderGrid(filtered, 'Search Results');
-    }
-
-    function renderGrid(list, title) {
-      let html = `<h2 class="section-title">${title}</h2><div class="grid">`;
-      list.forEach(song => {
-        html += `
-          <div class="card" onclick="loadSong(${JSON.stringify(song)}); togglePlay()">
-            <img src="${song.cover}" alt="${song.title}">
-            <div class="card-info">
-              <h3>${song.title}</h3>
-              <p>${song.artist}</p>
-              <button onclick="event.stopPropagation(); addToFavorites(${JSON.stringify(song)})">Like</button>
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .tail-container {
+            background: linear-gradient(180deg, #18181b 0%, #09090b 100%);
+        }
+        
+        .song-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .song-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+        }
+        
+        .player {
+            backdrop-filter: blur(20px);
+        }
+        
+        .visualizer {
+            width: 120px;
+            height: 40px;
+        }
+        
+        .category-item {
+            transition: all 0.2s ease;
+        }
+        
+        .category-item:hover {
+            background-color: #27272a;
+            padding-left: 1.25rem;
+        }
+        
+        .active-category {
+            background-color: #27272a;
+            border-left: 4px solid rgb(234 179 8);
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: linear-gradient(to right, rgb(234 179 8) var(--progress), #3f3f46 var(--progress));
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 overflow-hidden">
+    <div class="flex h-screen tail-container">
+        <!-- SIDEBAR -->
+        <div class="w-72 bg-zinc-900 border-r border-zinc-800 flex flex-col">
+            <!-- Logo -->
+            <div class="p-6 border-b border-zinc-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-yellow-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg">🎵</div>
+                    <div>
+                        <span class="text-3xl font-bold tracking-tighter">Wave</span>
+                        <span class="text-3xl font-bold tracking-tighter text-yellow-400">Hut</span>
+                    </div>
+                </div>
             </div>
-          </div>`;
-      });
-      html += '</div>';
-      document.getElementById('content').innerHTML = html;
-    }
-
-    function showSection(sec) {
-      document.querySelectorAll('nav button, aside button').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
-      if (sec === 'home' || sec === 'trending') renderGrid(songs, 'Recommended & Trending');
-      else if (sec === 'favorites') renderGrid(favorites, 'Liked Songs');
-      else renderGrid(songs.filter(s => s.genre === sec.charAt(0).toUpperCase() + sec.slice(1)), sec.charAt(0).toUpperCase() + sec.slice(1) + ' Songs');
-    }
-
-    function toggleTheme() {
-      document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-    }
-
-    // Start
-    renderGrid(songs, 'Recommended for You');
-    loadSong(songs[0]);
-  </script>
-</body>
-</html>
+            
+            <!-- Categories -->
+            <div class="p-6">
+                <h3 class="uppercase text-xs tracking-widest text-zinc-500 mb-4 font-medium">Music Category</h3>
+                <div id="categories" class="space-y-1">
+                    <!-- populated by JS -->
+                </div>
+            </div>
+            
+            <!-- Quick Links -->
+            <div class="px-6 mt-auto mb-8">
+                <div onclick="switchTab(0)" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-zinc-800 cursor-pointer text-yellow-400">
+                    <i class="fas fa-home text-xl"></i>
+                    <span class="font-medium">Discover</span>
+                </div>
+                <div onclick="switchTab(1)" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-zinc-800 cursor-pointer">
+                    <i class="fas fa-book text-xl"></i>
+                    <span class="font-medium">My Library</span>
+                </div>
+                <div onclick="switchTab(2)" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-zinc-800 cursor-pointer">
+                    <i class="fas fa-list-ul text-xl"></i>
+                    <span class="font-medium">Playlists</span>
+                </div>
+            </div>
+            
+            <!-- Mini Player Preview -->
+            <div class="mx-6 mb-6 bg-zinc-800 rounded-3xl p-4 text-xs">
+                <div class="flex items-center gap-3">
+                    <img id="sidebar-cover" src="https://picsum.photos/id/1015/64/64" class="w-12 h-12 rounded-2xl object-cover">
+                    <div class="flex-1 min-w-0">
+                        <div id="sidebar-title" class="font-medium truncate">Fairy Tales</div>
+                        <div id="sidebar-artist" class="text-zinc-500 text-xs truncate">The Moment</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MAIN CONTENT -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Nav -->
+            <div class="h-16 bg-zinc-900 border-b border-zinc-800 px-8 flex items-center justify-between z-50">
+                <div class="flex items-center gap-8">
+                    <button onclick="goBack()" class="text-zinc-400 hover:text-white">
+                        <i class="fas fa-chevron-left text-2xl"></i>
+                    </button>
+                    <button onclick="goForward()" class="text-zinc-400 hover:text-white">
+                        <i class="fas fa-chevron-right text-2xl"></i>
+                    </button>
+                </div>
+                
+                <div class="flex-1 max-w-md mx-8">
+                    <div class="relative">
+                        <input id="search-input" type="text" placeholder="Search songs, artists..." 
+                               class="w-full bg-zinc-800 border border-zinc-700 rounded-full py-3 pl-12 text-sm focus:outline-none focus:border-yellow-400">
+                        <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-zinc-500"></i>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-6">
+                    <button onclick="toggleTheme()" class="text-2xl text-zinc-400 hover:text-white transition-colors">
+                        <i id="theme-icon" class="fas fa-moon"></i>
+                    </button>
+                    
+                    <div onclick="showLoginModal()" id="user-section" class="flex items-center gap-3 cursor-pointer">
+                        <div class="w-8 h-8 bg-zinc-700 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <div id="username-display" class="text-sm font-medium">Guest</div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="showUploadModal()" 
+                            class="bg-yellow-400 hover:bg-yellow-500 text-zinc-950 font-semibold px-6 py-2 rounded-3xl flex items-center gap-2 text-sm transition-all active:scale-95">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Upload</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Content Area -->
+            <div id="main-content" class="flex-1 overflow-auto p-8">
+                <!-- DISCOVER TAB -->
+                <div id="discover-tab">
+                    <!-- Hero -->
+                    <div class="hero-bg rounded-3xl overflow-hidden relative h-96 flex items-center">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent"></div>
+                        
+                        <div class="p-12 max-w-lg relative z-10">
+                            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-1 rounded-full text-xs mb-6">
+                                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                                Since 2013
+                            </div>
+                            
+                            <h1 class="text-6xl font-bold leading-none tracking-tighter mb-4">
+                                Improve your<br>Music Taste
+                            </h1>
+                            <p class="text-zinc-300 mb-8">We’ve guided millions of global users on their digital assets journey</p>
+                            
+                            <div class="flex items-center gap-4">
+                                <button onclick="playRandom()" 
+                                        class="bg-white text-zinc-950 px-8 py-4 rounded-3xl font-semibold flex items-center gap-3 hover:scale-105 transition">
+                                    <i class="fas fa-play"></i>
+                                    <span>Start Listening</span>
+                                </button>
+                                
+                                <div class="flex -space-x-3">
+                                    <img src="https://picsum.photos/id/64/32/32" class="w-8 h-8 rounded-full ring-2 ring-white object-cover">
+                                    <img src="https://picsum.photos/id/91/32/32" class="w-8 h-8 rounded-full ring-2 ring-white object-cover">
+                                    <img src="https://picsum.photos/id/201/32/32" class="w-8 h-8 rounded-full ring-2 ring-white object-cover">
+                                </div>
+                                <div class="text-xs">
+                                    <div class="font-semibold">10.2k+</div>
+                                    <div class="text-white/70">Active users</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Hero Image -->
+                        <img src="https://picsum.photos/id/1005/700/700" 
+                             class="absolute right-12 bottom-0 h-96 object-cover rounded-tl-3xl shadow-2xl">
+                        
+                        <!-- Join Box -->
+                        <div onclick="showLoginModal()" 
+                             class="absolute right-12 top-12 bg-zinc-900/90 backdrop-blur-xl border border-yellow-400/30 rounded-3xl p-6 w-60 cursor-pointer hover:border-yellow-400 transition-all group">
+                            <div class="flex justify-between items-start mb-6">
+                                <div>
+                                    <div class="text-yellow-400 text-xl">🎧</div>
+                                </div>
+                                <i class="fas fa-arrow-right text-3xl group-active:rotate-45 transition"></i>
+                            </div>
+                            <div class="text-2xl font-bold tracking-tight">Join For Free</div>
+                            <div class="text-zinc-400 text-sm mt-1">No credit card needed</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Popular Section -->
+                    <div class="mt-12">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-3xl font-bold tracking-tight">Popular At The Moment</h2>
+                            <button onclick="viewAll()" 
+                                    class="text-yellow-400 hover:text-yellow-300 flex items-center gap-2 text-sm font-medium">
+                                See All <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        
+                        <div id="popular-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- LIBRARY TAB -->
+                <div id="library-tab" class="hidden">
+                    <div class="flex justify-between items-center mb-8">
+                        <h2 class="text-4xl font-bold">My Library</h2>
+                        <button onclick="showUploadModal()" 
+                                class="bg-yellow-400 text-zinc-950 px-6 py-3 rounded-3xl flex items-center gap-3 font-semibold">
+                            <i class="fas fa-plus"></i> Upload New Song
+                        </button>
+                    </div>
+                    <div id="library-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+                
+                <!-- PLAYLISTS TAB -->
+                <div id="playlists-tab" class="hidden">
+                    <div class="flex justify-between mb-8">
+                        <h2 class="text-4xl font-bold">My Playlists</h2>
+                        <button onclick="createPlaylist()" 
+                                class="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-3xl flex items-center gap-3">
+                            <i class="fas fa-plus"></i> New Playlist
+                        </button>
+                    </div>
+                    <div id="playlists-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- BOTTOM PLAYER -->
+    <div id="player" class="player fixed bottom-0 left-0 right-0 bg-zinc-900/95 border-t border-zinc-700 h-24 z-50 flex items-center px-6">
+        <div class="flex items-center gap-4 w-72">
+            <!-- Album Art -->
+            <div onclick="toggleQueue()" class="w-14 h-14 rounded-2xl overflow-hidden cursor-pointer ring-1 ring-white/10">
+                <img id="player-cover" src="https://picsum.photos/id/1015/300/300" class="w-full h-full object-cover">
+            </div>
+            
+            <div class="flex-1 min-w-0">
+                <div id="player-title" class="font-semibold truncate">Select a song</div>
+                <div id="player-artist" class="text-zinc-400 text-sm truncate">—</div>
+            </div>
+            
+            <button onclick="likeCurrentSong()" class="text-zinc-400 hover:text-red-400 transition">
+                <i id="like-icon" class="far fa-heart text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- Center Controls -->
+        <div class="flex-1 flex flex-col items-center gap-2 max-w-md">
+            <div class="flex items-center gap-8 text-zinc-400">
+                <button onclick="toggleShuffle()" id="shuffle-btn" class="hover:text-white transition">
+                    <i class="fas fa-random"></i>
+                </button>
+                
+                <button onclick="prevSong()" class="hover:text-white transition text-2xl">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                
+                <button onclick="togglePlay()" id="play-btn"
+                        class="w-12 h-12 bg-white text-zinc-950 rounded-full flex items-center justify-center text-3xl shadow-xl hover:scale-105 active:scale-95 transition-all">
+                    <i id="play-icon" class="fas fa-play"></i>
+                </button>
+                
+                <button onclick="nextSong()" class="hover:text-white transition text-2xl">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+                
+                <button onclick="toggleRepeat()" id="repeat-btn" class="hover:text-white transition">
+                    <i class="fas fa-redo"></i>
+                </button>
+            </div>
+            
+            <!-- Progress -->
+            <div class="w-full flex items-center gap-3 text-xs text-zinc-400">
+                <span id="current-time">0:00</span>
+                <div onclick="seek(event)" class="flex-1 h-1 bg-zinc-700 rounded-full relative cursor-pointer group">
+                    <div id="progress-fill" class="h-1 bg-yellow-400 rounded-full w-0 transition-all"></div>
+                    <div id="progress-knob" 
+                         class="absolute w-3 h-3 -top-1 bg-white rounded-full shadow opacity-0 group-hover:opacity-100 transition pointer-events-none"></div>
+                </div>
+                <span id="total-duration">0:00</span>
+            </div>
+        </div>
+        
+        <!-- Right side -->
+        <div class="flex items-center gap-6 w-72 justify-end">
+            <!-- Visualizer -->
+            <canvas id="visualizer" width="120" height="40" class="visualizer"></canvas>
+            
+            <!-- Volume -->
+            <div class="flex items-center gap-3">
+                <i class="fas fa-volume-up text-zinc-400"></i>
+                <input type="range" id="volume-slider" min="0" max="100" value="80"
+                       class="w-24 accent-yellow-400">
+            </div>
+            
+            <button onclick="showQueueModal()" class="text-zinc-400 hover:text-white">
+                <i class="fas fa-list-ul"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- LOGIN MODAL -->
+    <div id="login-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[100]">
+        <div class="bg-zinc-900 w-full max-w-md rounded-3xl p-8">
+            <h3 class="text-3xl font-bold text-center mb-8">Welcome to Wave</h3>
+            
+            <div class="space-y-4">
+                <input id="login-email" type="text" placeholder="Email or Username" 
+                       class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 focus:outline-none focus:border-yellow-400">
+                
+                <input id="login-pass" type="password" placeholder="Password" 
+                       class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 focus:outline-none focus:border-yellow-400">
+            </div>
+            
+            <button onclick="fakeLogin()" 
+                    class="mt-8 w-full bg-yellow-400 text-zinc-950 py-4 rounded-3xl font-semibold text-lg">
+                Log In
+            </button>
+            
+            <div class="text-center mt-6 text-sm">
+                Don't have account? 
+                <span onclick="showSignupModal()" class="text-yellow-400 cursor-pointer">Sign up free</span>
+            </div>
+            
+            <button onclick="hideLoginModal()" 
+                    class="absolute top-6 right-6 text-3xl text-zinc-400 hover:text-white">×</button>
+        </div>
+    </div>
+    
+    <!-- SIGNUP MODAL -->
+    <div id="signup-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[100]">
+        <div class="bg-zinc-900 w-full max-w-md rounded-3xl p-8">
+            <h3 class="text-3xl font-bold text-center mb-8">Create Free Account</h3>
+            <button onclick="fakeSignup()" 
+                    class="w-full bg-white text-zinc-950 py-4 rounded-3xl font-semibold flex items-center justify-center gap-3">
+                <i class="fab fa-google"></i>
+                Continue with Google
+            </button>
+            <div class="text-center text-xs text-zinc-500 my-6">OR</div>
+            <button onclick="fakeSignup()" 
+                    class="w-full border border-zinc-600 py-4 rounded-3xl font-medium">
+                Use Email
+            </button>
+            <button onclick="hideSignupModal()" 
+                    class="mt-6 w-full text-zinc-400">Cancel</button>
+        </div>
+    </div>
+    
+    <!-- UPLOAD MODAL -->
+    <div id="upload-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[100]">
+        <div class="bg-zinc-900 rounded-3xl p-10 w-full max-w-lg">
+            <h3 class="text-2xl font-bold mb-6">Upload Song
