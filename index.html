@@ -1,488 +1,278 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="hi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Music Hut Beat - Free Music Streaming</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <style>
-    :root {
-      --bg: #0f0c29;
-      --bg-gradient: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-      --text: #ffffff;
-      --primary: #FF3366;
-      --secondary: #00FFFF;
-      --card: rgba(30, 30, 50, 0.7);
-      --hover: rgba(50, 50, 80, 0.9);
-      --glow: 0 0 20px rgba(255, 51, 102, 0.6);
-    }
-    [data-theme="light"] {
-      --bg: #f0f4ff;
-      --bg-gradient: linear-gradient(-45deg, #a1c4fd, #c2e9fb, #fbc2eb, #a6c1ee);
-      --text: #1a1a2e;
-      --card: rgba(255, 255, 255, 0.85);
-      --hover: rgba(240, 240, 255, 0.9);
-      --glow: 0 0 15px rgba(161, 196, 253, 0.5);
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: var(--bg-gradient);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      color: var(--text);
-      min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-    }
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    /* Optional subtle overlay for readability */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.4) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: -1;
-    }
-    header {
-      background: linear-gradient(135deg, var(--primary), #8f00ff, var(--secondary));
-      background-size: 200% 200%;
-      animation: headerGlow 8s ease infinite;
-      padding: 1.5rem;
-      text-align: center;
-      font-size: 3rem;
-      font-weight: 900;
-      letter-spacing: 4px;
-      text-shadow: var(--glow);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-    }
-    @keyframes headerGlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .logo { font-size: 4rem; margin-bottom: 0.5rem; background: linear-gradient(90deg, #fff, var(--secondary), #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 2.5rem;
-      padding: 1.2rem;
-      background: var(--card);
-      backdrop-filter: blur(10px);
-      margin: 1rem auto;
-      max-width: 90%;
-      border-radius: 50px;
-      box-shadow: var(--glow);
-    }
-    nav a { color: var(--text); text-decoration: none; font-weight: bold; transition: 0.3s; }
-    nav a:hover { color: var(--primary); transform: scale(1.1); }
-    .search-bar, .upload-section {
-      max-width: 700px;
-      margin: 1.5rem auto;
-      display: flex;
-      gap: 0.5rem;
-    }
-    input[type="text"], input[type="file"] {
-      flex: 1;
-      padding: 1rem;
-      border: none;
-      border-radius: 30px;
-      font-size: 1.1rem;
-      background: var(--card);
-      color: var(--text);
-      backdrop-filter: blur(5px);
-    }
-    button {
-      padding: 1rem 1.8rem;
-      border: none;
-      background: var(--primary);
-      color: white;
-      border-radius: 30px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-    button:hover { background: var(--secondary); transform: scale(1.05); }
-    .sections {
-      padding: 2rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-    }
-    .card {
-      background: var(--card);
-      border-radius: 16px;
-      overflow: hidden;
-      transition: 0.4s;
-      backdrop-filter: blur(8px);
-      box-shadow: var(--glow);
-    }
-    .card:hover { transform: translateY(-10px) scale(1.05); }
-    .card img { width: 100%; height: 200px; object-fit: cover; }
-    .card h3 { padding: 1rem; text-align: center; font-size: 1.3rem; }
-    #player {
-      position: fixed;
-      bottom: 0;
-      left: 0; right: 0;
-      background: var(--card);
-      backdrop-filter: blur(12px);
-      padding: 1.2rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 -10px 30px rgba(0,0,0,0.7);
-      z-index: 100;
-      border-top: 1px solid var(--primary);
-    }
-    #player-controls button { font-size: 2rem; margin: 0 0.8rem; background: none; border: none; color: var(--text); cursor: pointer; transition: 0.3s; }
-    #player-controls button:hover { color: var(--primary); transform: scale(1.2); }
-    #progress-container {
-      flex: 1;
-      margin: 0 1.5rem;
-      height: 8px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    #progress { height: 100%; width: 0; background: var(--primary); border-radius: 5px; transition: width 0.1s linear; }
-    .theme-toggle {
-      position: fixed;
-      top: 1.5rem;
-      right: 1.5rem;
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 1rem;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 999;
-      box-shadow: var(--glow);
-    }
-    #my-uploads, #playlist, #favorites {
-      margin: 3rem 2rem;
-    }
-    .song-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem;
-      background: var(--card);
-      margin: 1rem 0;
-      border-radius: 12px;
-      backdrop-filter: blur(5px);
-    }
-    @media (max-width: 768px) {
-      header { font-size: 2.2rem; }
-      .logo { font-size: 3rem; }
-      #player { flex-direction: column; gap: 1.2rem; padding: 1rem; }
-      nav { flex-wrap: wrap; gap: 1rem; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Hut Wave | Stream Free Music</title>
+    <style>
+        /* Modern Design Variables */
+        :root {
+            --primary-color: #1DB954; /* Spotify style green */
+            --bg-dark: #0f0f0f;
+            --card-bg: #1e1e1e;
+            --text-light: #ffffff;
+            --text-gray: #b3b3b3;
+            --accent: #ff4d4d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Sidebar --- */
+        nav {
+            width: 260px;
+            background-color: #000;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            border-right: 1px solid #333;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .nav-links div {
+            padding: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+
+        .nav-links div:hover {
+            color: white;
+            background: #282828;
+            border-radius: 5px;
+        }
+
+        /* --- Main Content Area --- */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: linear-gradient(to bottom, #222, #0f0f0f);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .search-bar {
+            width: 50%;
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: none;
+            outline: none;
+            background: #333;
+            color: white;
+        }
+
+        .user-auth button {
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .login-btn { background: transparent; color: white; }
+        .signup-btn { background: white; color: black; }
+
+        /* --- Music Sections --- */
+        .section-title {
+            margin: 25px 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .music-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            transition: 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .music-card:hover {
+            background: #282828;
+            transform: translateY(-5px);
+        }
+
+        .music-card img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            font-size: 10px;
+            background: var(--primary-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        /* --- Music Player (Footer) --- */
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 90px;
+            background: #181818;
+            border-top: 1px solid #333;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            justify-content: space-between;
+        }
+
+        .now-playing { width: 30%; display: flex; align-items: center; gap: 15px; }
+        .controls { width: 40%; text-align: center; }
+        .volume-controls { width: 30%; text-align: right; }
+
+        .control-btns { font-size: 20px; cursor: pointer; margin: 0 10px; }
+        
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #444;
+            border-radius: 2px;
+            margin-top: 10px;
+        }
+
+        .progress { width: 45%; height: 100%; background: var(--primary-color); border-radius: 2px; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav { display: none; }
+            header .search-bar { width: 80%; }
+        }
+    </style>
 </head>
 <body>
 
-  <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
+    <nav>
+        <div class="logo">🎵 Music Hut Wave</div>
+        <div class="nav-links">
+            <div>🏠 Home</div>
+            <div>🔥 Trending</div>
+            <div>📂 Library</div>
+            <div>❤️ Liked Songs</div>
+            <div>➕ Create Playlist</div>
+            <hr style="border-color: #222; margin: 10px 0;">
+            <p style="font-size: 12px; color: grey;">CATEGORIES</p>
+            <div>Hindi Songs</div>
+            <div>English Global</div>
+            <div>Hip-Hop / Rap</div>
+            <div>Rock Classics</div>
+            <div>Instrumental</div>
+            <div>Old Gold (Retro)</div>
+        </div>
+    </nav>
 
-  <header>
-    <div class="logo">Music Hut Beat</div>
-    <p>Free Streaming – Upload Your Own Tracks!</p>
-  </header>
+    <main>
+        <header>
+            <input type="text" class="search-bar" placeholder="Search Songs, Artists, Albums...">
+            <div class="user-auth">
+                <button class="login-btn">Log In</button>
+                <button class="signup-btn">Sign Up Free</button>
+            </div>
+        </header>
 
-  <nav>
-    <a href="#home">Home</a>
-    <a href="#trending">Trending</a>
-    <a href="#new">New Releases</a>
-    <a href="#hindi">Hindi</a>
-    <a href="#english">English</a>
-    <a href="#uploads">My Uploads</a>
-    <a href="#playlist">Playlist</a>
-  </nav>
+        <div class="hero-banner" style="background: #333; padding: 40px; border-radius: 15px; margin-bottom: 20px;">
+            <h1>Free Access. No Subscription.</h1>
+            <p>Listen to millions of songs without downloading.</p>
+        </div>
 
-  <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="Search songs, artists, albums, genres..." onkeyup="searchSongs()"/>
-    <button><i class="fas fa-search"></i></button>
-  </div>
+        <div class="section-title">
+            <h2>Trending Now</h2>
+            <span style="color: var(--primary-color); cursor: pointer;">Show all</span>
+        </div>
+        <div class="grid-container">
+            <div class="music-card">
+                <span class="badge">HOT</span>
+                <img src="https://via.placeholder.com/150" alt="Song">
+                <p>Latest Hits 2026</p>
+                <small style="color: grey;">Artist Name</small>
+            </div>
+            <div class="music-card">
+                <img src="https://via.placeholder.com/150" alt="Song">
+                <p>New Releases</p>
+                <small style="color: grey;">Weekly Update</small>
+            </div>
+            <div class="music-card">
+                <img src="https://via.placeholder.com/150" alt="Song">
+                <p>Regional Vibes</p>
+                <small style="color: grey;">Top Charts</small>
+            </div>
+            <div class="music-card">
+                <img src="https://via.placeholder.com/150" alt="Song">
+                <p>Recommended</p>
+                <small style="color: grey;">For You</small>
+            </div>
+        </div>
 
-  <div class="upload-section">
-    <input type="file" id="uploadSong" accept="audio/*" multiple />
-    <button onclick="handleUpload()">Upload Songs</button>
-  </div>
+        <div style="margin-top: 50px; padding: 20px; border: 1px solid #333; border-radius: 10px;">
+            <h3>Platform Info</h3>
+            <p style="color: grey; font-size: 14px;">Music Hut Wave is a lightweight, web-based streaming service. Features include Dark Mode UI, Personalized Recommendations, and 100% Free Access without downloading.</p>
+        </div>
+    </main>
 
-  <section id="home" class="sections">
-    <!-- Sections added via JS -->
-  </section>
+    <footer>
+        <div class="now-playing">
+            <img src="https://via.placeholder.com/50" style="border-radius: 4px;">
+            <div>
+                <p style="font-size: 14px; font-weight: bold;">Song Title</p>
+                <p style="font-size: 12px; color: grey;">Artist Profile</p>
+            </div>
+            <span style="margin-left: 10px; cursor: pointer;">❤️</span>
+        </div>
 
-  <section id="my-uploads">
-    <h2>My Uploaded Songs</h2>
-    <div id="uploadedSongs"></div>
-  </section>
+        <div class="controls">
+            <span class="control-btns">🔀</span> <span class="control-btns">⏮</span> <span class="control-btns" style="font-size: 30px; color: white;">⏯</span> <span class="control-btns">⏭</span> <span class="control-btns">🔁</span> <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 10px; margin-top: 5px;">
+                <span>1:45</span> <span>3:50</span>
+            </div>
+        </div>
 
-  <section id="playlist">
-    <h2>My Playlist</h2>
-    <div id="playlistSongs"></div>
-  </section>
+        <div class="volume-controls">
+            <span>🔊</span>
+            <input type="range" style="accent-color: var(--primary-color);">
+        </div>
+    </footer>
 
-  <section id="favorites">
-    <h2>Favorites</h2>
-    <div id="favSongs"></div>
-  </section>
-
-  <section id="player">
-    <div style="display:flex; align-items:center; gap:1.2rem; min-width:220px;">
-      <img id="currentCover" src="https://via.placeholder.com/80/FF3366/fff?text=Now" alt="Cover" style="width:80px;height:80px;border-radius:12px;box-shadow:var(--glow);"/>
-      <div>
-        <h4 id="currentTitle">Select a song</h4>
-        <small id="currentArtist"></small>
-      </div>
-    </div>
-    <div id="player-controls">
-      <button onclick="prevSong()"><i class="fas fa-backward"></i></button>
-      <button id="playPauseBtn" onclick="togglePlay()"><i class="fas fa-play fa-2x"></i></button>
-      <button onclick="nextSong()"><i class="fas fa-forward"></i></button>
-      <button onclick="shuffle = !shuffle; this.style.color = shuffle ? 'var(--primary)' : ''"><i class="fas fa-random"></i></button>
-      <button onclick="repeat = !repeat; this.style.color = repeat ? 'var(--primary)' : ''"><i class="fas fa-redo"></i></button>
-    </div>
-    <div id="progress-container" onclick="seek(event)">
-      <div id="progress"></div>
-    </div>
-    <span id="time">0:00 / 0:00</span>
-    <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8" onchange="audio.volume = this.value"/>
-  </section>
-
-  <audio id="audio"></audio>
-
-  <script>
-    const songs = [
-      { id: 'demo1', title: "Demo Pop", artist: "Artist A", src: "https://drive.google.com/file/d/1kemuSnSUuEFVjW_HWmJLI7KHkUI0n6gM/view?usp=drivesdk", genre: "Pop", cover: "https://via.placeholder.com/300/FF3366/000?text=Pop" },
-      { id: 'demo2', title: "Hip-Hop Beat", artist: "Artist B", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", genre: "Hip-Hop", cover: "https://via.placeholder.com/300/00FFFF/000?text=HipHop" },
-      { id: 'demo3', title: "Hindi Melody", artist: "Singer X", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", genre: "Hindi", cover: "https://via.placeholder.com/300/FF3366/000?text=Hindi" },
-      // Add more demo songs as needed
-    ];
-
-    let allSongs = [...songs]; // merged with uploads
-    let currentIndex = 0;
-    let isPlaying = false;
-    let shuffle = false;
-    let repeat = false;
-    let playlist = [];
-    let favorites = [];
-
-    const audio = document.getElementById("audio");
-    const playPauseBtn = document.getElementById("playPauseBtn");
-
-    function loadSong(index) {
-      const song = allSongs[index];
-      document.getElementById("currentTitle").textContent = song.title;
-      document.getElementById("currentArtist").textContent = song.artist;
-      document.getElementById("currentCover").src = song.cover;
-      audio.src = song.src;
-      audio.load();
-      if (isPlaying) audio.play().catch(()=>{});
-      // add to recent if needed
-    }
-
-    function togglePlay() {
-      if (isPlaying) {
-        audio.pause();
-        playPauseBtn.innerHTML = '<i class="fas fa-play fa-2x"></i>';
-      } else {
-        audio.play().catch(()=>{});
-        playPauseBtn.innerHTML = '<i class="fas fa-pause fa-2x"></i>';
-      }
-      isPlaying = !isPlaying;
-    }
-
-    function nextSong() {
-      currentIndex = shuffle ? Math.floor(Math.random() * allSongs.length) : (currentIndex + 1) % allSongs.length;
-      loadSong(currentIndex);
-      togglePlay();
-    }
-
-    function prevSong() {
-      currentIndex = (currentIndex - 1 + allSongs.length) % allSongs.length;
-      loadSong(currentIndex);
-      togglePlay();
-    }
-
-    audio.ontimeupdate = () => {
-      if (!audio.duration) return;
-      const progress = (audio.currentTime / audio.duration) * 100;
-      document.getElementById("progress").style.width = progress + "%";
-      document.getElementById("time").textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
-    };
-
-    audio.onended = () => {
-      if (repeat) {
-        audio.currentTime = 0;
-        audio.play();
-      } else {
-        nextSong();
-      }
-    };
-
-    function formatTime(seconds) {
-      const min = Math.floor(seconds / 60);
-      const sec = Math.floor(seconds % 60);
-      return `${min}:${sec < 10 ? '0' : ''}${sec}`;
-    }
-
-    function seek(e) {
-      const width = document.getElementById("progress-container").clientWidth;
-      const clickX = e.offsetX;
-      audio.currentTime = (clickX / width) * audio.duration;
-    }
-
-    function addToPlaylist(song) {
-      if (!playlist.some(s => s.id === song.id)) {
-        playlist.push(song);
-        renderList("playlistSongs", playlist, "playFromPlaylist");
-      }
-    }
-
-    function addToFav(song) {
-      if (!favorites.some(s => s.id === song.id)) {
-        favorites.push(song);
-        renderList("favSongs", favorites);
-      }
-    }
-
-    function renderList(containerId, list, playFunc = null) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = "";
-      list.forEach((song, i) => {
-        const div = document.createElement("div");
-        div.className = "song-item";
-        div.innerHTML = `
-          <span>${song.title} - ${song.artist}</span>
-          <div>
-            <button onclick="${playFunc ? playFunc + '(' + i + ')' : 'loadSongFromArray(' + list + ',' + i + ')'}">Play</button>
-            <button onclick="addToPlaylist(allSongs.find(s=>s.id===${JSON.stringify(song.id)}))">+ Playlist</button>
-          </div>`;
-        container.appendChild(div);
-      });
-    }
-
-    function loadSongFromArray(arr, i) {
-      const song = arr[i];
-      currentIndex = allSongs.findIndex(s => s.id === song.id);
-      loadSong(currentIndex);
-      togglePlay();
-      const songs = [
-  { 
-  const songs = [
-  { 
-    id: 'demo1', 
-    title: "Demo Pop", 
-    artist: "Artist A", 
-    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", 
-    genre: "Pop", 
-    cover: "https://thumbs.dreamstime.com/b/colorful-headphones-sound-waves-vibrant-purple-blue-tones-ai-generated-376722578.jpg"
-  },
-  { 
-    id: 'demo2', 
-    title: "Hip-Hop Beat", 
-    artist: "Artist B", 
-    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", 
-    genre: "Hip-Hop", 
-    cover: "https://thumbs.dreamstime.com/b/neon-headphones-vibrant-audio-waveforms-dark-background-concept-modern-music-technology-digital-sound-visualization-368783465.jpg"
-  },
-  { 
-    id: 'demo3', 
-    title: "Hindi Melody", 
-    artist: "Singer X", 
-    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", 
-    genre: "Hindi", 
-    cover: "https://thumbs.dreamstime.com/b/glowing-headphones-digital-music-waves-pair-futuristic-emits-blue-lights-surrounded-dark-background-322272715.jpg"
-  },
-];
-  },
-  // Add more if you want
-];
-    }
-
-    function playFromPlaylist(i) {
-      const song = playlist[i];
-      currentIndex = allSongs.findIndex(s => s.id === song.id);
-      loadSong(currentIndex);
-      togglePlay();
-    }
-
-    function handleUpload() {
-      const files = document.getElementById("uploadSong").files;
-      for (let file of files) {
-        if (file.type.startsWith("audio/")) {
-          const url = URL.createObjectURL(file);
-          const customId = 'upload_' + Date.now() + Math.random().toString(36).substr(2,5);
-          const newSong = {
-            id: customId,
-            title: file.name.replace(/\.[^/.]+$/, ""),
-            artist: "Uploaded",
-            src: url,
-            genre: "Uploaded",
-            cover: "https://via.placeholder.com/300/8f00ff/fff?text=Upload"
-          };
-          allSongs.push(newSong);
-          renderUploads();
-        }
-      }
-      document.getElementById("uploadSong").value = "";
-    }
-
-    function renderUploads() {
-      const uploads = allSongs.filter(s => s.id.startsWith('upload_'));
-      renderList("uploadedSongs", uploads, "playFromUploads");
-    }
-
-    function playFromUploads(i) {
-      const uploads = allSongs.filter(s => s.id.startsWith('upload_'));
-      const song = uploads[i];
-      currentIndex = allSongs.findIndex(s => s.id === song.id);
-      loadSong(currentIndex);
-      togglePlay();
-    }
-
-    function searchSongs() {
-      // Can be expanded later
-      console.log("Search:", document.getElementById("searchInput").value);
-    }
-
-    function toggleTheme() {
-      const html = document.documentElement;
-      const current = html.getAttribute("data-theme");
-      html.setAttribute("data-theme", current === "dark" ? "light" : "dark");
-    }
-
-    // Render demo sections
-    const sections = document.querySelector(".sections");
-    ["Trending Songs", "New Releases", "Hindi Songs", "English Songs", "Pop", "Hip-Hop"].forEach(title => {
-      const sec = document.createElement("div");
-      sec.innerHTML = `<h2>${title}</h2>`;
-      const grid = document.createElement("div");
-      grid.className = "sections";
-      songs.slice(0,4).forEach((song, i) => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <img src="${song.cover}" alt="${song.title}">
-          <h3>${song.title}</h3>
-          <p>${song.artist}</p>
-          <button onclick="addToPlaylist(allSongs.find(s=>s.id==='${song.id}'))">+ Playlist</button>
-          <button onclick="addToFav(allSongs.find(s=>s.id==='${song.id}'))">Like</button>
-        `;
-        grid.appendChild(card);
-      });
-      sec.appendChild(grid);
-      sections.appendChild(sec);
-    });
-
-    // Initial load
-    loadSong(0);
-    renderUploads();
-  </script>
 </body>
 </html>
