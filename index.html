@@ -2,95 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Hut Beat - Premium</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Music Hut Beat - Pro</title>
+    <style>
+        :root { --p: #1DB954; --bg: #0b0b0b; --card: #181818; }
+        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; padding-bottom: 100px; }
+        .header { background: linear-gradient(to bottom, #333, var(--bg)); padding: 40px 20px; text-align: center; }
+        .upload-area { border: 2px dashed #444; padding: 20px; margin: 20px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .upload-area:hover { border-color: var(--p); background: #111; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; padding: 20px; }
+        .card { background: var(--card); padding: 15px; border-radius: 8px; transition: 0.3s; cursor: pointer; text-align: center;}
+        .card:hover { background: #282828; transform: translateY(-5px); }
+        .card img { width: 100%; border-radius: 5px; margin-bottom: 10px; }
+        .player { position: fixed; bottom: 0; width: 100%; background: #000; padding: 15px; display: flex; align-items: center; border-top: 1px solid #333; z-index: 100;}
+        .controls { flex: 2; text-align: center; }
+        .btn { background: var(--p); border: none; padding: 10px 20px; border-radius: 20px; color: black; font-weight: bold; cursor: pointer; }
+        #progress { width: 60%; cursor: pointer; accent-color: var(--p); }
+    </style>
 </head>
 <body>
 
-    <div class="glass-container">
-        <aside class="sidebar">
-            <div class="logo">
-                <div class="logo-icon"><i class="fas fa-play"></i></div>
-                <span>Music Hut</span>
-            </div>
-            <nav>
-                <div class="nav-item active"><i class="fas fa-home"></i> Home</div>
-                <div class="nav-item"><i class="fas fa-compass"></i> Explore</div>
-                <div class="nav-item"><i class="fas fa-heart"></i> Favorites</div>
-            </nav>
-            <div class="upload-box">
-                <p>Add Your Beats</p>
-                <label for="audio-upload" class="upload-btn">
-                    <i class="fas fa-cloud-upload-alt"></i> Upload
-                </label>
-                <input type="file" id="audio-upload" accept="audio/*" hidden>
-            </div>
-        </aside>
+<div class="header">
+    <h1>Music Hut Beat</h1>
+    <p>Upload your songs and feel the beat!</p>
+    <div class="upload-area" onclick="document.getElementById('file').click()">
+        <i class="fas fa-plus"></i> Click here to Upload Song (MP3)
+        <input type="file" id="file" hidden accept="audio/*">
+    </div>
+</div>
 
-        <main class="main-content">
-            <header>
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search for artists, songs...">
-                </div>
-                <div class="user-info">
-                    <span class="premium-tag">PREMIUM</span>
-                    <img src="https://ui-avatars.com/api/?name=User&background=random" alt="User">
-                </div>
-            </header>
-
-            <h1 class="welcome-text">Your Daily Mix</h1>
-            
-            <div class="song-grid" id="song-grid">
-                <div class="empty-state">
-                    <i class="fas fa-music"></i>
-                    <p>No songs yet. Upload your first beat!</p>
-                </div>
-            </div>
-        </main>
-
-        <footer class="player-bar">
-            <div class="track-info">
-                <div class="track-img" id="track-img">
-                    <i class="fas fa-headphones"></i>
-                </div>
-                <div class="track-text">
-                    <h4 id="current-title">Not Playing</h4>
-                    <p id="current-artist">Select a song</p>
-                </div>
-            </div>
-
-            <div class="controls-wrapper">
-                <div class="main-controls">
-                    <i class="fas fa-random" title="Shuffle"></i>
-                    <i class="fas fa-step-backward" id="prev"></i>
-                    <div class="play-pause" id="play-btn">
-                        <i class="fas fa-play"></i>
-                    </div>
-                    <i class="fas fa-step-forward" id="next"></i>
-                    <i class="fas fa-redo" title="Repeat"></i>
-                </div>
-                <div class="progress-container">
-                    <span id="time-current">0:00</span>
-                    <div class="progress-bar-bg" id="progress-container">
-                        <div class="progress-fill" id="progress-fill"></div>
-                    </div>
-                    <span id="time-total">0:00</span>
-                </div>
-            </div>
-
-            <div class="volume-box">
-                <i class="fas fa-volume-up" id="vol-icon"></i>
-                <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.8">
-            </div>
-        </footer>
+<div class="grid" id="songGrid">
     </div>
 
-    <div class="bg-bubble b1"></div>
-    <div class="bg-bubble b2"></div>
+<div class="player">
+    <div style="flex:1" id="nowPlaying">Select a song</div>
+    <div class="controls">
+        <button class="btn" id="playBtn">Play</button><br>
+        <input type="range" id="progress" value="0">
+    </div>
+    <div style="flex:1; text-align:right;">
+        Vol: <input type="range" id="vol" style="width:80px" value="100">
+    </div>
+</div>
 
-    <script src="script.js"></script>
+<script>
+    const audio = new Audio();
+    const fileInput = document.getElementById('file');
+    const songGrid = document.getElementById('songGrid');
+    const playBtn = document.getElementById('playBtn');
+    const progress = document.getElementById('progress');
+    const nowPlaying = document.getElementById('nowPlaying');
+
+    // 1. Upload & Display
+    fileInput.onchange = (e) => {
+        const file = e.target.files[0];
+        if(!file) return;
+        
+        const url = URL.createObjectURL(file);
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <img src="https://via.placeholder.com/150/1DB954/FFFFFF?text=Music">
+            <b>${file.name.substring(0, 15)}...</b>
+        `;
+        card.onclick = () => {
+            audio.src = url;
+            audio.play();
+            nowPlaying.innerText = "Playing: " + file.name;
+            playBtn.innerText = "Pause";
+        };
+        songGrid.appendChild(card);
+    };
+
+    // 2. Play/Pause
+    playBtn.onclick = () => {
+        if(audio.paused) { audio.play(); playBtn.innerText = "Pause"; }
+        else { audio.pause(); playBtn.innerText = "Play"; }
+    };
+
+    // 3. Progress Bar Update
+    audio.ontimeupdate = () => {
+        progress.value = (audio.currentTime / audio.duration) * 100 || 0;
+    };
+    progress.oninput = () => {
+        audio.currentTime = (progress.value / 100) * audio.duration;
+    };
+
+    // 4. Volume
+    document.getElementById('vol').oninput = (e) => {
+        audio.volume = e.target.value / 100;
+    };
+</script>
+
 </body>
 </html>
