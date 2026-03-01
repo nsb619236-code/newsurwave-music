@@ -3,113 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Hut Beat Music - Ultimate Player</title>
+    <title>Music Hut Beat - Premium</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="dark-theme">
+<body>
 
-    <div class="app-container">
-        <aside class="sidebar" id="sidebar">
+    <div class="glass-container">
+        <aside class="sidebar">
             <div class="logo">
-                <i class="fas fa-bolt"></i> <span>Music Hut</span>
+                <div class="logo-icon"><i class="fas fa-play"></i></div>
+                <span>Music Hut</span>
             </div>
-            <nav class="menu">
-                <div class="menu-item active" onclick="showSection('home')"><i class="fas fa-home"></i> Home</div>
-                <div class="menu-item" onclick="showSection('library')"><i class="fas fa-compact-disc"></i> Library</div>
-                <div class="menu-item" onclick="showSection('upload')"><i class="fas fa-cloud-upload-alt"></i> Upload</div>
+            <nav>
+                <div class="nav-item active"><i class="fas fa-home"></i> Home</div>
+                <div class="nav-item"><i class="fas fa-compass"></i> Explore</div>
+                <div class="nav-item"><i class="fas fa-heart"></i> Favorites</div>
             </nav>
-            <div class="playlists-section">
-                <h4>YOUR PLAYLISTS</h4>
-                <div id="playlist-list">
-                    </div>
-                <button class="btn-text" onclick="createPlaylist()"><i class="fas fa-plus"></i> New Playlist</button>
+            <div class="upload-box">
+                <p>Add Your Beats</p>
+                <label for="audio-upload" class="upload-btn">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload
+                </label>
+                <input type="file" id="audio-upload" accept="audio/*" hidden>
             </div>
         </aside>
 
         <main class="main-content">
-            <header class="glass-header">
-                <div class="search-bar">
+            <header>
+                <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search for beats...">
+                    <input type="text" placeholder="Search for artists, songs...">
                 </div>
-                <div class="user-actions">
-                    <button id="theme-toggle" class="icon-btn"><i class="fas fa-moon"></i></button>
-                    <div class="profile">
-                        <span id="username-display">Guest</span>
-                        <i class="fas fa-user-circle"></i>
-                    </div>
+                <div class="user-info">
+                    <span class="premium-tag">PREMIUM</span>
+                    <img src="https://ui-avatars.com/api/?name=User&background=random" alt="User">
                 </div>
             </header>
 
-            <section id="home-section" class="content-section">
-                <h2 class="section-title">Recently Played</h2>
-                <div class="grid-container" id="recent-grid"></div>
-
-                <h2 class="section-title">Trending Now</h2>
-                <div class="grid-container" id="trending-grid"></div>
-            </section>
-
-            <section id="library-section" class="content-section hidden">
-                <h2 class="section-title">Your Music Library</h2>
-                <div class="song-list-header">
-                    <span># Title</span>
-                    <span>Album</span>
-                    <span><i class="far fa-clock"></i></span>
+            <h1 class="welcome-text">Your Daily Mix</h1>
+            
+            <div class="song-grid" id="song-grid">
+                <div class="empty-state">
+                    <i class="fas fa-music"></i>
+                    <p>No songs yet. Upload your first beat!</p>
                 </div>
-                <div id="library-list"></div>
-            </section>
-
-            <section id="upload-section" class="content-section hidden">
-                <div class="upload-card">
-                    <i class="fas fa-file-audio"></i>
-                    <h3>Upload Local Beat</h3>
-                    <input type="file" id="audio-upload" accept="audio/*" hidden>
-                    <button class="btn-primary" onclick="document.getElementById('audio-upload').click()">Choose File</button>
-                </div>
-            </section>
+            </div>
         </main>
 
         <footer class="player-bar">
-            <div class="song-detail">
-                <div class="album-art-mini animate-pulse" id="player-art">
-                    <i class="fas fa-music"></i>
+            <div class="track-info">
+                <div class="track-img" id="track-img">
+                    <i class="fas fa-headphones"></i>
                 </div>
-                <div class="song-meta">
-                    <marquee behavior="scroll" direction="left" id="current-title">Welcome to Music Hut</marquee>
-                    <span id="current-artist">Select a song</span>
+                <div class="track-text">
+                    <h4 id="current-title">Not Playing</h4>
+                    <p id="current-artist">Select a song</p>
                 </div>
-                <i class="far fa-heart heart-icon"></i>
             </div>
 
-            <div class="player-core">
-                <div class="core-controls">
-                    <i class="fas fa-random" id="shuffle-btn"></i>
-                    <i class="fas fa-step-backward" id="prev-btn"></i>
-                    <div class="play-trigger" id="master-play">
+            <div class="controls-wrapper">
+                <div class="main-controls">
+                    <i class="fas fa-random" title="Shuffle"></i>
+                    <i class="fas fa-step-backward" id="prev"></i>
+                    <div class="play-pause" id="play-btn">
                         <i class="fas fa-play"></i>
                     </div>
-                    <i class="fas fa-step-forward" id="next-btn"></i>
-                    <i class="fas fa-redo" id="repeat-btn"></i>
+                    <i class="fas fa-step-forward" id="next"></i>
+                    <i class="fas fa-redo" title="Repeat"></i>
                 </div>
-                <div class="progress-area">
-                    <span id="current-time">0:00</span>
-                    <div class="progress-wrapper">
-                        <input type="range" id="seek-slider" value="0" max="100">
+                <div class="progress-container">
+                    <span id="time-current">0:00</span>
+                    <div class="progress-bar-bg" id="progress-container">
+                        <div class="progress-fill" id="progress-fill"></div>
                     </div>
-                    <span id="duration">0:00</span>
+                    <span id="time-total">0:00</span>
                 </div>
             </div>
 
-            <div class="extra-controls">
-                <i class="fas fa-list-ul"></i>
+            <div class="volume-box">
                 <i class="fas fa-volume-up" id="vol-icon"></i>
-                <input type="range" id="volume-slider" value="80" max="100">
+                <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.8">
             </div>
         </footer>
     </div>
 
-    <div class="bg-gradient"></div>
+    <div class="bg-bubble b1"></div>
+    <div class="bg-bubble b2"></div>
 
     <script src="script.js"></script>
 </body>
