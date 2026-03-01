@@ -3,214 +3,192 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SurVibe – Ultra HD Music Streaming</title>
+  <title>SurVibe – Sur Ka Naya Vibe</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
   <style>
     :root {
-      --bg: #0d001a;
-      --text: #f0e6ff;
-      --primary: #ff2e9e;
-      --secondary: #00f5ff;
-      --accent: #9d4edd;
-      --card: rgba(30, 20, 60, 0.6);
-      --card-hover: rgba(50, 40, 90, 0.8);
-      --glow: 0 0 25px rgba(255, 46, 158, 0.7);
-      --blur: blur(12px);
+      --bg: #0a0a1f;
+      --text: #e0e0ff;
+      --primary: #ff2e63;
+      --secondary: #00f2ea;
+      --card: #1a1a3a;
+      --hover: #2a2a5a;
+      --gradient: linear-gradient(135deg, #ff2e63, #00f2ea, #8a2be2);
     }
     [data-theme="light"] {
-      --bg: #f5efff;
-      --text: #1a0033;
-      --card: rgba(255, 255, 255, 0.75);
-      --card-hover: rgba(240, 230, 255, 0.9);
-      --glow: 0 0 20px rgba(157, 78, 221, 0.4);
+      --bg: #f0f4ff;
+      --text: #1a1a3f;
+      --card: #ffffff;
+      --hover: #e0e8ff;
+      --gradient: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: linear-gradient(-45deg, #0d001a, #1a0033, #330066, #4d0099);
-      background-size: 400% 400%;
-      animation: gradient 18s ease infinite;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
       color: var(--text);
       min-height: 100vh;
+      background: var(--gradient);
+      background-size: 300% 300%;
+      animation: gradientFlow 12s ease infinite;
     }
-    @keyframes gradient {
+    @keyframes gradientFlow {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
     header {
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: var(--blur);
-      padding: 1.2rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+      padding: 1.5rem;
+      text-align: center;
       position: sticky;
       top: 0;
-      z-index: 200;
-      box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
     .logo {
-      font-size: 2.8rem;
+      font-size: 3.5rem;
       font-weight: 900;
-      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+      background: var(--gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: var(--glow);
+      text-shadow: 0 0 20px rgba(255,46,99,0.6);
     }
-    .auth-btns button {
-      background: var(--accent);
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+    }
+    nav button {
+      background: var(--card);
       border: none;
-      color: white;
-      padding: 0.6rem 1.2rem;
+      color: var(--text);
+      padding: 0.8rem 1.5rem;
       border-radius: 30px;
-      margin-left: 1rem;
       cursor: pointer;
-      transition: 0.3s;
+      font-weight: bold;
     }
-    .auth-btns button:hover { transform: scale(1.05); background: var(--primary); }
+    nav button.active { background: var(--primary); color: white; }
     .search-bar {
-      max-width: 700px;
-      margin: 1.5rem auto;
+      max-width: 600px;
+      margin: 1rem auto;
       position: relative;
     }
     #searchInput {
       width: 100%;
-      padding: 1.2rem 4rem 1.2rem 1.8rem;
+      padding: 1rem 3rem 1rem 1.5rem;
       border-radius: 50px;
       border: none;
       background: var(--card);
       color: var(--text);
       font-size: 1.1rem;
-      backdrop-filter: var(--blur);
-      box-shadow: var(--glow);
     }
-    .search-icon { position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--secondary); font-size: 1.4rem; }
-    .container { max-width: 1400px; margin: 0 auto; padding: 1rem 2rem; }
-    .section-title { font-size: 2.2rem; margin: 2.5rem 0 1.5rem; color: var(--secondary); text-shadow: 0 0 15px var(--secondary); }
+    .search-icon { position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--primary); }
+    .container { padding: 1rem; max-width: 1200px; margin: auto; }
+    .section-title { font-size: 1.8rem; margin: 2rem 0 1rem; color: var(--secondary); }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 1.8rem;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
     }
     .card {
       background: var(--card);
-      border-radius: 20px;
+      border-radius: 16px;
       overflow: hidden;
-      transition: 0.4s;
-      backdrop-filter: var(--blur);
-      box-shadow: var(--glow);
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-    .card:hover { transform: translateY(-12px) scale(1.04); box-shadow: 0 20px 50px rgba(255,46,158,0.4); }
-    .card img { width: 100%; height: 220px; object-fit: cover; }
-    .card-info { padding: 1.2rem; text-align: center; }
-    .btn-small {
-      background: var(--primary);
-      border: none;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      margin: 0.3rem;
+      transition: 0.3s;
       cursor: pointer;
-      font-size: 0.9rem;
     }
-    .btn-small.delete { background: #ff3366; }
+    .card:hover { transform: translateY(-8px); box-shadow: 0 10px 30px rgba(255,46,99,0.3); }
+    .card img { width: 100%; height: 180px; object-fit: cover; }
+    .card-info { padding: 1rem; text-align: center; }
     #player {
       position: fixed;
       bottom: 0;
       left: 0; right: 0;
       background: var(--card);
-      backdrop-filter: var(--blur);
-      padding: 1.2rem 2rem;
+      backdrop-filter: blur(10px);
+      padding: 1rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 -15px 40px rgba(0,0,0,0.7);
-      z-index: 150;
-      border-top: 1px solid var(--primary);
-      transition: all 0.4s;
+      box-shadow: 0 -10px 30px rgba(0,0,0,0.6);
+      z-index: 99;
     }
-    #player.expanded { padding: 2rem; height: 180px; }
-    #currentCover { width: 80px; height: 80px; border-radius: 16px; box-shadow: var(--glow); }
-    #player-controls button { background: none; border: none; color: var(--text); font-size: 2.2rem; margin: 0 1rem; cursor: pointer; transition: 0.3s; }
-    #player-controls button:hover { color: var(--secondary); transform: scale(1.2); }
-    #progress-container { flex: 1; height: 8px; background: rgba(255,255,255,0.15); border-radius: 4px; cursor: pointer; margin: 0 1.5rem; }
-    #progress { height: 100%; width: 0; background: linear-gradient(to right, var(--primary), var(--secondary)); border-radius: 4px; transition: width 0.1s linear; }
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 300;
+    #player img { width: 60px; height: 60px; border-radius: 12px; }
+    #player-controls button {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.8rem;
+      margin: 0 0.8rem;
+      cursor: pointer;
     }
-    .modal-content {
-      background: var(--card);
-      padding: 2rem;
-      border-radius: 20px;
-      width: 90%;
-      max-width: 500px;
-      backdrop-filter: var(--blur);
-      box-shadow: var(--glow);
+    #progress-container {
+      flex: 1;
+      height: 6px;
+      background: #444;
+      border-radius: 3px;
+      margin: 0 1rem;
+      cursor: pointer;
     }
-    input, button { padding: 0.8rem; border-radius: 12px; border: none; margin: 0.5rem 0; width: 100%; }
-    button.primary { background: var(--primary); color: white; }
+    #progress { height: 100%; width: 0; background: var(--primary); border-radius: 3px; }
+    .theme-toggle { position: fixed; top: 1rem; right: 1rem; background: var(--primary); color: white; border: none; padding: 0.8rem; border-radius: 50%; cursor: pointer; z-index: 100; }
+    .premium-banner {
+      background: linear-gradient(90deg, #ff2e63, #8a2be2);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin: 1rem;
+      border-radius: 12px;
+      font-weight: bold;
+    }
     @media (max-width: 768px) {
-      #player { padding: 1rem; flex-wrap: wrap; }
-      .logo { font-size: 2rem; }
+      #player { flex-direction: column; gap: 1rem; }
+      .logo { font-size: 2.5rem; }
     }
   </style>
 </head>
 <body>
 
-  <div id="loginModal" class="modal">
-    <div class="modal-content">
-      <h2>Login to SurVibe</h2>
-      <input type="text" id="username" placeholder="Username"/>
-      <input type="password" id="password" placeholder="Password"/>
-      <button class="primary" onclick="login()">Login</button>
-      <button onclick="document.getElementById('loginModal').style.display='none'">Close</button>
-    </div>
-  </div>
+  <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
 
   <header>
     <div class="logo">SurVibe</div>
-    <div class="auth-btns">
-      <span id="userDisplay">Guest</span>
-      <button onclick="showLogin()">Login</button>
-      <button onclick="logout()" id="logoutBtn" style="display:none;">Logout</button>
-    </div>
+    <p>Sur Ka Naya Vibe – Free Music Streaming</p>
   </header>
 
+  <nav>
+    <button class="active" onclick="showSection('home')">Home</button>
+    <button onclick="showSection('trending')">Trending</button>
+    <button onclick="showSection('charts')">Top Charts</button>
+    <button onclick="showSection('new')">New Releases</button>
+    <button onclick="showSection('playlists')">My Playlists</button>
+    <button onclick="showSection('favorites')">Favorites</button>
+  </nav>
+
   <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="Search songs, artists..." oninput="searchSongs()"/>
+    <input type="text" id="searchInput" placeholder="Search songs, artists, albums..." oninput="searchSongs()"/>
     <i class="fas fa-search search-icon"></i>
   </div>
 
-  <div class="container">
-    <h2 class="section-title">Upload Your Tracks</h2>
-    <input type="file" id="uploadFiles" accept="audio/*" multiple style="margin-bottom:1rem;"/>
-    <button class="btn-small primary" onclick="handleUpload()">Upload Songs</button>
+  <div class="premium-banner">Get SurVibe Plus – Ad-free, Unlimited Downloads, HD Audio!</div>
 
-    <h2 class="section-title">My Library</h2>
-    <div id="library"></div>
-
-    <h2 class="section-title">Recommended</h2>
-    <div class="grid" id="recommended"></div>
+  <div class="container" id="content">
+    <!-- Sections loaded via JS -->
   </div>
 
-  <div id="player" class="player">
-    <img id="currentCover" src="https://source.unsplash.com/random/80x80/?neon,music" alt="Cover"/>
-    <div style="flex:1; margin:0 1.5rem;">
-      <h4 id="currentTitle">No song selected</h4>
+  <div id="player">
+    <img id="currentCover" src="https://via.placeholder.com/60/ff2e63/fff?text=Sur" alt="Cover"/>
+    <div style="flex:1; margin:0 1rem;">
+      <h4 id="currentTitle">Select a song</h4>
       <small id="currentArtist"></small>
     </div>
     <div id="player-controls">
       <button onclick="prevSong()"><i class="fas fa-backward"></i></button>
-      <button id="playPauseBtn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
+      <button id="playPause" onclick="togglePlay()"><i class="fas fa-play"></i></button>
       <button onclick="nextSong()"><i class="fas fa-forward"></i></button>
       <button onclick="toggleShuffle()"><i class="fas fa-random"></i></button>
       <button onclick="toggleRepeat()"><i class="fas fa-redo"></i></button>
@@ -219,124 +197,40 @@
       <div id="progress"></div>
     </div>
     <span id="time">0:00 / 0:00</span>
-    <input type="range" id="volume" min="0" max="1" step="0.01" value="0.9" onchange="audio.volume = this.value"/>
-    <button onclick="toggleExpandPlayer()" style="margin-left:1rem;"><i class="fas fa-expand"></i></button>
+    <input type="range" id="volume" min="0" max="1" step="0.01" value="1" onchange="setVolume(this.value)"/>
   </div>
 
   <audio id="audio"></audio>
 
   <script>
-    let allSongs = [];
-    let currentIndex = -1;
+    // Dummy Songs Data (replace with real API later)
+    const songs = [
+      { id:1, title:"Tum Hi Ho", artist:"Arijit Singh", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", cover:"https://source.unsplash.com/random/300x300/?music,hindi", genre:"Hindi", mood:"Romantic" },
+      { id:2, title:"Shape of You", artist:"Ed Sheeran", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", cover:"https://source.unsplash.com/random/300x300/?music,pop", genre:"English", mood:"Upbeat" },
+      { id:3, title:"Levitating", artist:"Dua Lipa", src:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", cover:"https://source.unsplash.com/random/300x300/?music,dance", genre:"English", mood:"Dance" },
+      // Add 20-30 more for demo (Hindi, Punjabi, Tamil etc.)
+    ];
+
+    let currentSong = null;
     let isPlaying = false;
     let shuffle = false;
     let repeat = false;
-    let favorites = JSON.parse(localStorage.getItem('survive_favorites')) || [];
-    let playlists = JSON.parse(localStorage.getItem('survive_playlists')) || {};
-    let user = localStorage.getItem('survive_user') || null;
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    let playlists = JSON.parse(localStorage.getItem('playlists')) || { "My Favorites": favorites };
+    let recentlyPlayed = JSON.parse(localStorage.getItem('recentlyPlayed')) || [];
 
     const audio = document.getElementById('audio');
-    const playPauseBtn = document.getElementById('playPauseBtn');
+    const playPauseBtn = document.getElementById('playPause');
 
-    if (user) {
-      document.getElementById('userDisplay').textContent = user;
-      document.getElementById('logoutBtn').style.display = 'inline';
-    }
-
-    function showLogin() { document.getElementById('loginModal').style.display = 'flex'; }
-    function login() {
-      const name = document.getElementById('username').value.trim() || 'User';
-      localStorage.setItem('survive_user', name);
-      document.getElementById('userDisplay').textContent = name;
-      document.getElementById('logoutBtn').style.display = 'inline';
-      document.getElementById('loginModal').style.display = 'none';
-    }
-    function logout() {
-      localStorage.removeItem('survive_user');
-      location.reload();
-    }
-
-    function handleUpload() {
-      const files = document.getElementById('uploadFiles').files;
-      for (let file of files) {
-        if (!file.type.startsWith('audio/')) continue;
-        const url = URL.createObjectURL(file);
-        let title = file.name.replace(/\.[^/.]+$/, "");
-        let artist = "Uploaded";
-        let cover = "https://source.unsplash.com/random/300x300/?neon,music,abstract";
-
-        jsmediatags.read(file, {
-          onSuccess: (tag) => {
-            if (tag.tags.title) title = tag.tags.title;
-            if (tag.tags.artist) artist = tag.tags.artist;
-            if (tag.tags.picture) {
-              const pic = tag.tags.picture;
-              const base64 = btoa(String.fromCharCode(...new Uint8Array(pic.data)));
-              cover = `data:${pic.format};base64,${base64}`;
-            }
-            addSong({title, artist, src: url, cover, id: Date.now() + Math.random()});
-          },
-          onError: () => addSong({title, artist, src: url, cover, id: Date.now() + Math.random()})
-        });
-      }
-      document.getElementById('uploadFiles').value = '';
-    }
-
-    function addSong(song) {
-      allSongs.push(song);
-      renderLibrary();
-      renderRecommended();
-    }
-
-    function renderLibrary() {
-      let html = '<h3>Your Uploads & Favorites</h3>';
-      allSongs.forEach((song, i) => {
-        html += `
-          <div class="card">
-            <img src="${song.cover}" alt="${song.title}">
-            <div class="card-info">
-              <h3>${song.title}</h3>
-              <p>${song.artist}</p>
-              <button class="btn-small" onclick="playSong(${i})">Play</button>
-              <button class="btn-small" onclick="addToFavorites(${i})">Like</button>
-            </div>
-          </div>`;
-      });
-      if (favorites.length) {
-        html += '<h3>Favorites</h3><div class="grid">';
-        favorites.forEach((song, i) => {
-          html += `<div class="card"><img src="${song.cover}"><div class="card-info"><h3>${song.title}</h3><p>${song.artist}</p><button class="btn-small delete" onclick="removeFav(${i})">Remove</button></div></div>`;
-        });
-        html += '</div>';
-      }
-      document.getElementById('library').innerHTML = html;
-    }
-
-    function renderRecommended() {
-      let html = '';
-      allSongs.slice(0, 12).forEach((song, i) => {
-        html += `
-          <div class="card" onclick="playSong(${i})">
-            <img src="${song.cover}" alt="${song.title}">
-            <div class="card-info">
-              <h3>${song.title}</h3>
-              <p>${song.artist}</p>
-            </div>
-          </div>`;
-      });
-      document.getElementById('recommended').innerHTML = html;
-    }
-
-    function playSong(index) {
-      currentIndex = index;
-      const song = allSongs[index];
+    function loadSong(song) {
+      currentSong = song;
       document.getElementById('currentTitle').textContent = song.title;
       document.getElementById('currentArtist').textContent = song.artist;
       document.getElementById('currentCover').src = song.cover;
       audio.src = song.src;
-      audio.play().catch(e => console.log(e));
-      isPlaying = true;
-      playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      audio.load();
+      if (isPlaying) audio.play();
+      addToRecent(song);
     }
 
     function togglePlay() {
@@ -351,14 +245,20 @@
     }
 
     function nextSong() {
-      currentIndex = (currentIndex + 1) % allSongs.length;
-      playSong(currentIndex);
+      let index = songs.findIndex(s => s.id === currentSong.id);
+      index = shuffle ? Math.floor(Math.random() * songs.length) : (index + 1) % songs.length;
+      loadSong(songs[index]);
+      togglePlay();
     }
 
     function prevSong() {
-      currentIndex = (currentIndex - 1 + allSongs.length) % allSongs.length;
-      playSong(currentIndex);
+      let index = songs.findIndex(s => s.id === currentSong.id);
+      index = (index - 1 + songs.length) % songs.length;
+      loadSong(songs[index]);
+      togglePlay();
     }
+
+    function setVolume(val) { audio.volume = val; }
 
     function seek(e) {
       const width = document.getElementById('progress-container').clientWidth;
@@ -366,51 +266,81 @@
     }
 
     audio.ontimeupdate = () => {
-      if (audio.duration) {
-        document.getElementById('progress').style.width = (audio.currentTime / audio.duration * 100) + '%';
-        document.getElementById('time').textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
-      }
+      if (!audio.duration) return;
+      const prog = (audio.currentTime / audio.duration) * 100;
+      document.getElementById('progress').style.width = prog + '%';
+      document.getElementById('time').textContent = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
     };
 
-    function formatTime(t) {
-      const m = Math.floor(t / 60);
-      const s = Math.floor(t % 60);
-      return m + ':' + (s < 10 ? '0' : '') + s;
+    function formatTime(s) {
+      let min = Math.floor(s / 60);
+      let sec = Math.floor(s % 60);
+      return min + ':' + (sec < 10 ? '0' : '') + sec;
     }
 
-    function toggleExpandPlayer() {
-      document.getElementById('player').classList.toggle('expanded');
+    function toggleShuffle() { shuffle = !shuffle; }
+    function toggleRepeat() { repeat = !repeat; }
+
+    audio.onended = () => {
+      if (repeat) audio.play();
+      else nextSong();
+    };
+
+    function addToFavorites(song) {
+      if (!favorites.some(s => s.id === song.id)) {
+        favorites.push(song);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+      }
     }
 
-    function addToFavorites(index) {
-      const song = allSongs[index];
-      if (!favorites.some(s => s.id === song.id)) favorites.push(song);
-      localStorage.setItem('survive_favorites', JSON.stringify(favorites));
-      renderLibrary();
-    }
-
-    function removeFav(index) {
-      favorites.splice(index, 1);
-      localStorage.setItem('survive_favorites', JSON.stringify(favorites));
-      renderLibrary();
+    function addToRecent(song) {
+      recentlyPlayed = recentlyPlayed.filter(s => s.id !== song.id);
+      recentlyPlayed.unshift(song);
+      if (recentlyPlayed.length > 10) recentlyPlayed.pop();
+      localStorage.setItem('recentlyPlayed', JSON.stringify(recentlyPlayed));
     }
 
     function searchSongs() {
-      const q = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = allSongs.filter(s => s.title.toLowerCase().includes(q) || s.artist.toLowerCase().includes(q));
-      let html = '<h2 class="section-title">Search Results</h2><div class="grid">';
-      filtered.forEach((song, i) => {
-        const globalIndex = allSongs.findIndex(s => s.id === song.id);
-        html += `<div class="card" onclick="playSong(${globalIndex})"><img src="${song.cover}"><div class="card-info"><h3>${song.title}</h3><p>${song.artist}</p></div></div>`;
-      });
-      html += '</div>';
-      document.getElementById('recommended').innerHTML = html; // replace recommended temporarily
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = songs.filter(s => s.title.toLowerCase().includes(query) || s.artist.toLowerCase().includes(query));
+      renderGrid(filtered, 'Search Results');
     }
 
-    // Initial
-    renderLibrary();
-    renderRecommended();
-    audio.volume = 0.9;
+    function renderGrid(songList, title) {
+      let html = `<h2 class="section-title">${title}</h2><div class="grid">`;
+      songList.forEach(song => {
+        html += `
+          <div class="card" onclick="loadSong(${JSON.stringify(song)}); togglePlay()">
+            <img src="${song.cover}" alt="${song.title}">
+            <div class="card-info">
+              <h3>${song.title}</h3>
+              <p>${song.artist}</p>
+              <button onclick="event.stopPropagation(); addToFavorites(${JSON.stringify(song)})">Like</button>
+            </div>
+          </div>`;
+      });
+      html += `</div>`;
+      document.getElementById('content').innerHTML = html;
+    }
+
+    function showSection(section) {
+      document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      if (section === 'home') {
+        renderGrid(songs.slice(0,12), 'Recommended for You');
+      } else if (section === 'favorites') {
+        renderGrid(favorites, 'Liked Songs');
+      } // Add more sections like trending, charts etc. with filtered songs
+    }
+
+    function toggleTheme() {
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    // Initial load
+    showSection('home');
+    loadSong(songs[0]);
   </script>
 </body>
 </html>
