@@ -14,7 +14,7 @@
         body { font-family: 'Inter', system-ui, sans-serif; }
         .logo-font { font-family: 'Space Grotesk', sans-serif; }
         
-        .glass { background: rgba(15,23,42,0.85); backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.08); }
+        .glass { background: rgba(15,23,42,0.92); backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.08); }
         .card-hover { transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1); }
         .card-hover:hover { transform: translateY(-12px) scale(1.04); box-shadow: 0 30px 60px -15px rgb(234 179 8 / 0.4); }
         
@@ -23,8 +23,10 @@
         
         .progress { transition: width 0.1s linear; }
         .visual-bar { transition: height 0.06s ease; }
-        
         .nav-active { background: rgb(234 179 8 / 0.15); color: rgb(234 179 8); border-left: 4px solid rgb(234 179 8); }
+        
+        .modal { animation: modalPop 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+        @keyframes modalPop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-950 to-zinc-950 text-slate-100 min-h-screen flex flex-col overflow-hidden">
@@ -50,7 +52,7 @@
 
             <div class="flex items-center gap-6">
                 <button onclick="toggleTheme()" id="theme-btn" class="text-2xl"><i class="fas fa-moon"></i></button>
-                <div onclick="showLoginModal()" id="user-avatar" 
+                <div onclick="showUserMenu()" id="user-avatar" 
                      class="flex items-center gap-3 cursor-pointer">
                     <div class="w-8 h-8 bg-yellow-400 text-slate-950 rounded-2xl flex items-center justify-center font-bold">K</div>
                     <span id="username" class="font-medium hidden md:block">Ksb</span>
@@ -92,7 +94,7 @@
                     <div class="p-12 max-w-lg z-10">
                         <h1 class="text-6xl font-bold leading-none tracking-tighter logo-font">Improve Your Music Taste</h1>
                         <p class="mt-6 text-lg text-white/80">Millions of songs. Zero ads. Pure vibes.</p>
-                        <button onclick="playRandomDemo()" 
+                        <button onclick="playRandom()" 
                                 class="mt-8 bg-white text-slate-950 px-10 py-5 rounded-3xl font-bold flex items-center gap-4 hover:scale-105 transition">
                             <i class="fas fa-play"></i> Start Listening
                         </button>
@@ -165,6 +167,7 @@
         </div>
 
         <div class="flex items-center gap-6 w-72 justify-end">
+            <button onclick="showPlaylistModal()" class="text-xl hover:text-yellow-400"><i class="fas fa-list-ul"></i></button>
             <canvas id="visualizer" width="110" height="40" class="opacity-80"></canvas>
             <input type="range" id="volume" min="0" max="100" value="80" class="accent-yellow-400 w-28">
         </div>
@@ -172,7 +175,7 @@
 
     <!-- Upload Modal -->
     <div id="upload-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[100]">
-        <div class="glass rounded-3xl p-10 w-full max-w-md">
+        <div class="glass rounded-3xl p-10 w-full max-w-md modal">
             <h3 class="text-2xl font-bold mb-8 text-center">Upload New Song</h3>
             <div id="drop-area" class="border-2 border-dashed border-yellow-400/30 rounded-3xl h-52 flex flex-col items-center justify-center cursor-pointer hover:border-yellow-400">
                 <i class="fas fa-cloud-upload-alt text-6xl text-yellow-400 mb-4"></i>
@@ -184,12 +187,34 @@
         </div>
     </div>
 
+    <!-- Playlist Detail Modal -->
+    <div id="playlist-detail-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[100]">
+        <div class="glass rounded-3xl p-8 w-full max-w-lg modal max-h-[85vh] overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="playlist-name" class="text-2xl font-bold"></h3>
+                <button onclick="hidePlaylistModal()" class="text-3xl text-white/60">×</button>
+            </div>
+            <div id="playlist-songs" class="flex-1 overflow-auto space-y-3"></div>
+            <button onclick="addCurrentToPlaylist()" class="mt-6 w-full py-4 bg-yellow-400 text-slate-950 rounded-3xl font-semibold flex items-center justify-center gap-3">
+                <i class="fas fa-plus"></i> Add Current Song
+            </button>
+        </div>
+    </div>
+
+    <!-- User Menu -->
+    <div id="user-menu" class="hidden fixed top-16 right-6 glass rounded-3xl p-4 w-52 z-[100]">
+        <div onclick="logout()" class="flex items-center gap-3 px-6 py-4 hover:bg-white/10 rounded-2xl cursor-pointer">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </div>
+    </div>
+
     <!-- Login Modal -->
     <div id="login-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[100]">
-        <div class="glass rounded-3xl p-10 w-full max-w-sm">
+        <div class="glass rounded-3xl p-10 w-full max-w-sm modal">
             <h2 class="text-3xl font-bold text-center mb-8">Welcome to Music Hut Beat</h2>
             <input id="login-name" type="text" placeholder="Your name" value="Ksb" class="w-full py-5 px-6 bg-white/10 rounded-3xl text-lg mb-6">
-            <button onclick="loginUser()" class="w-full py-5 bg-yellow-400 text-slate-950 rounded-3xl font-bold text-xl">Continue as Guest →</button>
+            <button onclick="loginUser()" class="w-full py-5 bg-yellow-400 text-slate-950 rounded-3xl font-bold text-xl">Continue</button>
         </div>
     </div>
 
@@ -213,7 +238,8 @@
         let currentIndex = 0;
         let isPlaying = false;
         let shuffleMode = false;
-        let repeatMode = 0; // 0=off, 1=one, 2=all
+        let repeatMode = 0;
+        let currentPlaylistId = null; // for modal
         let audio = document.getElementById('main-audio');
         let visualCtx, analyser, dataArray;
 
@@ -225,13 +251,24 @@
             localStorage.setItem('mhb_user', currentUser);
         }
 
+        // ============== DELETE SONG ==============
+        function deleteSong(id) {
+            if (!confirm("Delete this song?")) return;
+            myLibrary = myLibrary.filter(s => s.id !== id);
+            allSongs = allSongs.filter(s => s.id !== id);
+            saveData();
+            renderLibrary();
+            renderDiscover();
+            alert("Song deleted from library");
+        }
+
         // ============== RENDER ==============
-        function renderGrid(containerId, songsList) {
+        function renderGrid(containerId, songsList, isLibrary = false) {
             const container = document.getElementById(containerId);
             container.innerHTML = "";
             songsList.forEach(song => {
                 const div = document.createElement('div');
-                div.className = "card-hover glass rounded-3xl overflow-hidden cursor-pointer";
+                div.className = "card-hover glass rounded-3xl overflow-hidden cursor-pointer relative";
                 div.innerHTML = `
                     <div class="relative">
                         <img src="${song.cover}" class="w-full aspect-square object-cover">
@@ -245,6 +282,13 @@
                         <div class="text-sm text-white/60">${song.artist}</div>
                     </div>
                 `;
+                if (isLibrary) {
+                    const delBtn = document.createElement('button');
+                    delBtn.className = "absolute top-4 right-4 text-red-400 text-xl";
+                    delBtn.innerHTML = `<i class="fas fa-trash"></i>`;
+                    delBtn.onclick = (e) => { e.stopImmediatePropagation(); deleteSong(song.id); };
+                    div.appendChild(delBtn);
+                }
                 div.onclick = () => playSongById(song.id);
                 container.appendChild(div);
             });
@@ -253,11 +297,11 @@
         function renderPlaylists() {
             const container = document.getElementById('playlists-grid');
             container.innerHTML = "";
-            playlists.forEach((pl, idx) => {
+            playlists.forEach(pl => {
                 const div = document.createElement('div');
                 div.className = "glass rounded-3xl p-6 cursor-pointer hover:ring-2 hover:ring-yellow-400";
                 div.innerHTML = `<div class="font-bold text-2xl">${pl.name}</div><div class="text-sm text-white/60 mt-2">${pl.songs.length} songs</div>`;
-                div.onclick = () => playPlaylist(pl);
+                div.onclick = () => showPlaylistDetail(pl.id);
                 container.appendChild(div);
             });
         }
@@ -271,7 +315,6 @@
             const song = [...allSongs, ...myLibrary].find(s => s.id === id);
             if (!song) return;
 
-            // Add to recent
             recentlyPlayed = recentlyPlayed.filter(s => s.id !== song.id);
             recentlyPlayed.unshift(song);
             if (recentlyPlayed.length > 10) recentlyPlayed.pop();
@@ -288,7 +331,7 @@
                 document.getElementById('play-icon').classList.replace('fa-play', 'fa-pause');
                 document.getElementById('player').classList.add('playing');
                 initVisualizer();
-            }).catch(() => alert("Browser blocked autoplay. Tap play again."));
+            }).catch(() => alert("Tap play again (autoplay blocked)"));
         }
 
         function togglePlay() {
@@ -296,68 +339,4 @@
             if (isPlaying) {
                 audio.pause();
                 isPlaying = false;
-                document.getElementById('play-icon').classList.replace('fa-pause', 'fa-play');
-                document.getElementById('player').classList.remove('playing');
-            } else {
-                audio.play();
-                isPlaying = true;
-                document.getElementById('play-icon').classList.replace('fa-play', 'fa-pause');
-                document.getElementById('player').classList.add('playing');
-            }
-        }
-
-        function nextSong() {
-            currentIndex = (currentIndex + 1) % (allSongs.length + myLibrary.length);
-            const all = [...allSongs, ...myLibrary];
-            playSongById(all[currentIndex].id);
-        }
-
-        function prevSong() {
-            currentIndex = (currentIndex - 1 + (allSongs.length + myLibrary.length)) % (allSongs.length + myLibrary.length);
-            const all = [...allSongs, ...myLibrary];
-            playSongById(all[currentIndex].id);
-        }
-
-        function toggleShuffle() {
-            shuffleMode = !shuffleMode;
-            document.getElementById('shuffle-btn').style.color = shuffleMode ? '#eab308' : '';
-        }
-
-        function toggleRepeat() {
-            repeatMode = (repeatMode + 1) % 3;
-            const btn = document.getElementById('repeat-btn');
-            btn.style.color = repeatMode ? '#eab308' : '';
-        }
-
-        // ============== UPLOAD ==============
-        function handleUpload(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const url = URL.createObjectURL(file);
-            const newSong = {
-                id: Date.now(),
-                title: file.name.replace(/\.[^/.]+$/, ""),
-                artist: currentUser,
-                src: url,
-                cover: `https://picsum.photos/id/${Math.floor(Math.random()*1000)}/600`
-            };
-            myLibrary.unshift(newSong);
-            allSongs.unshift(newSong);
-            saveData();
-            hideUploadModal();
-            renderLibrary();
-            playSongById(newSong.id);
-        }
-
-        function showUploadModal() {
-            document.getElementById('upload-modal').classList.remove('hidden');
-        }
-
-        function hideUploadModal() {
-            document.getElementById('upload-modal').classList.add('hidden');
-        }
-
-        // ============== PLAYLISTS ==============
-        function createPlaylist() {
-            const name = prompt("Playlist ka naam kya hai?");
-            if (
+                document.getElementById('play-icon').classList.replace('fa-pause', '
