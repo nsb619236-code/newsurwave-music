@@ -3,27 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Music Hut Beat • Scroll Fixed</title>
+  <title>Music Hut Beat • Full Features</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
-    html, body { height: 100%; margin: 0; padding: 0; }
     body { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; }
-    .glass { background: rgba(30,41,59,0.65); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.09); }
+    .glass { background: rgba(30,41,59,0.7); backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.1); }
     .card { transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1); }
-    .card:hover { transform: translateY(-10px) scale(1.04); box-shadow: 0 25px 50px -12px rgba(234,179,8,0.35); }
-    .playing .album { animation: spin 24s linear infinite; }
+    .card:hover { transform: translateY(-12px) scale(1.04); box-shadow: 0 30px 60px -15px rgba(234,179,8,0.4); }
+    .playing .album { animation: spin 20s linear infinite; }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    .progress { height: 5px; background: linear-gradient(to right, #eab308 var(--progress,0%), #4b5563 var(--progress,0%)); }
-    .nav-active { color: #eab308; border-left: 4px solid #eab308; background: rgba(234,179,8,0.12); }
-    
+    .nav-active { color: #eab308; border-left: 4px solid #eab308; background: rgba(234,179,8,0.15); }
+    .heart-liked { color: #ef4444 !important; }
     main { -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
   </style>
 </head>
 <body class="flex flex-col">
 
   <!-- Header -->
-  <header class="fixed top-0 left-0 right-0 z-50 glass h-16 flex items-center px-4 md:px-8 justify-between border-b border-white/10">
+  <header class="fixed top-0 w-full glass z-50 h-16 flex items-center px-4 md:px-8 justify-between border-b border-white/10">
     <div class="flex items-center gap-3">
       <button id="menu-btn" class="lg:hidden text-2xl"><i class="fas fa-bars"></i></button>
       <span class="text-2xl font-bold tracking-tighter text-yellow-400">Music Hut Beat</span>
@@ -31,30 +29,63 @@
     <div class="flex items-center gap-4 md:gap-6">
       <button onclick="toggleTheme()" class="text-xl"><i class="fas fa-moon"></i></button>
       <button onclick="document.getElementById('upload-multi').click()" class="bg-gradient-to-r from-yellow-500 to-amber-500 text-black px-5 py-2.5 rounded-full font-medium flex items-center gap-2 shadow-md">
-        <i class="fas fa-cloud-upload-alt"></i> <span class="hidden md:inline">Upload Songs</span>
+        <i class="fas fa-cloud-upload-alt"></i> <span class="hidden md:inline">Upload</span>
       </button>
       <input type="file" id="upload-multi" accept="audio/*" multiple class="hidden" onchange="addMultipleSongs(event)">
     </div>
   </header>
 
-  <div class="flex flex-1 pt-16 overflow-hidden">
+  <div class="flex flex-1 pt-16">
     <!-- Sidebar -->
     <aside id="sidebar" class="w-64 glass border-r border-white/10 h-full overflow-y-auto fixed lg:static z-40 -translate-x-full lg:translate-x-0 transition-transform">
       <div class="p-4 space-y-2">
         <div onclick="setView('library')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer nav-active">
           <i class="fas fa-music"></i> Library
         </div>
+        <div onclick="setView('favorites')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer">
+          <i class="fas fa-heart"></i> Favorites
+        </div>
+        <div onclick="setView('playlists')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer">
+          <i class="fas fa-list"></i> Playlists
+        </div>
+        <div onclick="setView('recent')" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer">
+          <i class="fas fa-history"></i> Recent
+        </div>
       </div>
     </aside>
 
     <!-- Main Content -->
     <main class="flex-1 overflow-y-auto pb-32 px-4 md:px-8" style="height: calc(100vh - 64px);">
+      <!-- Library -->
       <div id="library-view" class="view">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mt-8 mb-6">
           <h1 class="text-4xl md:text-5xl font-bold">Your Library</h1>
-          <input id="search-lib" onkeyup="filterLibrary()" placeholder="Search songs..." class="w-full md:w-72 bg-white/10 px-4 py-2.5 rounded-full border border-white/20 focus:border-yellow-400 outline-none">
+          <input id="search-lib" onkeyup="filterView('library')" placeholder="Search..." class="w-full md:w-72 bg-white/10 px-4 py-2.5 rounded-full border border-white/20 focus:border-yellow-400 outline-none">
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 pb-8" id="library-songs"></div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 pb-20" id="library-songs"></div>
+      </div>
+
+      <!-- Favorites -->
+      <div id="favorites-view" class="view hidden">
+        <h1 class="text-4xl md:text-5xl font-bold mt-8 mb-6">Favorites ❤️</h1>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 pb-20" id="favorites-songs"></div>
+      </div>
+
+      <!-- Playlists -->
+      <div id="playlists-view" class="view hidden">
+        <div class="flex justify-between items-center mt-8 mb-6">
+          <h1 class="text-4xl md:text-5xl font-bold">Playlists</h1>
+          <button onclick="createPlaylist()" class="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full flex items-center gap-2">
+            <i class="fas fa-plus"></i> New
+          </button>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 pb-20" id="playlists-list"></div>
+      </div>
+
+      <!-- Recent -->
+      <div id="recent-view" class="view hidden">
+        <h1 class="text-4xl md:text-5xl font-bold mt-8 mb-6">Recently Played</h1>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 pb-20" id="recent-songs"></div>
       </div>
     </main>
   </div>
@@ -67,7 +98,7 @@
       </div>
       <div class="min-w-0 flex-1">
         <div id="title" class="font-medium truncate text-sm md:text-base">No song selected</div>
-        <div id="artist" class="text-xs text-gray-400 truncate">Upload songs to start</div>
+        <div id="artist" class="text-xs text-gray-400 truncate">Upload to start</div>
       </div>
     </div>
 
@@ -98,14 +129,24 @@
 
   <script>
     let songs = JSON.parse(localStorage.getItem('mhb_songs')) || [];
+    let favorites = JSON.parse(localStorage.getItem('mhb_fav')) || [];
+    let playlists = JSON.parse(localStorage.getItem('mhb_pl')) || [];
+    let recent = JSON.parse(localStorage.getItem('mhb_recent')) || [];
     let currentIdx = -1;
     let isPlay = false;
     let shuffle = false;
     let repeat = 0;
+    let currentPlId = null;
     const audio = document.getElementById('audio');
     let vizCtx;
 
-    function save() { localStorage.setItem('mhb_songs', JSON.stringify(songs)); renderLibrary(); }
+    function saveAll() {
+      localStorage.setItem('mhb_songs', JSON.stringify(songs));
+      localStorage.setItem('mhb_fav', JSON.stringify(favorites));
+      localStorage.setItem('mhb_pl', JSON.stringify(playlists));
+      localStorage.setItem('mhb_recent', JSON.stringify(recent));
+      renderAllViews();
+    }
 
     function addMultipleSongs(e) {
       const files = Array.from(e.target.files);
@@ -114,36 +155,38 @@
       let added = 0;
       files.forEach(file => {
         if (!file.type.startsWith('audio/')) return;
-        
         const url = URL.createObjectURL(file);
         const song = {
           id: Date.now() + added,
           title: file.name.replace(/\.[^/.]+$/, ""),
           artist: "You",
           src: url,
-          cover: `https://picsum.photos/seed/${Date.now()+added}/300`
+          cover: `https://picsum.photos/seed/${Date.now()+added}/300`,
+          duration: "0:00" // update later if needed
         };
         songs.unshift(song);
         added++;
       });
 
       if (added > 0) {
-        save();
-        alert(`${added} song${added > 1 ? 's' : ''} added! Scroll down to see them.`);
-        if (currentIdx === -1 && songs.length > 0) playIdx(0);
+        saveAll();
+        alert(`${added} song${added > 1 ? 's' : ''} added!`);
+        if (currentIdx === -1 && songs.length) playIdx(0);
       }
     }
 
-    function renderLibrary() {
-      const grid = document.getElementById('library-songs');
-      grid.innerHTML = songs.length ? '' : '<p class="col-span-full text-center py-16 text-gray-400 text-xl">No songs yet — upload multiple MP3s!</p>';
+    function renderAllViews() {
+      renderSongs('library-songs', songs, true);
+      renderSongs('favorites-songs', favorites);
+      renderSongs('recent-songs', recent);
+      renderPlaylists();
+    }
 
-      const term = document.getElementById('search-lib').value.toLowerCase();
-      const filtered = songs.filter(s => 
-        s.title.toLowerCase().includes(term) || s.artist.toLowerCase().includes(term)
-      );
+    function renderSongs(id, list, showDelete = false) {
+      const grid = document.getElementById(id);
+      grid.innerHTML = list.length ? '' : '<p class="col-span-full text-center py-16 text-gray-400 text-xl">Empty — add some music!</p>';
 
-      filtered.forEach((s, i) => {
+      list.forEach((s, i) => {
         const card = document.createElement('div');
         card.className = 'card glass rounded-2xl overflow-hidden cursor-pointer relative group';
         card.innerHTML = `
@@ -152,11 +195,12 @@
             <div class="font-medium truncate">${s.title}</div>
             <div class="text-xs text-gray-300">${s.artist}</div>
           </div>
-          <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition">
-            <button onclick="event.stopPropagation(); deleteSong(${s.id})" class="bg-red-500/80 hover:bg-red-600 text-white p-2 rounded-full">
-              <i class="fas fa-trash text-sm"></i>
-            </button>
-          </div>
+          <button onclick="event.stopPropagation(); toggleFavorite(${s.id})" class="absolute top-3 left-3 text-2xl ${favorites.some(f => f.id === s.id) ? 'heart-liked' : 'text-white/50'}">
+            <i class="fas fa-heart"></i>
+          </button>
+          ${showDelete ? `<button onclick="event.stopPropagation(); deleteSong(${s.id})" class="absolute top-3 right-3 text-red-400 text-xl opacity-0 group-hover:opacity-100 transition">
+            <i class="fas fa-trash"></i>
+          </button>` : ''}
           <button onclick="event.stopPropagation(); playIdx(${songs.indexOf(s)})" class="absolute bottom-4 right-4 w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg">
             <i class="fas fa-play text-black ml-0.5"></i>
           </button>
@@ -166,10 +210,25 @@
       });
     }
 
+    function renderPlaylists() {
+      const container = document.getElementById('playlists-list');
+      container.innerHTML = "";
+      playlists.forEach(pl => {
+        const div = document.createElement('div');
+        div.className = "glass rounded-2xl p-5 cursor-pointer hover:ring-2 hover:ring-yellow-400";
+        div.innerHTML = `<div class="font-bold text-xl">${pl.name}</div><div class="text-sm text-gray-400 mt-1">${pl.songs.length} songs</div>`;
+        div.onclick = () => showPlaylistDetail(pl.id);
+        container.appendChild(div);
+      });
+    }
+
     function deleteSong(id) {
-      if (!confirm("Delete this song?")) return;
+      if (!confirm("Delete song?")) return;
       songs = songs.filter(s => s.id !== id);
-      save();
+      favorites = favorites.filter(s => s.id !== id);
+      playlists.forEach(pl => pl.songs = pl.songs.filter(sid => sid !== id));
+      recent = recent.filter(s => s.id !== id);
+      saveAll();
       if (currentIdx >= songs.length) {
         currentIdx = songs.length - 1;
         if (currentIdx >= 0) playIdx(currentIdx);
@@ -177,7 +236,31 @@
       }
     }
 
-    function filterLibrary() { renderLibrary(); }
+    function toggleFavorite(id) {
+      const song = songs.find(s => s.id === id);
+      if (!song) return;
+      const idx = favorites.findIndex(f => f.id === id);
+      if (idx > -1) favorites.splice(idx, 1);
+      else favorites.push(song);
+      saveAll();
+      renderAllViews();
+    }
+
+    function createPlaylist() {
+      const name = prompt("Playlist name?");
+      if (!name) return;
+      playlists.push({id: Date.now(), name, songs: []});
+      saveAll();
+      renderPlaylists();
+    }
+
+    function showPlaylistDetail(id) {
+      currentPlId = id;
+      const pl = playlists.find(p => p.id === id);
+      if (!pl) return;
+      alert(`Playlist: ${pl.name}\nSongs: ${pl.songs.length}\n\n(Full modal UI coming in next upgrade)`);
+      // Can expand to modal later
+    }
 
     function playIdx(idx) {
       if (idx < 0 || idx >= songs.length) return;
@@ -195,6 +278,12 @@
         document.getElementById('player').classList.add('playing');
         initViz();
       }).catch(() => alert("Tap play again"));
+
+      // Add to recent
+      recent = recent.filter(r => r.id !== s.id);
+      recent.unshift(s);
+      if (recent.length > 10) recent.pop();
+      saveAll();
     }
 
     function togglePlay() {
@@ -293,11 +382,13 @@
     function setView(view) {
       document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
       document.getElementById(view + '-view').classList.remove('hidden');
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('nav-active'));
+      document.querySelector(`[onclick="setView('${view}')"]`)?.classList.add('nav-active');
       document.getElementById('sidebar').classList.add('-translate-x-full');
     }
 
     // Init
-    renderLibrary();
+    renderAllViews();
     document.getElementById('menu-btn').onclick = () => document.getElementById('sidebar').classList.toggle('-translate-x-full');
     document.getElementById('vol').oninput = e => audio.volume = e.target.value;
 
@@ -305,7 +396,7 @@
 
     if (songs.length > 0 && currentIdx === -1) playIdx(0);
 
-    console.log("Scroll issue fixed! Multiple upload + smooth scrolling ready 🎶");
+    console.log("Full Features Loaded – Multiple upload, favorites, playlists, recent, heart like, delete, smooth scroll 🔥");
   </script>
 </body>
 </html>
