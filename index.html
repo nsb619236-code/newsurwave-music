@@ -10,25 +10,26 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 <style>
   /* Reset & Base Styles */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  body {
-    font-family: 'Inter', sans-serif;
-    background-color: #121212;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #121212;
+  color: #fff;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-  /* Header with Logo */
+/* Header with Logo & Navigation */
 header {
   background: linear-gradient(135deg, #1db954, #0f5b7d);
-  padding: 20px 40px;
+  padding: 10px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -36,31 +37,31 @@ header {
   top: 0;
   z-index: 999;
   box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  border-bottom-radius: 10px;
 }
 .logo {
-  width: 100px;
-  margin-bottom: 10px;
+  width: 80px;
+  margin-bottom: 8px;
 }
 .logo img {
   width: 100%;
-  border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 header h1 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   margin-bottom: 10px;
   color: #fff;
 }
 nav {
   display: flex;
-  gap: 20px;
-  margin-top: 10px;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 nav a {
   color: #fff;
   text-decoration: none;
   font-weight: 600;
-  font-size: 1rem;
   padding: 8px 12px;
   border-radius: 20px;
   transition: background 0.3s;
@@ -69,7 +70,30 @@ nav a:hover {
   background: rgba(255,255,255,0.2);
 }
 
-/* Main Sections */
+/* Signup/Login & Upload */
+#auth-upload {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+button {
+  background-color: #1ed760;
+  color: #fff;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+}
+button:hover {
+  background-color: #17b34a;
+  transform: scale(1.05);
+}
+
+/* Sections */
 section {
   padding: 50px 20px;
   max-width: 1200px;
@@ -87,7 +111,7 @@ p {
   line-height: 1.6;
 }
 
-/* Featured Posters & Albums */
+/* Posters & Albums */
 #posters {
   display: flex;
   flex-wrap: wrap;
@@ -175,7 +199,7 @@ p {
   background-color: #17b34a;
 }
 
-/* Music Player */
+/* Music Player - Bottom Fixed */
 #music-player {
   position: fixed;
   bottom: 0;
@@ -187,8 +211,9 @@ p {
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 -4px 15px rgba(0,0,0,0.3);
-  transition: background 0.3s;
   z-index: 999;
+  transition: background 0.3s;
+  flex-wrap: wrap;
 }
 .player-info {
   display: flex;
@@ -200,6 +225,7 @@ p {
   border-radius: 10px;
   overflow: hidden;
   margin-right: 15px;
+  flex-shrink: 0;
 }
 .album-art img {
   width: 100%;
@@ -222,6 +248,7 @@ p {
   display: flex;
   align-items: center;
   gap: 15px;
+  margin-top: 10px;
 }
 .controls button {
   background: none;
@@ -234,20 +261,23 @@ p {
 .controls button:hover {
   color: #1ed760;
 }
+#seekBar {
+  width: 150px;
+}
 #volumeControl {
   width: 100px;
 }
 @media(max-width: 768px){
   #music-player {
     flex-direction: column;
-    height: auto;
+    align-items: center;
   }
   .player-info {
     margin-bottom: 10px;
   }
 }
 
-/* Theme toggle - optional */
+/* Additional styles for animations & hover effects */
 </style>
 </head>
 <body>
@@ -255,20 +285,30 @@ p {
 <!-- Header with Logo & Navigation -->
 <header>
   <div class="logo">
-    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Music Logo" />
+    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Website Logo" />
   </div>
   <h1>Sur Wave Music</h1>
   <nav>
     <a href="#posters">Posters</a>
     <a href="#singers">Singers</a>
-    <a href="#upload">Upload</a>
+    <a href="#library">Library</a>
+    <a href="#signup">Signup</a>
+    <a href="#login">Login</a>
   </nav>
 </header>
 
-<!-- Posters & Albums Section -->
+<!-- Auth & Upload Buttons -->
+<div id="auth-upload">
+  <button id="signupBtn"><i class="fas fa-user-plus"></i> Signup</button>
+  <button id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
+  <button id="uploadBtn"><i class="fas fa-upload"></i> Upload Songs</button>
+</div>
+
+<!-- Main Sections -->
 <section id="posters">
   <h2>Featured Albums & Posters</h2>
-  <div id="posters-container">
+  <div id="posters">
+    <!-- Poster cards -->
     <div class="poster-card">
       <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Album 1" />
       <div class="poster-info">
@@ -283,14 +323,12 @@ p {
         <p>by Singer X</p>
       </div>
     </div>
-    <!-- Add more posters as needed -->
   </div>
 </section>
 
-<!-- Singers Section -->
 <section id="singers">
   <h2>Top Singers</h2>
-  <div id="singers-container">
+  <div id="singers">
     <div class="singer-card">
       <img src="https://images.unsplash.com/photo-1544725176-7c40e5a4c6e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Singer 1" />
       <h4>Singer A</h4>
@@ -299,83 +337,194 @@ p {
       <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Singer 2" />
       <h4>Singer B</h4>
     </div>
-    <!-- Add more singers -->
   </div>
 </section>
 
-<!-- Upload Button -->
-<section id="upload" style="text-align:center; margin-top:50px;">
-  <h2>Upload Your Songs</h2>
-  <input type="file" id="fileUpload" multiple style="display:none" onchange="handleFiles(this.files)" />
-  <button id="uploadBtn" onclick="document.getElementById('fileUpload').click()"><i class="fas fa-upload"></i> Upload Songs</button>
+<!-- Song List & Player -->
+<section id="songs" style="margin-top:50px;">
+  <h2>Now Playing</h2>
+  <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
+    <div style="width:100%; max-width:600px; text-align:center;">
+      <audio id="audio" src="" controls style="width: 100%; display:none;"></audio>
+      <div style="background:#1f1f1f; padding:20px; border-radius:15px; box-shadow:0 4px 10px rgba(0,0,0,0.3);">
+        <h3 id="songTitleDisplay">Select a song to play</h3>
+        <p id="songArtistDisplay">Artist</p>
+        <div style="display:flex; justify-content:center; gap:10px; margin-top:10px;">
+          <button id="prevBtn"><i class="fas fa-backward"></i></button>
+          <button id="playPauseBtn"><i class="fas fa-play"></i></button>
+          <button id="nextBtn"><i class="fas fa-forward"></i></button>
+        </div>
+        <div style="margin-top:10px;">
+          <input type="range" id="seekBar" min="0" max="100" value="0" style="width:100%;" />
+        </div>
+        <div style="margin-top:10px; display:flex; align-items:center; justify-content:space-between;">
+          <span id="currentTime">0:00</span>
+          <span id="durationTime">0:00</span>
+        </div>
+        <div style="margin-top:10px; display:flex; align-items:center; gap:15px;">
+          <button id="shuffleBtn" title="Shuffle"><i class="fas fa-random"></i></button>
+          <button id="repeatBtn" title="Repeat"><i class="fas fa-redo"></i></button>
+          <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5" title="Volume" />
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- Music Player -->
-<div id="music-player">
-  <div class="player-info">
-    <div class="album-art" id="currentAlbum">
-      <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Current Song" />
-    </div>
-    <div class="song-details">
-      <div class="song-title" id="songTitle">Sample Song</div>
-      <div class="song-artist" id="songArtist">Unknown Artist</div>
+<!-- Library System -->
+<section id="library" style="margin-top:50px;">
+  <h2>My Library & Playlists</h2>
+  <div style="display:flex; flex-direction:column; gap:20px;">
+    <button id="createPlaylistBtn" style="width:200px; align-self:center;">Create Playlist</button>
+    <div id="playlistContainer" style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center;">
+      <!-- Playlists will appear here -->
     </div>
   </div>
-  <div class="controls">
-    <button id="prevBtn" title="Previous"><i class="fas fa-backward"></i></button>
-    <button id="playPauseBtn" title="Play/Pause"><i class="fas fa-play"></i></button>
-    <button id="nextBtn" title="Next"><i class="fas fa-forward"></i></button>
-    <button id="shuffleBtn" title="Shuffle"><i class="fas fa-random"></i></button>
-    <button id="repeatBtn" title="Repeat"><i class="fas fa-redo"></i></button>
-    <input type="range" id="seekBar" min="0" max="100" value="0" style="width:150px; margin-left:15px;" />
-    <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5" title="Volume" />
-  </div>
-</div>
+</section>
 
-<!-- Optional: Scripts for functionality -->
+<!-- Scripts for functionality -->
 <script>
-  // Placeholder Variables
+  // Sample Songs Data
+  const songs = [
+    {
+      title: "Shape of You",
+      artist: "Ed Sheeran",
+      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+      cover: "https://images.unsplash.com/photo-1549924231-f129b911e442?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      title: "Blinding Lights",
+      artist: "The Weeknd",
+      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+      cover: "https://images.unsplash.com/photo-1516707025808-1cae4a7d7bff?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      title: "Levitating",
+      artist: "Dua Lipa",
+      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+      cover: "https://images.unsplash.com/photo-1544725176-7c40e5a4c6e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    }
+  ];
+
+  let currentSongIndex = 0;
   let isPlaying = false;
+  let shuffleMode = false;
+  let repeatMode = false;
+
+  const audio = document.getElementById('audio');
   const playPauseBtn = document.getElementById('playPauseBtn');
+  const songTitleDisplay = document.getElementById('songTitleDisplay');
+  const songArtistDisplay = document.getElementById('songArtistDisplay');
   const seekBar = document.getElementById('seekBar');
-  const volumeControl = document.getElementById('volumeControl');
+  const currentTimeSpan = document.getElementById('currentTime');
+  const durationTimeSpan = document.getElementById('durationTime');
+  const albumCover = document.querySelector('#music-player #currentAlbum img');
 
-  // Play/Pause toggle
-  document.getElementById('playPauseBtn').addEventListener('click', () => {
-    isPlaying = !isPlaying;
-    document.querySelector('#playPauseBtn i').className = isPlaying ? 'fas fa-pause' : 'fas fa-play';
-  });
-
-  // Volume control
-  volumeControl.addEventListener('input', () => {
-    // Here you can connect to actual audio element
-    // e.g., audio.volume = volumeControl.value;
-  });
-
-  // Seek bar change
-  seekBar.addEventListener('input', () => {
-    // Connect to actual audio currentTime
-  });
-
-  // Upload songs
-  function handleFiles(files) {
-    alert(files.length + ' song(s) uploaded!');
-    // Implement upload logic or add to playlist
+  // Initialize first song
+  function loadSong(index) {
+    const song = songs[index];
+    audio.src = song.url;
+    songTitleDisplay.textContent = song.title;
+    songArtistDisplay.textContent = song.artist;
+    albumCover.src = song.cover;
   }
 
-  // Control buttons
+  function playSong() {
+    audio.play();
+    isPlaying = true;
+    document.querySelector('#playPauseBtn i').className = 'fas fa-pause';
+  }
+
+  function pauseSong() {
+    audio.pause();
+    isPlaying = false;
+    document.querySelector('#playPauseBtn i').className = 'fas fa-play';
+  }
+
+  document.getElementById('playPauseBtn').addEventListener('click', () => {
+    if (isPlaying) {
+      pauseSong();
+    } else {
+      playSong();
+    }
+  });
+
   document.getElementById('nextBtn').addEventListener('click', () => {
-    alert('Next song');
+    if (shuffleMode) {
+      currentSongIndex = Math.floor(Math.random() * songs.length);
+    } else {
+      currentSongIndex = (currentSongIndex + 1) % songs.length;
+    }
+    loadSong(currentSongIndex);
+    playSong();
   });
+
   document.getElementById('prevBtn').addEventListener('click', () => {
-    alert('Previous song');
+    if (shuffleMode) {
+      currentSongIndex = Math.floor(Math.random() * songs.length);
+    } else {
+      currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+    }
+    loadSong(currentSongIndex);
+    playSong();
   });
+
+  // Seek bar update
+  audio.addEventListener('timeupdate', () => {
+    const progress = (audio.currentTime / audio.duration) * 100;
+    seekBar.value = progress || 0;
+    // Update current time display
+    let currentMinutes = Math.floor(audio.currentTime / 60);
+    let currentSeconds = Math.floor(audio.currentTime % 60);
+    if (currentSeconds < 10) currentSeconds = '0' + currentSeconds;
+    currentTimeSpan.textContent = `${currentMinutes}:${currentSeconds}`;
+  });
+
+  // Duration display
+  audio.addEventListener('loadedmetadata', () => {
+    let durationMinutes = Math.floor(audio.duration / 60);
+    let durationSeconds = Math.floor(audio.duration % 60);
+    if (durationSeconds < 10) durationSeconds = '0' + durationSeconds;
+    durationTimeSpan.textContent = `${durationMinutes}:${durationSeconds}`;
+  });
+
+  // Seek control
+  seekBar.addEventListener('input', () => {
+    if (audio.duration) {
+      audio.currentTime = (seekBar.value / 100) * audio.duration;
+    }
+  });
+
+  // Play next on song end
+  audio.addEventListener('ended', () => {
+    if (repeatMode) {
+      loadSong(currentSongIndex);
+      playSong();
+    } else {
+      document.getElementById('nextBtn').click();
+    }
+  });
+
+  // Shuffle and Repeat
   document.getElementById('shuffleBtn').addEventListener('click', () => {
-    alert('Shuffle toggled');
+    shuffleMode = !shuffleMode;
+    document.getElementById('shuffleBtn').style.color = shuffleMode ? '#1ed760' : '#fff';
   });
   document.getElementById('repeatBtn').addEventListener('click', () => {
-    alert('Repeat toggled');
+    repeatMode = !repeatMode;
+    document.getElementById('repeatBtn').style.color = repeatMode ? '#1ed760' : '#fff';
   });
+
+  // Volume Control
+  document.getElementById('volumeControl').addEventListener('input', () => {
+    audio.volume = document.getElementById('volumeControl').value;
+  });
+
+  // Load initial song
+  loadSong(currentSongIndex);
+
+  // Play song on click in song list (if added later)
+  // You can extend this code to add a song list UI
 </script>
 
 </body>
