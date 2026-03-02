@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 <style>
-  /* Reset & Base */
+  /* Reset & Base Styles */
 * {
   margin: 0;
   padding: 0;
@@ -143,7 +143,7 @@ h2 {
   font-size: 1rem;
 }
 
-/* Song List & Player */
+/* Song List */
 #songList {
   margin-top: 30px;
   display: flex;
@@ -195,7 +195,6 @@ h2 {
   padding: 10px 20px;
   box-shadow: 0 -4px 15px rgba(0,0,0,0.3);
   z-index: 999;
-  transition: background 0.3s;
 }
 .player-info {
   display: flex;
@@ -249,9 +248,6 @@ h2 {
     align-items: center;
   }
 }
-
-/* Animations can be added later for visualizer etc. */
-
 </style>
 </head>
 <body>
@@ -321,9 +317,7 @@ h2 {
 <!-- Song List -->
 <section id="songs" style="margin-top:50px;">
   <h2>Now Playing</h2>
-  <div id="songList">
-    <!-- Songs will be dynamically added here -->
-  </div>
+  <div id="songList"></div>
 </section>
 
 <!-- Bottom Fixed Music Player -->
@@ -352,10 +346,10 @@ h2 {
   </div>
 </div>
 
-<!-- Scripts: Core functionality -->
+<!-- Scripts -->
 <script>
   // Song Data
-  const songData = [
+  const songs = [
     {
       title: "Shape of You",
       artist: "Ed Sheeran",
@@ -399,12 +393,11 @@ h2 {
 
   // Load song
   function loadSong(index) {
-    const song = songData[index];
+    const song = songs[index];
     audio.src = song.url;
     songTitle.innerText = song.title;
     songArtist.innerText = song.artist;
     albumCover.src = song.cover;
-    audio.load();
   }
 
   // Play/Pause
@@ -427,9 +420,9 @@ h2 {
   // Next song
   function nextSong() {
     if (shuffleMode) {
-      currentIndex = Math.floor(Math.random() * songData.length);
+      currentIndex = Math.floor(Math.random() * songs.length);
     } else {
-      currentIndex = (currentIndex + 1) % songData.length;
+      currentIndex = (currentIndex + 1) % songs.length;
     }
     loadSong(currentIndex);
     audio.play();
@@ -438,9 +431,9 @@ h2 {
   // Previous song
   function prevSong() {
     if (shuffleMode) {
-      currentIndex = Math.floor(Math.random() * songData.length);
+      currentIndex = Math.floor(Math.random() * songs.length);
     } else {
-      currentIndex = (currentIndex - 1 + songData.length) % songData.length;
+      currentIndex = (currentIndex - 1 + songs.length) % songs.length;
     }
     loadSong(currentIndex);
     audio.play();
@@ -455,7 +448,6 @@ h2 {
   audio.ontimeupdate = () => {
     const progress = (audio.currentTime / audio.duration) * 100;
     seekBar.value = progress || 0;
-    // Update current time
     let currentMinutes = Math.floor(audio.currentTime / 60);
     let currentSeconds = Math.floor(audio.currentTime % 60);
     if (currentSeconds < 10) currentSeconds = '0' + currentSeconds;
@@ -502,33 +494,32 @@ h2 {
     repeatBtn.style.color = repeatMode ? '#1ed760' : '#fff';
   };
 
-  // Load first song
-  loadSong(currentIndex);
-
   // Populate song list
   const songListDiv = document.getElementById('songList');
-  songData.forEach((song, index) => {
-    const songDiv = document.createElement('div');
-    songDiv.className = 'song-item';
-    songDiv.innerHTML = `<i class="fas fa-music"></i>
+  songs.forEach((song, index) => {
+    const item = document.createElement('div');
+    item.className = 'song-item';
+    item.innerHTML = `
+      <i class="fas fa-music"></i>
       <div class="song-info">
         <div class="song-title">${song.title}</div>
         <div class="song-artist">${song.artist}</div>
       </div>`;
-    songDiv.onclick = () => {
+    item.onclick = () => {
       currentIndex = index;
       loadSong(index);
       audio.play();
     };
-    songListDiv.appendChild(songDiv);
+    songListDiv.appendChild(item);
   });
 
-  // Signup/Login/Upload buttons (dummy alerts)
-  document.getElementById('signupBtn').onclick = () => alert('Signup functionality coming soon!');
-  document.getElementById('loginBtn').onclick = () => alert('Login functionality coming soon!');
-  document.getElementById('uploadBtn').onclick = () => alert('Upload functionality coming soon!');
-
+  // Button alerts (dummy functions)
+  document.getElementById('signupBtn').onclick = () => alert('Signup clicked!');
+  document.getElementById('loginBtn').onclick = () => alert('Login clicked!');
+  document.getElementById('uploadBtn').onclick = () => alert('Upload clicked!');
+  
+  // Load first song initially
+  loadSong(currentIndex);
 </script>
-
 </body>
 </html>
