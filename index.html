@@ -3,14 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Content Creator Platform</title>
-<!-- Font Awesome & Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<title>Complete Music Platform</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
 <style>
   body {
     font-family: 'Inter', sans-serif;
-    background-color: #121212;
+    background: #121212;
     color: #fff;
     margin: 0;
     padding: 0;
@@ -24,9 +23,7 @@
     margin: 0;
     font-size: 2rem;
   }
-
-  /* Buttons */
-  #actionBtns {
+  #navbar {
     display: flex;
     justify-content: center;
     gap: 15px;
@@ -37,94 +34,102 @@
     border: none;
     border-radius: 50px;
     background-color: #1ed760;
-    font-size: 1rem;
     cursor: pointer;
-    transition: 0.3s;
+    font-size: 1rem;
   }
   button:hover {
     background-color: #17b34a;
   }
-
-  /* Sections */
-section {
-  padding: 20px;
-  max-width: 900px;
-  margin: auto;
+  section {
+    padding: 20px;
+    display: none;
+    max-width: 1000px;
+    margin: auto;
+  }
+  section.active {
+    display: block;
+  }
+  /* Forms & Content styles */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #222;
+    padding: 15px;
+    border-radius: 10px;
+  }
+  input[type=text], input[type=email], input[type=tel], input[type=password], input[type=file] {
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+  }
+  input[type=submit] {
+    background: #4caf50;
+    color: #fff;
+    cursor: pointer;
+  }
+  input[type=submit]:hover {
+    background: #3a9c44;
+  }
+  /* Content display */
+#contentDisplay {
+  margin-top: 20px;
 }
-
-.hidden {
-  display: none;
-}
-
-/* Signup & Login Forms */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  background: #222;
-  padding: 15px;
-  border-radius: 10px;
-}
-input {
-  padding: 8px;
-  border-radius: 5px;
-  border: none;
-}
-input[type="submit"] {
-  background-color: #4caf50;
-  color: #fff;
-  cursor: pointer;
-}
-input[type="submit"]:hover {
-  background-color: #3a9c44;
-}
-
-/* Upload Form */
-#uploadForm {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.content-item {
+  border: 1px solid #444;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
 }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Content Creator Platform</h1>
+  <h1>Music & Content Platform</h1>
 </header>
 
-<div id="actionBtns">
-  <button id="signupBtn">Signup</button>
-  <button id="loginBtn">Login</button>
-  <button id="uploadContentBtn">Upload Content</button>
-  <button id="viewLibraryBtn">My Library</button>
+<div id="navbar">
+  <button data-section="signup">Signup</button>
+  <button data-section="login">Login</button>
+  <button data-section="dashboard">Dashboard</button>
+  <button data-section="upload">Upload Content</button>
+  <button data-section="library">My Library</button>
+  <button data-section="earnings">Earnings</button>
+  <button data-section="admin">Admin Panel</button>
 </div>
 
-<!-- Signup Form -->
-<div id="signupDiv" class="hidden">
+<!-- Signup Section -->
+<section id="signup" class="active">
   <h2>Signup</h2>
   <form id="signupForm">
     <input type="text" placeholder="Full Name" id="signupName" required />
     <input type="email" placeholder="Email" id="signupEmail" required />
-    <input type="tel" placeholder="Phone Number" id="signupPhone" required />
+    <input type="tel" placeholder="Phone" id="signupPhone" required />
     <input type="password" placeholder="Password" id="signupPassword" required />
-    <input type="submit" value="Create Account" />
+    <input type="submit" value="Sign Up" />
   </form>
-</div>
+</section>
 
-<!-- Login Form -->
-<div id="loginDiv" class="hidden">
+<!-- Login Section -->
+<section id="login">
   <h2>Login</h2>
   <form id="loginForm">
     <input type="email" placeholder="Email" id="loginEmail" required />
     <input type="password" placeholder="Password" id="loginPassword" required />
     <input type="submit" value="Login" />
   </form>
-</div>
+</section>
 
-<!-- Upload Content Form -->
-<div id="uploadDiv" class="hidden">
-  <h2>Upload Your Content</h2>
+<!-- Dashboard for logged-in user -->
+<section id="dashboard">
+  <h2>Welcome to Dashboard</h2>
+  <p>Use the menu to navigate.</p>
+</section>
+
+<!-- Content Upload -->
+<section id="upload">
+  <h2>Upload Content</h2>
   <form id="uploadForm">
     <input type="text" placeholder="Song Title" id="songTitle" required />
     <input type="text" placeholder="Artist Name" id="artistName" required />
@@ -132,85 +137,74 @@ input[type="submit"]:hover {
     <input type="file" accept="image/*" id="posterFile" required />
     <input type="submit" value="Upload" />
   </form>
-  <div id="uploadedContent"></div>
-</div>
+</section>
 
-<!-- My Library & Earnings -->
-<div id="libraryDiv" class="hidden">
-  <h2>My Content & Earnings</h2>
-  <div id="contentList"></div>
-  <h3>Earnings Dashboard</h3>
+<!-- Library -->
+<section id="library">
+  <h2>My Library</h2>
+  <div id="contentDisplay">No Content Yet</div>
+</section>
+
+<!-- Earnings -->
+<section id="earnings">
+  <h2>Earnings Dashboard</h2>
   <p>Total Earnings: <strong>$0</strong></p>
-</div>
+</section>
+
+<!-- Admin Panel -->
+<section id="admin">
+  <h2>Admin Panel</h2>
+  <p>Manage Users & Content</p>
+</section>
 
 <script>
-  // State variables
-  let currentUser = null; // store user data after signup/login
-  let userLibrary = []; // store uploaded songs
+  const sections = document.querySelectorAll('section');
+  const buttons = document.querySelectorAll('#navbar button');
+  let currentUser = null;
+  let userLibrary = [];
+  let totalEarnings = 0;
 
-  // Button handlers
-  document.getElementById('signupBtn').onclick = () => {
-    toggleDivs('signupDiv');
-  };
-  document.getElementById('loginBtn').onclick = () => {
-    toggleDivs('loginDiv');
-  };
-  document.getElementById('uploadContentBtn').onclick = () => {
-    if (!currentUser) {
-      alert('Please login first to upload content.');
-      toggleDivs('loginDiv');
-    } else {
-      toggleDivs('uploadDiv');
-    }
-  };
-  document.getElementById('viewLibraryBtn').onclick = () => {
-    if (!currentUser) {
-      alert('Please login first to view your library.');
-      toggleDivs('loginDiv');
-    } else {
-      showLibrary();
-    }
-  };
+  // Navigation
+  buttons.forEach(btn => {
+    btn.onclick = () => {
+      const target = btn.getAttribute('data-section');
+      sections.forEach(sec => {
+        sec.classList.toggle('active', sec.id === target);
+      });
+    };
+  });
 
-  // Toggle visibility of sections
-  function toggleDivs(divId) {
-    document.querySelectorAll('div[id$="Div"]').forEach(div => {
-      div.classList.add('hidden');
-    });
-    document.getElementById(divId).classList.remove('hidden');
-  }
-
-  // Signup form
+  // Signup
 document.getElementById('signupForm').onsubmit = (e) => {
   e.preventDefault();
   const name = document.getElementById('signupName').value;
   const email = document.getElementById('signupEmail').value;
   const phone = document.getElementById('signupPhone').value;
   const password = document.getElementById('signupPassword').value;
-  // Save user info (simulate signup)
+  // Save user info
   currentUser = { name, email, phone };
   alert('Signup successful! Welcome, ' + name);
-  toggleDivs('libraryDiv');
+  // Switch to dashboard
+  sections.forEach(sec => sec.classList.remove('active'));
+  document.getElementById('dashboard').classList.add('active');
   showLibrary();
 };
 
-// Login form
+// Login
 document.getElementById('loginForm').onsubmit = (e) => {
   e.preventDefault();
   const email = document.getElementById('loginEmail').value;
   const password = document.getElementById('loginPassword').value;
   if (email && password) {
-    // For demo, login always success
     currentUser = { name: 'Demo User', email };
-    alert('Login successful! Welcome back.');
-    toggleDivs('libraryDiv');
+    alert('Login successful!');
+    sections.forEach(sec => sec.classList.remove('active'));
+    document.getElementById('dashboard').classList.add('active');
     showLibrary();
-  } else {
-    alert('Invalid credentials!');
   }
 };
 
-// Upload form
+// Upload Content
 document.getElementById('uploadForm').onsubmit = (e) => {
   e.preventDefault();
   const title = document.getElementById('songTitle').value;
@@ -219,50 +213,44 @@ document.getElementById('uploadForm').onsubmit = (e) => {
   const posterFile = document.getElementById('posterFile').files[0];
 
   if (audioFile && posterFile) {
-    // For demo, just simulate upload
     const readerAudio = new FileReader();
     readerAudio.onload = () => {
       const readerImage = new FileReader();
       readerImage.onload = () => {
-        const newContent = {
+        const content = {
           title,
           artist,
           audioSrc: readerAudio.result,
           posterSrc: readerImage.result
         };
-        userLibrary.push(newContent);
-        alert('Content uploaded successfully!');
+        userLibrary.push(content);
+        alert('Content uploaded!');
         showLibrary();
         document.getElementById('uploadForm').reset();
-        toggleDivs('libraryDiv');
       };
       readerImage.readAsDataURL(posterFile);
     };
     readerAudio.readAsDataURL(audioFile);
   } else {
-    alert('Please select both audio and poster files.');
+    alert('Select files!');
   }
 };
 
-// Display library
 function showLibrary() {
-  toggleDivs('libraryDiv');
-  const listDiv = document.getElementById('contentList');
-  listDiv.innerHTML = '';
+  const container = document.getElementById('contentDisplay');
+  container.innerHTML = '';
   if (userLibrary.length === 0) {
-    listDiv.innerHTML = '<p>No content uploaded yet.</p>';
+    container.innerHTML = 'No Content Yet.';
   } else {
     userLibrary.forEach((item, index) => {
       const div = document.createElement('div');
-      div.style.border = '1px solid #444';
-      div.style.padding = '10px';
-      div.style.marginBottom = '10px';
+      div.className = 'content-item';
       div.innerHTML = `
         <h4>${item.title} by ${item.artist}</h4>
-        <img src="${item.posterSrc}" style="width:100px; border-radius:8px; margin-right:10px; vertical-align:middle;" />
+        <img src="${item.posterSrc}" style="width:100px; border-radius:8px; margin-right:10px; vertical-align:middle;">
         <audio controls src="${item.audioSrc}"></audio>
       `;
-      listDiv.appendChild(div);
+      container.appendChild(div);
     });
   }
 }
