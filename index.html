@@ -3,523 +3,270 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Sur Wave Music</title>
-<!-- Google Fonts & Font Awesome -->
+<title>Content Creator Platform</title>
+<!-- Font Awesome & Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 <style>
-  /* Reset & Base Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: #121212;
-  color: #fff;
-  line-height: 1.6;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-}
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #121212;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+  }
+  header {
+    background: linear-gradient(135deg, #4caf50, #2c7be5);
+    padding: 15px;
+    text-align: center;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 2rem;
+  }
 
-/* Header */
-header {
-  background: linear-gradient(135deg, #1db954, #0f5b7d);
-  padding: 15px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-.logo {
-  width: 80px;
-  margin-bottom: 8px;
-}
-.logo img {
-  width: 100%;
-  border-radius: 15px;
-}
-h1 {
-  font-size: 1.8rem;
-  color: #fff;
-  margin-bottom: 10px;
-}
-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 8px;
-}
-nav a {
-  padding: 8px 14px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 20px;
-  color: #fff;
-  text-decoration: none;
-  font-weight: 600;
-  transition: background 0.3s;
-}
-nav a:hover {
-  background: rgba(255,255,255,0.4);
-}
+  /* Buttons */
+  #actionBtns {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+  }
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    background-color: #1ed760;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  button:hover {
+    background-color: #17b34a;
+  }
 
-/* Buttons: Signup, Login, Upload */
-#buttons {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin: 20px 0;
-}
-button {
-  background-color: #1ed760;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 50px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
-}
-button:hover {
-  background-color: #17b34a;
-  transform: scale(1.05);
-}
-
-/* Sections styling */
+  /* Sections */
 section {
-  padding: 40px 20px;
-  max-width: 1200px;
+  padding: 20px;
+  max-width: 900px;
   margin: auto;
 }
-h2 {
-  font-size: 2rem;
-  margin-bottom: 30px;
-  text-align: center;
-  color: #1ed760;
+
+.hidden {
+  display: none;
 }
 
-/* Posters & Singers */
-#posters, #singers {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-}
-.poster-card, .singer-card {
-  background: #1f1f1f;
-  border-radius: 15px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-.poster-card:hover, .singer-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-}
-.poster-card img, .singer-card img {
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-}
-.poster-info, .singer-info {
-  padding: 10px;
-  text-align: center;
-}
-.singer-card {
-  width: 150px;
-}
-.singer-card img {
-  border-radius: 50%;
-  border: 2px solid #1ed760;
-}
-.singer-info h4 {
-  margin-top: 8px;
-  font-size: 1rem;
-}
-
-/* Song List */
-#songList {
-  margin-top: 30px;
+/* Signup & Login Forms */
+form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.song-item {
-  background: #1f1f1f;
-  padding: 12px 20px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-.song-item:hover {
-  background: #333;
-}
-.song-item i {
-  margin-right: 15px;
-  font-size: 1.2rem;
-  color: #1ed760;
-}
-.song-info {
-  flex: 1;
-}
-.song-title {
-  font-weight: 600;
-}
-.song-artist {
-  font-size: 0.9rem;
-  color: #aaa;
-}
-
-/* Music Player Fixed Bottom */
-#musicPlayer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  gap: 10px;
   background: #222;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-around;
-  padding: 10px 20px;
-  box-shadow: 0 -4px 15px rgba(0,0,0,0.3);
-  z-index: 999;
-}
-.player-info {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-.album-cover {
-  width: 60px;
-  height: 60px;
+  padding: 15px;
   border-radius: 10px;
-  overflow: hidden;
 }
-.album-cover img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+input {
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
 }
-.song-details {
+input[type="submit"] {
+  background-color: #4caf50;
+  color: #fff;
+  cursor: pointer;
+}
+input[type="submit"]:hover {
+  background-color: #3a9c44;
+}
+
+/* Upload Form */
+#uploadForm {
   display: flex;
   flex-direction: column;
-}
-#controls {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-top: 10px;
-}
-#controls button {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1.4rem;
-  cursor: pointer;
-  transition: color 0.3s;
-}
-#controls button:hover {
-  color: #1ed760;
-}
-#seekBar {
-  width: 150px;
-}
-#volumeControl {
-  width: 100px;
-}
-@media(max-width:768px){
-  #musicPlayer {
-    flex-direction: column;
-  }
-  .player-info {
-    flex-direction: column;
-    align-items: center;
-  }
+  gap: 10px;
 }
 </style>
 </head>
 <body>
 
-<!-- Header -->
 <header>
-  <div class="logo">
-    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Logo" />
-  </div>
-  <h1>Sur Wave Music</h1>
-  <nav>
-    <a href="#posters">Posters</a>
-    <a href="#singers">Singers</a>
-    <a href="#library">Library</a>
-    <a href="#signup">Signup</a>
-    <a href="#login">Login</a>
-  </nav>
+  <h1>Content Creator Platform</h1>
 </header>
 
-<!-- Buttons: Signup, Login, Upload -->
-<div id="buttons">
-  <button id="signupBtn"><i class="fas fa-user-plus"></i> Signup</button>
-  <button id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
-  <button id="uploadBtn"><i class="fas fa-upload"></i> Upload Songs</button>
+<div id="actionBtns">
+  <button id="signupBtn">Signup</button>
+  <button id="loginBtn">Login</button>
+  <button id="uploadContentBtn">Upload Content</button>
+  <button id="viewLibraryBtn">My Library</button>
 </div>
 
-<!-- Posters -->
-<section id="posters">
-  <h2>Featured Albums & Posters</h2>
-  <div style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center;">
-    <div class="poster-card">
-      <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Album 1" />
-      <div class="poster-info">
-        <h3>Vibrant Beats</h3>
-        <p>by DJ Sur</p>
-      </div>
-    </div>
-    <div class="poster-card">
-      <img src="https://images.unsplash.com/photo-1516707025808-1cae4a7d7bff?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Album 2" />
-      <div class="poster-info">
-        <h3>Melody Moods</h3>
-        <p>by Singer X</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Singers -->
-<section id="singers">
-  <h2>Top Singers</h2>
-  <div style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center;">
-    <div class="singer-card">
-      <img src="https://images.unsplash.com/photo-1544725176-7c40e5a4c6e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Singer 1" />
-      <div class="singer-info">
-        <h4>Singer A</h4>
-      </div>
-    </div>
-    <div class="singer-card">
-      <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Singer 2" />
-      <div class="singer-info">
-        <h4>Singer B</h4>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Song List -->
-<section id="songs" style="margin-top:50px;">
-  <h2>Now Playing</h2>
-  <div id="songList"></div>
-</section>
-
-<!-- Bottom Fixed Music Player -->
-<div id="musicPlayer">
-  <div class="player-info">
-    <div class="album-cover" id="currentAlbum">
-      <img src="" alt="Album Cover" />
-    </div>
-    <div class="song-details">
-      <div id="songTitle">Select a song</div>
-      <div id="songArtist"></div>
-    </div>
-  </div>
-  <div id="controls">
-    <button id="prevBtn" title="Previous"><i class="fas fa-backward"></i></button>
-    <button id="playPauseBtn" title="Play/Pause"><i class="fas fa-play"></i></button>
-    <button id="nextBtn" title="Next"><i class="fas fa-forward"></i></button>
-    <button id="shuffleBtn" title="Shuffle Mode"><i class="fas fa-random"></i></button>
-    <button id="repeatBtn" title="Repeat Mode"><i class="fas fa-redo"></i></button>
-    <input type="range" id="seekBar" min="0" max="100" value="0" />
-    <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5" />
-  </div>
-  <div style="margin-top:10px; display:flex; justify-content:center; gap:15px;">
-    <span id="currentTime">0:00</span>
-    <span id="durationTime">0:00</span>
-  </div>
+<!-- Signup Form -->
+<div id="signupDiv" class="hidden">
+  <h2>Signup</h2>
+  <form id="signupForm">
+    <input type="text" placeholder="Full Name" id="signupName" required />
+    <input type="email" placeholder="Email" id="signupEmail" required />
+    <input type="tel" placeholder="Phone Number" id="signupPhone" required />
+    <input type="password" placeholder="Password" id="signupPassword" required />
+    <input type="submit" value="Create Account" />
+  </form>
 </div>
 
-<!-- Scripts -->
+<!-- Login Form -->
+<div id="loginDiv" class="hidden">
+  <h2>Login</h2>
+  <form id="loginForm">
+    <input type="email" placeholder="Email" id="loginEmail" required />
+    <input type="password" placeholder="Password" id="loginPassword" required />
+    <input type="submit" value="Login" />
+  </form>
+</div>
+
+<!-- Upload Content Form -->
+<div id="uploadDiv" class="hidden">
+  <h2>Upload Your Content</h2>
+  <form id="uploadForm">
+    <input type="text" placeholder="Song Title" id="songTitle" required />
+    <input type="text" placeholder="Artist Name" id="artistName" required />
+    <input type="file" accept="audio/*" id="audioFile" required />
+    <input type="file" accept="image/*" id="posterFile" required />
+    <input type="submit" value="Upload" />
+  </form>
+  <div id="uploadedContent"></div>
+</div>
+
+<!-- My Library & Earnings -->
+<div id="libraryDiv" class="hidden">
+  <h2>My Content & Earnings</h2>
+  <div id="contentList"></div>
+  <h3>Earnings Dashboard</h3>
+  <p>Total Earnings: <strong>$0</strong></p>
+</div>
+
 <script>
-  // Song Data
-  const songs = [
-    {
-      title: "Shape of You",
-      artist: "Ed Sheeran",
-      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-      cover: "https://images.unsplash.com/photo-1549924231-f129b911e442?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      title: "Blinding Lights",
-      artist: "The Weeknd",
-      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-      cover: "https://images.unsplash.com/photo-1516707025808-1cae4a7d7bff?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      title: "Levitating",
-      artist: "Dua Lipa",
-      url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-      cover: "https://images.unsplash.com/photo-1544725176-7c40e5a4c6e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+  // State variables
+  let currentUser = null; // store user data after signup/login
+  let userLibrary = []; // store uploaded songs
+
+  // Button handlers
+  document.getElementById('signupBtn').onclick = () => {
+    toggleDivs('signupDiv');
+  };
+  document.getElementById('loginBtn').onclick = () => {
+    toggleDivs('loginDiv');
+  };
+  document.getElementById('uploadContentBtn').onclick = () => {
+    if (!currentUser) {
+      alert('Please login first to upload content.');
+      toggleDivs('loginDiv');
+    } else {
+      toggleDivs('uploadDiv');
     }
-  ];
+  };
+  document.getElementById('viewLibraryBtn').onclick = () => {
+    if (!currentUser) {
+      alert('Please login first to view your library.');
+      toggleDivs('loginDiv');
+    } else {
+      showLibrary();
+    }
+  };
 
-  let currentIndex = 0;
-  let isPlaying = false;
-  let shuffleMode = false;
-  let repeatMode = false;
-
-  const audio = new Audio();
-  const songTitle = document.getElementById('songTitle');
-  const songArtist = document.getElementById('songArtist');
-  const albumCover = document.querySelector('#currentAlbum img');
-
-  const playPauseBtn = document.getElementById('playPauseBtn');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const shuffleBtn = document.getElementById('shuffleBtn');
-  const repeatBtn = document.getElementById('repeatBtn');
-  const seekBar = document.getElementById('seekBar');
-  const volumeControl = document.getElementById('volumeControl');
-
-  const currentTimeSpan = document.getElementById('currentTime');
-  const durationTimeSpan = document.getElementById('durationTime');
-
-  // Load song
-  function loadSong(index) {
-    const song = songs[index];
-    audio.src = song.url;
-    songTitle.innerText = song.title;
-    songArtist.innerText = song.artist;
-    albumCover.src = song.cover;
+  // Toggle visibility of sections
+  function toggleDivs(divId) {
+    document.querySelectorAll('div[id$="Div"]').forEach(div => {
+      div.classList.add('hidden');
+    });
+    document.getElementById(divId).classList.remove('hidden');
   }
 
-  // Play/Pause
-  function togglePlay() {
-    if (isPlaying) {
-      audio.pause();
-    } else {
-      audio.play();
-    }
+  // Signup form
+document.getElementById('signupForm').onsubmit = (e) => {
+  e.preventDefault();
+  const name = document.getElementById('signupName').value;
+  const email = document.getElementById('signupEmail').value;
+  const phone = document.getElementById('signupPhone').value;
+  const password = document.getElementById('signupPassword').value;
+  // Save user info (simulate signup)
+  currentUser = { name, email, phone };
+  alert('Signup successful! Welcome, ' + name);
+  toggleDivs('libraryDiv');
+  showLibrary();
+};
+
+// Login form
+document.getElementById('loginForm').onsubmit = (e) => {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  if (email && password) {
+    // For demo, login always success
+    currentUser = { name: 'Demo User', email };
+    alert('Login successful! Welcome back.');
+    toggleDivs('libraryDiv');
+    showLibrary();
+  } else {
+    alert('Invalid credentials!');
   }
-  audio.onplay = () => {
-    isPlaying = true;
-    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-  };
-  audio.onpause = () => {
-    isPlaying = false;
-    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-  };
+};
 
-  // Next song
-  function nextSong() {
-    if (shuffleMode) {
-      currentIndex = Math.floor(Math.random() * songs.length);
-    } else {
-      currentIndex = (currentIndex + 1) % songs.length;
-    }
-    loadSong(currentIndex);
-    audio.play();
-  }
+// Upload form
+document.getElementById('uploadForm').onsubmit = (e) => {
+  e.preventDefault();
+  const title = document.getElementById('songTitle').value;
+  const artist = document.getElementById('artistName').value;
+  const audioFile = document.getElementById('audioFile').files[0];
+  const posterFile = document.getElementById('posterFile').files[0];
 
-  // Previous song
-  function prevSong() {
-    if (shuffleMode) {
-      currentIndex = Math.floor(Math.random() * songs.length);
-    } else {
-      currentIndex = (currentIndex - 1 + songs.length) % songs.length;
-    }
-    loadSong(currentIndex);
-    audio.play();
-  }
-
-  // Event Listeners
-  document.getElementById('playPauseBtn').addEventListener('click', togglePlay);
-  prevBtn.addEventListener('click', prevSong);
-  nextBtn.addEventListener('click', nextSong);
-
-  // Seek bar update
-  audio.ontimeupdate = () => {
-    const progress = (audio.currentTime / audio.duration) * 100;
-    seekBar.value = progress || 0;
-    let currentMinutes = Math.floor(audio.currentTime / 60);
-    let currentSeconds = Math.floor(audio.currentTime % 60);
-    if (currentSeconds < 10) currentSeconds = '0' + currentSeconds;
-    document.getElementById('currentTime').innerText = `${currentMinutes}:${currentSeconds}`;
-  };
-
-  // Duration
-  audio.onloadedmetadata = () => {
-    let durationMinutes = Math.floor(audio.duration / 60);
-    let durationSeconds = Math.floor(audio.duration % 60);
-    if (durationSeconds < 10) durationSeconds = '0' + durationSeconds;
-    document.getElementById('durationTime').innerText = `${durationMinutes}:${durationSeconds}`;
-  };
-
-  // Seek control
-  seekBar.addEventListener('input', () => {
-    if (audio.duration) {
-      audio.currentTime = (seekBar.value / 100) * audio.duration;
-    }
-  });
-
-  // Auto next
-  audio.onended = () => {
-    if (repeatMode) {
-      loadSong(currentIndex);
-      audio.play();
-    } else {
-      nextSong();
-    }
-  };
-
-  // Volume control
-  volumeControl.oninput = () => {
-    audio.volume = volumeControl.value;
-  };
-
-  // Shuffle & Repeat toggle
-  document.getElementById('shuffleBtn').onclick = () => {
-    shuffleMode = !shuffleMode;
-    shuffleBtn.style.color = shuffleMode ? '#1ed760' : '#fff';
-  };
-  document.getElementById('repeatBtn').onclick = () => {
-    repeatMode = !repeatMode;
-    repeatBtn.style.color = repeatMode ? '#1ed760' : '#fff';
-  };
-
-  // Populate song list
-  const songListDiv = document.getElementById('songList');
-  songs.forEach((song, index) => {
-    const item = document.createElement('div');
-    item.className = 'song-item';
-    item.innerHTML = `
-      <i class="fas fa-music"></i>
-      <div class="song-info">
-        <div class="song-title">${song.title}</div>
-        <div class="song-artist">${song.artist}</div>
-      </div>`;
-    item.onclick = () => {
-      currentIndex = index;
-      loadSong(index);
-      audio.play();
+  if (audioFile && posterFile) {
+    // For demo, just simulate upload
+    const readerAudio = new FileReader();
+    readerAudio.onload = () => {
+      const readerImage = new FileReader();
+      readerImage.onload = () => {
+        const newContent = {
+          title,
+          artist,
+          audioSrc: readerAudio.result,
+          posterSrc: readerImage.result
+        };
+        userLibrary.push(newContent);
+        alert('Content uploaded successfully!');
+        showLibrary();
+        document.getElementById('uploadForm').reset();
+        toggleDivs('libraryDiv');
+      };
+      readerImage.readAsDataURL(posterFile);
     };
-    songListDiv.appendChild(item);
-  });
+    readerAudio.readAsDataURL(audioFile);
+  } else {
+    alert('Please select both audio and poster files.');
+  }
+};
 
-  // Button alerts (dummy functions)
-  document.getElementById('signupBtn').onclick = () => alert('Signup clicked!');
-  document.getElementById('loginBtn').onclick = () => alert('Login clicked!');
-  document.getElementById('uploadBtn').onclick = () => alert('Upload clicked!');
-  
-  // Load first song initially
-  loadSong(currentIndex);
+// Display library
+function showLibrary() {
+  toggleDivs('libraryDiv');
+  const listDiv = document.getElementById('contentList');
+  listDiv.innerHTML = '';
+  if (userLibrary.length === 0) {
+    listDiv.innerHTML = '<p>No content uploaded yet.</p>';
+  } else {
+    userLibrary.forEach((item, index) => {
+      const div = document.createElement('div');
+      div.style.border = '1px solid #444';
+      div.style.padding = '10px';
+      div.style.marginBottom = '10px';
+      div.innerHTML = `
+        <h4>${item.title} by ${item.artist}</h4>
+        <img src="${item.posterSrc}" style="width:100px; border-radius:8px; margin-right:10px; vertical-align:middle;" />
+        <audio controls src="${item.audioSrc}"></audio>
+      `;
+      listDiv.appendChild(div);
+    });
+  }
+}
 </script>
+
 </body>
 </html>
