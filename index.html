@@ -4,82 +4,72 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Sur Wave Music</title>
-<!-- Google Fonts for sleek typography -->
+<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
-<!-- Font Awesome for icons -->
+<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 <style>
-  /* Reset and base styles */
+  /* Reset & Base Styles */
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
-
   body {
     font-family: 'Inter', sans-serif;
     background-color: #121212;
     color: #fff;
-    line-height: 1.6;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    transition: background 0.5s, color 0.5s;
+    overflow-x: hidden;
   }
 
-  /* Header styles */
+  /* Header with Logo */
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 40px;
   background: linear-gradient(135deg, #1db954, #0f5b7d);
+  padding: 20px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: sticky;
   top: 0;
   z-index: 999;
-  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.logo {
+  width: 100px;
+  margin-bottom: 10px;
+}
+.logo img {
+  width: 100%;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 header h1 {
   font-size: 2rem;
-  font-weight: 700;
-  letter-spacing: 2px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+nav {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
 }
 nav a {
   color: #fff;
-  margin-left: 25px;
   text-decoration: none;
   font-weight: 600;
   font-size: 1rem;
-  transition: color 0.3s;
+  padding: 8px 12px;
+  border-radius: 20px;
+  transition: background 0.3s;
 }
 nav a:hover {
-  color: #1ed760;
-}
-.theme-toggle {
-  background: #fff;
-  color: #121212;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 50px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s;
-}
-body.dark header {
-  background: linear-gradient(135deg, #000000, #434343);
-}
-body.dark nav a {
-  color: #ccc;
-}
-body.dark nav a:hover {
-  color: #1ed760;
-}
-body.dark .theme-toggle {
-  background: #1ed760;
-  color: #fff;
+  background: rgba(255,255,255,0.2);
 }
 
-/* Sections styles */
+/* Main Sections */
 section {
   padding: 50px 20px;
   max-width: 1200px;
@@ -89,248 +79,303 @@ h2 {
   font-size: 2rem;
   margin-bottom: 30px;
   text-align: center;
+  color: #1ed760;
 }
 p {
   font-size: 1.1rem;
   margin-bottom: 20px;
-}
-
-/* Welcome Section */
-#welcome {
-  background: linear-gradient(135deg, #1db954, #0f5b7d);
-  padding: 50px 20px;
-  border-radius: 20px;
-  text-align: center;
-  color: #fff;
-  margin-bottom: 50px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-}
-#welcome h2 {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-}
-#welcome p {
-  font-size: 1.2rem;
-}
-
-/* Features grid */
-#features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-}
-.feature-card {
-  background: #1f1f1f;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-.feature-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.4);
-}
-.feature-card h3 {
-  margin-bottom: 15px;
-  font-size: 1.3rem;
-  color: #1ed760;
-  display: flex;
-  align-items: center;
-}
-.feature-card h3 i {
-  margin-right: 10px;
-}
-.feature-card ul {
-  list-style: none;
-}
-.feature-card li {
-  margin-bottom: 10px;
-  line-height: 1.4;
-  display: flex;
-  align-items: center;
-}
-.feature-card li i {
-  margin-right: 10px;
-  color: #1ed760;
-}
-
-/* About & Contact styles */
-#about, #contact {
-  background-color: #1f1f1f;
-  padding: 40px 20px;
-  border-radius: 20px;
-  margin-top: 50px;
-  text-align: center;
-}
-#about p, #contact p {
-  max-width: 800px;
-  margin: 0 auto 20px;
-  font-size: 1.1rem;
   line-height: 1.6;
 }
 
-/* Footer styles */
-footer {
-  background: #000;
-  padding: 20px;
+/* Featured Posters & Albums */
+#posters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+.poster-card {
+  background: #1f1f1f;
+  border-radius: 15px;
+  overflow: hidden;
+  width: 200px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.poster-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+.poster-card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+.poster-info {
+  padding: 10px;
   text-align: center;
-  margin-top: auto;
+}
+.poster-info h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+.poster-info p {
   font-size: 0.9rem;
-  color: #777;
+  color: #aaa;
 }
 
-/* Buttons & Interactive Elements */
-button {
+/* Singers Section */
+#singers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+.singer-card {
+  background: #1f1f1f;
+  border-radius: 15px;
+  width: 150px;
+  padding: 10px;
   cursor: pointer;
-  border: none;
-  outline: none;
-  padding: 10px 20px;
-  border-radius: 50px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.singer-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+.singer-card img {
+  width: 100%;
+  border-radius: 50%;
+  border: 2px solid #1ed760;
+  margin-bottom: 10px;
+}
+.singer-card h4 {
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* Upload Button */
+#upload-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+}
+#uploadBtn {
   background-color: #1ed760;
   color: #fff;
-  font-weight: 600;
-  transition: all 0.3s;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.3s;
 }
-button:hover {
+#uploadBtn:hover {
   background-color: #17b34a;
 }
 
-/* Responsive typography & spacing */
+/* Music Player */
+#music-player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #222;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.3);
+  transition: background 0.3s;
+  z-index: 999;
+}
+.player-info {
+  display: flex;
+  align-items: center;
+}
+.album-art {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-right: 15px;
+}
+.album-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.song-details {
+  display: flex;
+  flex-direction: column;
+}
+.song-title {
+  font-weight: 600;
+  font-size: 1rem;
+}
+.song-artist {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.controls button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.controls button:hover {
+  color: #1ed760;
+}
+#volumeControl {
+  width: 100px;
+}
 @media(max-width: 768px){
-  header {
+  #music-player {
     flex-direction: column;
-    align-items: center;
+    height: auto;
   }
-  header h1 {
-    font-size: 1.5rem;
-  }
-  nav {
-    margin-top: 10px;
-  }
-  #welcome {
-    padding: 30px 20px;
+  .player-info {
+    margin-bottom: 10px;
   }
 }
+
+/* Theme toggle - optional */
 </style>
 </head>
 <body>
 
+<!-- Header with Logo & Navigation -->
 <header>
+  <div class="logo">
+    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Music Logo" />
+  </div>
   <h1>Sur Wave Music</h1>
   <nav>
-    <a href="#home">Home</a>
-    <a href="#features">Features</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
+    <a href="#posters">Posters</a>
+    <a href="#singers">Singers</a>
+    <a href="#upload">Upload</a>
   </nav>
-  <button class="theme-toggle" id="themeBtn">Dark Mode</button>
 </header>
 
-<section id="welcome">
-  <h2>Feel the Music, Sur the Waves</h2>
-  <p>Experience a premium, colorful, and sleek music streaming platform designed for true music lovers. Dive into the rhythm with Sur Wave Music!</p>
-</section>
-
-<section id="features">
-  <h2>Features</h2>
-  <div class="features-grid">
-
-    <!-- UI & Visuals -->
-    <div class="feature-card">
-      <h3><i class="fas fa-paint-brush"></i> 🎨 Premium UI</h3>
-      <ul>
-        <li>Gradient backgrounds & dynamic colors</li>
-        <li>Sleek animations & smooth transitions</li>
-        <li>Clean typography & spacing</li>
-        <li>Hover effects & interactive cards</li>
-        <li>Responsive & mobile optimized</li>
-      </ul>
+<!-- Posters & Albums Section -->
+<section id="posters">
+  <h2>Featured Albums & Posters</h2>
+  <div id="posters-container">
+    <div class="poster-card">
+      <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Album 1" />
+      <div class="poster-info">
+        <h3>Vibrant Beats</h3>
+        <p>by DJ Sur</p>
+      </div>
     </div>
-
-    <!-- Music Player -->
-    <div class="feature-card">
-      <h3><i class="fas fa-music"></i> 🎵 Music Player</h3>
-      <ul>
-        <li>Play / Pause / Next / Prev</li>
-        <li>Volume & seek controls</li>
-        <li>Shuffle & repeat modes</li>
-        <li>Animated album cover & visualizer</li>
-        <li>Fixed bottom player for easy access</li>
-      </ul>
+    <div class="poster-card">
+      <img src="https://images.unsplash.com/photo-1516707025808-1cae4a7d7bff?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Album 2" />
+      <div class="poster-info">
+        <h3>Melody Moods</h3>
+        <p>by Singer X</p>
+      </div>
     </div>
-
-    <!-- User & Library -->
-    <div class="feature-card">
-      <h3><i class="fas fa-user"></i> 👤 User System</h3>
-      <ul>
-        <li>Login / Signup / Logout</li>
-        <li>Personalized library & playlists</li>
-        <li>Cloud sync & offline mode</li>
-      </ul>
-    </div>
-
-    <!-- Library & Playlist -->
-    <div class="feature-card">
-      <h3><i class="fas fa-folder"></i> 📂 Library</h3>
-      <ul>
-        <li>Create & manage playlists</li>
-        <li>Upload & delete songs</li>
-        <li>Recently played & smart shuffle</li>
-      </ul>
-    </div>
-
-    <!-- UI & Theme -->
-    <div class="feature-card">
-      <h3><i class="fas fa-moon"></i> 🌙 Theme</h3>
-      <ul>
-        <li>Dark & Light toggle</li>
-        <li>Theme preference saved</li>
-        <li>Smooth transition</li>
-      </ul>
-    </div>
-
-    <!-- App & Offline -->
-    <div class="feature-card">
-      <h3><i class="fas fa-phone"></i> 📱 App</h3>
-      <ul>
-        <li>Responsive & installable PWA</li>
-        <li>Fast loading & offline support</li>
-        <li>Cloud storage & upload</li>
-      </ul>
-    </div>
-
+    <!-- Add more posters as needed -->
   </div>
 </section>
 
-<section id="about">
-  <h2>About Sur Wave Music</h2>
-  <p>Sur Wave Music is your ultimate music companion — endless, personalized, seamless. We connect you with your favorite tunes anytime, anywhere.</p>
+<!-- Singers Section -->
+<section id="singers">
+  <h2>Top Singers</h2>
+  <div id="singers-container">
+    <div class="singer-card">
+      <img src="https://images.unsplash.com/photo-1544725176-7c40e5a4c6e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Singer 1" />
+      <h4>Singer A</h4>
+    </div>
+    <div class="singer-card">
+      <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Singer 2" />
+      <h4>Singer B</h4>
+    </div>
+    <!-- Add more singers -->
+  </div>
 </section>
 
-<section id="contact">
-  <h2>Contact Us</h2>
-  <p>Email: support@surwavemusic.com</p>
-  <p>Phone: +91 12345 67890</p>
-  <p>Address: 123 Music Lane, Melody City</p>
+<!-- Upload Button -->
+<section id="upload" style="text-align:center; margin-top:50px;">
+  <h2>Upload Your Songs</h2>
+  <input type="file" id="fileUpload" multiple style="display:none" onchange="handleFiles(this.files)" />
+  <button id="uploadBtn" onclick="document.getElementById('fileUpload').click()"><i class="fas fa-upload"></i> Upload Songs</button>
 </section>
 
-<footer>
-  <p>&copy; 2024 Sur Wave Music. All rights reserved.</p>
-</footer>
+<!-- Music Player -->
+<div id="music-player">
+  <div class="player-info">
+    <div class="album-art" id="currentAlbum">
+      <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Current Song" />
+    </div>
+    <div class="song-details">
+      <div class="song-title" id="songTitle">Sample Song</div>
+      <div class="song-artist" id="songArtist">Unknown Artist</div>
+    </div>
+  </div>
+  <div class="controls">
+    <button id="prevBtn" title="Previous"><i class="fas fa-backward"></i></button>
+    <button id="playPauseBtn" title="Play/Pause"><i class="fas fa-play"></i></button>
+    <button id="nextBtn" title="Next"><i class="fas fa-forward"></i></button>
+    <button id="shuffleBtn" title="Shuffle"><i class="fas fa-random"></i></button>
+    <button id="repeatBtn" title="Repeat"><i class="fas fa-redo"></i></button>
+    <input type="range" id="seekBar" min="0" max="100" value="0" style="width:150px; margin-left:15px;" />
+    <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5" title="Volume" />
+  </div>
+</div>
 
-<!-- Theme toggle script -->
+<!-- Optional: Scripts for functionality -->
 <script>
-const themeBtn = document.getElementById('themeBtn');
-const body = document.body;
+  // Placeholder Variables
+  let isPlaying = false;
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  const seekBar = document.getElementById('seekBar');
+  const volumeControl = document.getElementById('volumeControl');
 
-themeBtn.addEventListener('click', () => {
-  body.classList.toggle('dark');
-  if(body.classList.contains('dark')){
-    themeBtn.textContent = 'Light Mode';
-  } else {
-    themeBtn.textContent = 'Dark Mode';
+  // Play/Pause toggle
+  document.getElementById('playPauseBtn').addEventListener('click', () => {
+    isPlaying = !isPlaying;
+    document.querySelector('#playPauseBtn i').className = isPlaying ? 'fas fa-pause' : 'fas fa-play';
+  });
+
+  // Volume control
+  volumeControl.addEventListener('input', () => {
+    // Here you can connect to actual audio element
+    // e.g., audio.volume = volumeControl.value;
+  });
+
+  // Seek bar change
+  seekBar.addEventListener('input', () => {
+    // Connect to actual audio currentTime
+  });
+
+  // Upload songs
+  function handleFiles(files) {
+    alert(files.length + ' song(s) uploaded!');
+    // Implement upload logic or add to playlist
   }
-});
+
+  // Control buttons
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    alert('Next song');
+  });
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    alert('Previous song');
+  });
+  document.getElementById('shuffleBtn').addEventListener('click', () => {
+    alert('Shuffle toggled');
+  });
+  document.getElementById('repeatBtn').addEventListener('click', () => {
+    alert('Repeat toggled');
+  });
 </script>
 
 </body>
