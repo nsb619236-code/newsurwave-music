@@ -152,6 +152,21 @@ loadSongs();
         }
 
         /* header */
+       <input type="file" id="songFile" accept="audio/*">
+<input type="file" id="posterFile" accept="image/*">
+<button onclick="handleUpload()" class="btn-primary">Upload To Cloud</button>
+
+<script>
+function handleUpload(){
+    const song = document.getElementById("songFile").files[0];
+    const poster = document.getElementById("posterFile").files[0];
+    if(song && poster){
+        uploadSongToFirebase(song, poster);
+    } else {
+        alert("Select Song & Poster");
+    }
+}
+</script> 
         .navbar {
             <input type="file" id="songUpload" accept="audio/*" hidden>
 <input type="file" id="posterUpload" accept="image/*" hidden>
