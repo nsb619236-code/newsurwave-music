@@ -1,3 +1,30 @@
+
+<script>
+const audioPlayer = document.getElementById("audioPlayer");
+const songUpload = document.getElementById("songUpload");
+const posterUpload = document.getElementById("posterUpload");
+
+songUpload.addEventListener("change", function(){
+    const file = this.files[0];
+    if(file){
+        const url = URL.createObjectURL(file);
+        audioPlayer.src = url;
+        audioPlayer.play();
+        alert("Song Uploaded & Playing!");
+    }
+});
+
+posterUpload.addEventListener("change", function(){
+    const file = this.files[0];
+    if(file){
+        const url = URL.createObjectURL(file);
+        document.querySelector(".cover-art").style.backgroundImage = `url(${url})`;
+        document.querySelector(".cover-art").style.backgroundSize = "cover";
+        document.querySelector(".cover-art").innerHTML = "";
+        alert("Poster Uploaded!");
+    }
+});
+</script>
 const UNSPLASH_KEY = "f7rgPa7m5QOuti0APoXGZtqUI6oDFFzeYylqRTVm8nY"; // ← ये बदल दो
 // Firebase Config (अपना config डालो - Firebase Console से copy)
 const firebaseConfig = {
@@ -244,6 +271,13 @@ function playSong(index) {
   isPlaying = true;
   document.getElementById('play-btn').innerHTML = '<i class="fas fa-pause"></i>';
   // बाकी UI update...
+}
+function togglePlay(){
+    if(audioPlayer.paused){
+        audioPlayer.play();
+    } else {
+        audioPlayer.pause();
+    }
 }
 
 function togglePlay() {
