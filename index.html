@@ -13,6 +13,72 @@
             box-sizing: border-box;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
+        <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "YOUR_ID",
+  storageBucket: "YOUR_BUCKET",
+  messagingSenderId: "YOUR_SENDER",
+  appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
+const db = getFirestore(app);
+
+// Upload Song
+window.uploadSongToFirebase = async function(file, poster) {
+    const songRef = ref(storage, "songs/" + file.name);
+    await uploadBytes(songRef, file);
+    const songURL = await getDownloadURL(songRef);
+
+    const posterRef = ref(storage, "posters/" + poster.name);
+    await uploadBytes(posterRef, poster);
+    const posterURL = await getDownloadURL(posterRef);
+
+    await addDoc(collection(db, "music"), {
+        name: file.name,
+        songURL: songURL,
+        posterURL: posterURL
+    });
+
+    alert("Song Uploaded Successfully 🔥");
+    loadSongs();
+}
+
+// Load Songs
+async function loadSongs() {
+    const querySnapshot = await getDocs(collection(db, "music"));
+    const container = document.querySelector(".card-grid");
+    container.innerHTML = "";
+
+    querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        container.innerHTML += `
+            <div class="music-card" onclick="playSong('${data.songURL}','${data.posterURL}')">
+                <div class="card-img" style="background-image:url('${data.posterURL}'); background-size:cover;"></div>
+                <h4>${data.name}</h4>
+                <p>Uploaded Track</p>
+            </div>
+        `;
+    });
+}
+
+window.playSong = function(song, poster){
+    const player = document.getElementById("audioPlayer");
+    player.src = song;
+    player.play();
+    document.querySelector(".cover-art").style.backgroundImage = `url(${poster})`;
+    document.querySelector(".cover-art").innerHTML = "";
+}
+
+loadSongs();
+</script>
 
         body {
             background: #0b0c0f;
