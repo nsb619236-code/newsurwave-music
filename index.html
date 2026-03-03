@@ -87,6 +87,16 @@
 
         /* header */
         .navbar {
+            <input type="file" id="songUpload" accept="audio/*" hidden>
+<input type="file" id="posterUpload" accept="image/*" hidden>
+
+<button class="btn-outline" onclick="document.getElementById('songUpload').click()">
+<i class="fas fa-upload"></i> Upload Song
+</button>
+
+<button class="btn-outline" onclick="document.getElementById('posterUpload').click()">
+<i class="fas fa-image"></i> Upload Poster
+</button>
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -129,6 +139,7 @@
 
         /* hero */
         .hero {
+            <audio id="audioPlayer"></audio>
             display: flex;
             align-items: center;
             justify-content: space-between;
