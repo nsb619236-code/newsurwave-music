@@ -1,299 +1,255 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Music Boss - Complete Music Platform</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Boss - Complete Working Version</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        }
-
-        :root {
-            --spotify-green: #1DB954;
-            --spotify-green-hover: #1ed760;
-            --spotify-black: #191414;
-            --spotify-dark: #121212;
-            --spotify-card: #181818;
-            --spotify-card-hover: #282828;
-            --spotify-text: #b3b3b3;
-            --spotify-light: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
         }
 
         body {
-            background: var(--spotify-black);
+            background: #000000;
             color: white;
-            font-family: 'Circular', sans-serif;
+            padding: 15px;
+            padding-bottom: 100px;
         }
 
-        /* Main Layout */
-        .container {
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1DB954, #0f8f3f);
+            padding: 30px 20px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(29,185,84,0.3);
+        }
+
+        .header h1 {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        /* Navigation */
+        .nav-bar {
             display: flex;
-            height: 100vh;
-            overflow: hidden;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
-        /* ========== SIDEBAR ========== */
-        .sidebar {
-            width: 260px;
-            background: var(--spotify-black);
-            padding: 24px;
+        .nav-btn {
+            background: #1DB954;
+            color: black;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            flex: 1;
+            min-width: 120px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #1ed760;
+            transform: scale(1.02);
+        }
+
+        .nav-btn.secondary {
+            background: #333;
+            color: white;
+        }
+
+        /* User Info */
+        .user-info {
+            background: #121212;
+            padding: 15px 20px;
+            border-radius: 50px;
+            margin-bottom: 20px;
             display: flex;
-            flex-direction: column;
-            gap: 24px;
-            border-right: 1px solid rgba(255,255,255,0.1);
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #333;
         }
 
-        .logo {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--spotify-green);
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: #1DB954;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 24px;
+            margin: 25px 0 15px 0;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .logo i {
-            font-size: 35px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 12px 16px;
-            color: var(--spotify-text);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-            font-weight: 600;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            color: white;
-            background: rgba(255,255,255,0.1);
-        }
-
-        .nav-item i {
-            font-size: 22px;
-        }
-
-        .playlist-item {
-            padding: 8px 16px;
-            color: var(--spotify-text);
-            cursor: pointer;
-            font-size: 14px;
-            transition: 0.2s;
-        }
-
-        .playlist-item:hover {
-            color: white;
-        }
-
-        /* ========== MAIN CONTENT ========== */
-        .main-content {
-            flex: 1;
-            background: linear-gradient(to bottom, #1f1f1f, var(--spotify-black));
-            overflow-y: auto;
-            padding: 24px 32px;
-            padding-bottom: 100px;
-        }
-
-        /* Top Bar */
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 16px;
-        }
-
-        .nav-circle {
-            width: 40px;
-            height: 40px;
-            background: rgba(0,0,0,0.7);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .user-btn {
-            background: var(--spotify-black);
-            border: none;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 23px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            background: var(--spotify-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Welcome Banner */
-        .welcome-banner {
-            background: linear-gradient(135deg, #450af5, #c4efd9);
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 32px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .welcome-banner h1 {
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
-
-        .welcome-banner p {
-            font-size: 18px;
-            opacity: 0.9;
-        }
-
-        /* Section Headers */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 32px 0 20px 0;
-        }
-
-        .section-header h2 {
-            font-size: 28px;
-            font-weight: 700;
-        }
-
-        .see-all {
-            color: var(--spotify-text);
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .see-all:hover {
-            color: white;
+        .section-title::before {
+            content: '';
+            width: 5px;
+            height: 25px;
+            background: #1DB954;
+            border-radius: 5px;
         }
 
         /* Cards Grid */
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 24px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
         .music-card {
-            background: var(--spotify-card);
-            padding: 16px;
+            background: #181818;
             border-radius: 12px;
+            padding: 15px;
             cursor: pointer;
             transition: 0.3s;
-            position: relative;
+            border: 1px solid transparent;
         }
 
         .music-card:hover {
-            background: var(--spotify-card-hover);
-            transform: translateY(-8px);
+            background: #282828;
+            transform: translateY(-5px);
+            border-color: #1DB954;
         }
 
         .card-img {
             width: 100%;
             aspect-ratio: 1;
-            background: linear-gradient(135deg, #333, #555);
+            background: linear-gradient(135deg, #1DB954, #0f8f3f);
             border-radius: 8px;
-            margin-bottom: 16px;
-            position: relative;
-            overflow: hidden;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 48px;
-        }
-
-        .play-overlay {
-            position: absolute;
-            bottom: 8px;
-            right: 8px;
-            width: 48px;
-            height: 48px;
-            background: var(--spotify-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: 0.3s;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
-        }
-
-        .music-card:hover .play-overlay {
-            opacity: 1;
-            bottom: 16px;
+            font-size: 40px;
         }
 
         .card-title {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .card-artist {
-            color: var(--spotify-text);
+            font-weight: bold;
+            margin-bottom: 5px;
             font-size: 14px;
         }
 
-        /* Radio Section */
-        .radio-section {
-            margin: 40px 0;
+        .card-artist {
+            color: #b3b3b3;
+            font-size: 12px;
         }
 
+        /* Upload Section */
+        .upload-section {
+            background: #121212;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px dashed #1DB954;
+        }
+
+        .upload-box {
+            background: #181818;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            margin: 10px 0;
+            border: 1px solid #333;
+        }
+
+        .upload-box:hover {
+            background: #282828;
+        }
+
+        .upload-box i {
+            font-size: 40px;
+            color: #1DB954;
+            margin-bottom: 10px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px;
+            margin: 8px 0;
+            background: #181818;
+            border: 1px solid #333;
+            border-radius: 30px;
+            color: white;
+            font-size: 14px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1DB954;
+        }
+
+        button {
+            background: #1DB954;
+            color: black;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin: 8px 0;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #1ed760;
+        }
+
+        button.secondary {
+            background: #333;
+            color: white;
+        }
+
+        /* Radio Grid */
         .radio-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 24px;
+            gap: 15px;
+            margin: 20px 0;
         }
 
         .radio-card {
-            background: linear-gradient(135deg, #450af5, #c4efd9);
+            background: linear-gradient(135deg, #1DB954, #0f8f3f);
             border-radius: 16px;
-            padding: 24px;
+            padding: 20px;
             cursor: pointer;
             transition: 0.3s;
             position: relative;
-            overflow: hidden;
         }
 
         .radio-card:hover {
             transform: scale(1.02);
         }
 
-        .radio-card.live::after {
-            content: 'LIVE';
+        .live-badge {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            background: var(--spotify-green);
-            color: black;
+            top: 10px;
+            right: 10px;
+            background: red;
+            color: white;
             padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
+            border-radius: 12px;
+            font-size: 10px;
             font-weight: bold;
             animation: pulse 1.5s infinite;
         }
@@ -304,155 +260,49 @@
             100% { opacity: 1; }
         }
 
-        .radio-card h3 {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-
-        .radio-card p {
-            opacity: 0.8;
-            font-size: 14px;
-        }
-
         /* Earnings Dashboard */
-        .earnings-dashboard {
-            background: linear-gradient(135deg, #1DB954, #169c46);
-            border-radius: 24px;
-            padding: 32px;
-            margin: 40px 0;
+        .earnings-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
         }
 
         .earning-card {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            padding: 24px;
+            background: linear-gradient(135deg, #1DB954, #0f8f3f);
             border-radius: 16px;
+            padding: 20px;
             text-align: center;
         }
 
         .earning-card h3 {
-            font-size: 36px;
-            margin-bottom: 8px;
-        }
-
-        .earning-card p {
-            opacity: 0.9;
-            font-size: 14px;
-        }
-
-        /* Upload Section */
-        .upload-section {
-            background: var(--spotify-card);
-            border-radius: 16px;
-            padding: 24px;
-            margin: 20px 0;
-            border: 2px dashed var(--spotify-green);
-        }
-
-        .upload-area {
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 32px;
-            text-align: center;
-            cursor: pointer;
-            margin-bottom: 16px;
-        }
-
-        .upload-area i {
-            font-size: 48px;
-            color: var(--spotify-green);
-            margin-bottom: 16px;
-        }
-
-        .upload-input {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            color: white;
-        }
-
-        /* Playlist Section */
-        .playlist-header {
-            display: flex;
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-
-        .playlist-cover {
-            width: 200px;
-            height: 200px;
-            background: linear-gradient(135deg, #1DB954, #191414);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 80px;
-            box-shadow: 0 20px 30px rgba(0,0,0,0.5);
-        }
-
-        .playlist-info h1 {
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
-
-        .playlist-stats {
-            color: var(--spotify-text);
-            margin-top: 16px;
-        }
-
-        /* Library View */
-        .library-filters {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .filter-chip {
-            background: rgba(255,255,255,0.1);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .filter-chip.active {
-            background: var(--spotify-green);
-            color: black;
-            font-weight: 600;
+            font-size: 30px;
+            margin-bottom: 5px;
         }
 
         /* Player Bar */
         .player-bar {
             position: fixed;
             bottom: 0;
-            left: 260px;
+            left: 0;
             right: 0;
-            background: var(--spotify-card);
-            padding: 16px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            z-index: 100;
+            background: #181818;
+            padding: 15px 20px;
+            border-top: 2px solid #1DB954;
+            display: none;
         }
 
         .player-info {
             display: flex;
             align-items: center;
-            gap: 16px;
-            width: 300px;
+            gap: 15px;
+            margin-bottom: 10px;
         }
 
         .player-img {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, #1DB954, #191414);
+            width: 50px;
+            height: 50px;
+            background: #1DB954;
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -461,53 +311,41 @@
         }
 
         .player-controls {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .control-buttons {
             display: flex;
             align-items: center;
-            gap: 24px;
+            justify-content: center;
+            gap: 30px;
         }
 
-        .control-buttons i {
-            font-size: 20px;
-            color: var(--spotify-text);
+        .player-controls i {
+            font-size: 24px;
             cursor: pointer;
+            color: #b3b3b3;
         }
 
-        .control-buttons i:hover {
-            color: white;
+        .player-controls i:hover {
+            color: #1DB954;
         }
 
-        .control-buttons .fa-play-circle {
+        .player-controls .fa-play-circle {
             font-size: 40px;
-            color: white;
-        }
-
-        .control-buttons .fa-play-circle:hover {
-            color: var(--spotify-green);
+            color: #1DB954;
         }
 
         .progress-bar {
             width: 100%;
-            max-width: 500px;
             height: 4px;
-            background: rgba(255,255,255,0.1);
+            background: #333;
             border-radius: 2px;
+            margin: 10px 0;
             cursor: pointer;
         }
 
         .progress {
             width: 0%;
             height: 100%;
-            background: var(--spotify-green);
+            background: #1DB954;
             border-radius: 2px;
-            position: relative;
         }
 
         /* Modal */
@@ -518,10 +356,11 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.9);
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
 
         .modal.active {
@@ -529,51 +368,16 @@
         }
 
         .modal-content {
-            background: var(--spotify-card);
-            padding: 40px;
+            background: #121212;
+            padding: 30px;
             border-radius: 24px;
-            width: 400px;
-            max-width: 90%;
+            width: 100%;
+            max-width: 400px;
         }
 
         .modal-content h2 {
-            color: var(--spotify-green);
-            margin-bottom: 24px;
-            font-size: 32px;
-        }
-
-        .modal-content input {
-            width: 100%;
-            padding: 16px;
-            margin: 8px 0;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 500px;
-            color: white;
-            font-size: 16px;
-        }
-
-        .modal-content button {
-            width: 100%;
-            padding: 16px;
-            margin: 16px 0;
-            background: var(--spotify-green);
-            border: none;
-            border-radius: 500px;
-            color: black;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .switch-auth {
-            text-align: center;
-            color: var(--spotify-text);
-        }
-
-        .switch-auth span {
-            color: var(--spotify-green);
-            cursor: pointer;
+            color: #1DB954;
+            margin-bottom: 20px;
         }
 
         /* Toast */
@@ -582,144 +386,276 @@
             bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--spotify-green);
+            background: #1DB954;
             color: black;
             padding: 12px 24px;
-            border-radius: 500px;
-            font-weight: 600;
-            z-index: 1001;
+            border-radius: 50px;
+            font-weight: bold;
+            z-index: 2000;
             display: none;
         }
+
+        /* Delete Button */
+        .delete-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
     </style>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <!-- ========== SIDEBAR ========== -->
-        <div class="sidebar">
-            <div class="logo">
-                <i class="fas fa-crown"></i>
-                Music Boss
-            </div>
 
+    <!-- Header -->
+    <div class="header">
+        <h1>🎵 MUSIC BOSS</h1>
+        <p>Upload • Radio • Earn</p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-bar">
+        <button class="nav-btn" onclick="showHome()">🏠 Home</button>
+        <button class="nav-btn secondary" onclick="showUpload()">📤 Upload</button>
+        <button class="nav-btn secondary" onclick="showRadio()">📻 Radio</button>
+        <button class="nav-btn secondary" onclick="showEarnings()">💰 Earnings</button>
+        <button class="nav-btn secondary" onclick="showLibrary()">📚 Library</button>
+    </div>
+
+    <!-- User Info -->
+    <div class="user-info" id="userInfo">
+        <span id="userNameDisplay">Guest User</span>
+        <div class="avatar" id="userAvatar" onclick="showAuthModal()">G</div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <h2 id="authTitle">Login</h2>
+            <input type="email" id="email" placeholder="Email" value="demo@music.com">
+            <input type="password" id="password" placeholder="Password" value="123456">
+            <button onclick="handleAuth()" id="authBtn">Login</button>
+            <button class="secondary" onclick="toggleAuthMode()" id="toggleAuth">Create Account</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent"></div>
+
+    <!-- Player Bar -->
+    <div class="player-bar" id="playerBar">
+        <div class="player-info">
+            <div class="player-img" id="playerImg">🎵</div>
             <div>
-                <div class="nav-item active" onclick="navigate('home')">
-                    <i class="fas fa-home"></i>
-                    Home
-                </div>
-                <div class="nav-item" onclick="navigate('search')">
-                    <i class="fas fa-search"></i>
-                    Search
-                </div>
-                <div class="nav-item" onclick="navigate('library')">
-                    <i class="fas fa-books"></i>
-                    Your Library
-                </div>
-                <div class="nav-item" onclick="navigate('radio')">
-                    <i class="fas fa-broadcast-tower"></i>
-                    Radio
-                </div>
-                <div class="nav-item" onclick="navigate('earnings')">
-                    <i class="fas fa-chart-line"></i>
-                    Earnings
-                </div>
-            </div>
-
-            <div style="margin-top: 20px;">
-                <div class="nav-item" onclick="showUploadModal()">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    Upload Song
-                </div>
-                <div class="nav-item" onclick="navigate('playlists')">
-                    <i class="fas fa-list"></i>
-                    Playlists
-                </div>
-            </div>
-
-            <div style="margin-top: auto;">
-                <div class="playlist-item">Chill Vibes</div>
-                <div class="playlist-item">Workout Hits</div>
-                <div class="playlist-item">Party Mix</div>
-                <div class="playlist-item">Bollywood Top 50</div>
-                <div class="playlist-item">Punjabi Hits</div>
+                <h4 id="playerTitle">Not Playing</h4>
+                <p style="color: #b3b3b3;" id="playerArtist">Select a song</p>
             </div>
         </div>
-
-        <!-- ========== MAIN CONTENT ========== -->
-        <div class="main-content" id="mainContent">
-            <!-- Top Bar -->
-            <div class="top-bar">
-                <div class="nav-buttons">
-                    <div class="nav-circle"><i class="fas fa-chevron-left"></i></div>
-                    <div class="nav-circle"><i class="fas fa-chevron-right"></i></div>
-                </div>
-                <div class="user-btn" onclick="toggleAuth()">
-                    <div class="user-avatar" id="userAvatar">G</div>
-                    <span id="userName">Guest</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-            </div>
-
-            <!-- Dynamic Content -->
-            <div id="homeContent">
-                <!-- Welcome Banner -->
-                <div class="welcome-banner">
-                    <h1>Welcome to Music Boss</h1>
-                    <p>Stream millions of songs, create playlists, and earn money from your music</p>
-                </div>
-
-                <!-- Radio Stations -->
-                <div class="radio-section">
-                    <div class="section-header">
-                        <h2>Live Radio Stations</h2>
-                        <span class="see-all" onclick="navigate('radio')">See all</span>
-                    </div>
-                    <div class="radio-grid" id="radioStations"></div>
-                </div>
-
-                <!-- Trending Now -->
-                <div class="section-header">
-                    <h2>Trending Now</h2>
-                    <span class="see-all">See all</span>
-                </div>
-                <div class="card-grid" id="trendingSongs"></div>
-
-                <!-- Recommended for You -->
-                <div class="section-header">
-                    <h2>Recommended for You</h2>
-                    <span class="see-all">See all</span>
-                </div>
-                <div class="card-grid" id="recommendedSongs"></div>
-
-                <!-- Earnings Dashboard -->
-                <div class="earnings-dashboard" id="earningsPreview">
-                    <div class="earning-card">
-                        <h3>$0</h3>
-                        <p>Total Earnings</p>
-                    </div>
-                    <div class="earning-card">
-                        <h3>0</h3>
-                        <p>Songs Uploaded</p>
-                    </div>
-                    <div class="earning-card">
-                        <h3>0</h3>
-                        <p>Total Plays</p>
-                    </div>
-                    <div class="earning-card">
-                        <h3>$0</h3>
-                        <p>This Month</p>
-                    </div>
-                </div>
-
-                <!-- New Releases -->
-                <div class="section-header">
-                    <h2>New Releases</h2>
-                    <span class="see-all">See all</span>
-                </div>
-                <div class="card-grid" id="newReleases"></div>
-            </div>
+        <div class="progress-bar" onclick="seekTo(event)">
+            <div class="progress" id="progress"></div>
         </div>
+        <div class="player-controls">
+            <i class="fas fa-step-backward" onclick="prevSong()"></i>
+            <i class="fas fa-play-circle" id="playBtn" onclick="playPause()"></i>
+            <i class="fas fa-step-forward" onclick="nextSong()"></i>
+        </div>
+    </div>
 
-        <!-- ========== PLAYER BAR ========== -->
-        <div class="player-bar" id="playerBar" style="display: none;">
-            <div class="player-info">
-                <div class="player-img" id="playe
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ========== GLOBAL VARIABLES ==========
+        let currentUser = null;
+        let songs = [];
+        let currentSong = null;
+        let isPlaying = false;
+        let audio = new Audio();
+        let currentRadio = null;
+        let radioInterval = null;
+        let userEarnings = 0;
+        let userPlays = 0;
+
+        // Radio Stations
+        const radioStations = [
+            { id: 1, name: 'Bollywood Hits', country: 'India', listeners: '2.5M', emoji: '🇮🇳' },
+            { id: 2, name: 'English Pop', country: 'USA', listeners: '5M', emoji: '🇺🇸' },
+            { id: 3, name: 'Punjabi Beats', country: 'India', listeners: '1.8M', emoji: '🇮🇳' },
+            { id: 4, name: 'K-Pop', country: 'Korea', listeners: '3.2M', emoji: '🇰🇷' },
+            { id: 5, name: 'Latin Hits', country: 'Spain', listeners: '4M', emoji: '🇪🇸' },
+            { id: 6, name: 'Japanese Pop', country: 'Japan', listeners: '2.1M', emoji: '🇯🇵' },
+            { id: 7, name: 'French Café', country: 'France', listeners: '1.2M', emoji: '🇫🇷' },
+            { id: 8, name: 'German Beats', country: 'Germany', listeners: '1.5M', emoji: '🇩🇪' },
+            { id: 9, name: 'Arabic Hits', country: 'UAE', listeners: '2.8M', emoji: '🇦🇪' },
+            { id: 10, name: 'UK Top 40', country: 'UK', listeners: '4.5M', emoji: '🇬🇧' }
+        ];
+
+        // Sample Songs
+        const sampleSongs = [
+            { id: 1, title: 'Blinding Lights', artist: 'The Weeknd', emoji: '🎤', plays: 1200000 },
+            { id: 2, title: 'Levitating', artist: 'Dua Lipa', emoji: '✨', plays: 800000 },
+            { id: 3, title: 'Peaches', artist: 'Justin Bieber', emoji: '🍑', plays: 650000 },
+            { id: 4, title: 'Stay', artist: 'Kid Laroi', emoji: '⭐', plays: 900000 },
+            { id: 5, title: 'Kesariya', artist: 'Arijit Singh', emoji: '🌅', plays: 500000 },
+            { id: 6, title: 'Raatan Lambiyan', artist: 'Jubin Nautiyal', emoji: '💕', plays: 400000 }
+        ];
+
+        // ========== INIT ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            checkLogin();
+            showHome();
+        });
+
+        function loadData() {
+            let savedSongs = JSON.parse(localStorage.getItem('songs') || '[]');
+            songs = [...sampleSongs, ...savedSongs];
+        }
+
+        // ========== AUTH FUNCTIONS ==========
+        function showAuthModal() {
+            document.getElementById('authModal').classList.add('active');
+        }
+
+        function toggleAuthMode() {
+            let title = document.getElementById('authTitle');
+            let btn = document.getElementById('authBtn');
+            let toggle = document.getElementById('toggleAuth');
+            
+            if (title.innerText === 'Login') {
+                title.innerText = 'Sign Up';
+                btn.innerText = 'Sign Up';
+                toggle.innerText = 'Back to Login';
+            } else {
+                title.innerText = 'Login';
+                btn.innerText = 'Login';
+                toggle.innerText = 'Create Account';
+            }
+        }
+
+        function handleAuth() {
+            let email = document.getElementById('email').value;
+            let pass = document.getElementById('password').value;
+            let title = document.getElementById('authTitle').innerText;
+
+            if (!email || !pass) {
+                showToast('Please fill all fields');
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('users') || '[]');
+
+            if (title === 'Sign Up') {
+                // Sign Up
+                if (users.find(u => u.email === email)) {
+                    showToast('User already exists!');
+                    return;
+                }
+                let newUser = { email: email, password: pass, name: email.split('@')[0] };
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                currentUser = newUser;
+                localStorage.setItem('currentUser', email);
+                showToast('Account created successfully!');
+            } else {
+                // Login
+                let user = users.find(u => u.email === email && u.password === pass);
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem('currentUser', email);
+                    showToast('Login successful!');
+                } else {
+                    showToast('Invalid credentials!');
+                    return;
+                }
+            }
+
+            document.getElementById('authModal').classList.remove('active');
+            updateUserUI();
+            loadUserEarnings();
+            showHome();
+        }
+
+        function updateUserUI() {
+            if (currentUser) {
+                document.getElementById('userNameDisplay').innerText = currentUser.name || currentUser.email;
+                document.getElementById('userAvatar').innerText = (currentUser.name || currentUser.email)[0].toUpperCase();
+            } else {
+                document.getElementById('userNameDisplay').innerText = 'Guest User';
+                document.getElementById('userAvatar').innerText = 'G';
+            }
+        }
+
+        function checkLogin() {
+            let savedEmail = localStorage.getItem('currentUser');
+            if (savedEmail) {
+                let users = JSON.parse(localStorage.getItem('users') || '[]');
+                currentUser = users.find(u => u.email === savedEmail);
+                updateUserUI();
+                loadUserEarnings();
+            }
+        }
+
+        // ========== HOME PAGE ==========
+        function showHome() {
+            let html = `
+                <!-- Featured -->
+                <div class="section-title">🔥 Trending Now</div>
+                <div class="card-grid" id="trendingGrid"></div>
+
+                <!-- Radio Preview -->
+                <div class="section-title">📻 Live Radio</div>
+                <div class="radio-grid" id="radioPreview"></div>
+
+                <!-- Recommended -->
+                <div class="section-title">🎵 Recommended</div>
+                <div class="card-grid" id="recommendedGrid"></div>
+
+                <!-- Earnings Preview -->
+                <div class="section-title">💰 Your Earnings</div>
+                <div class="earnings-grid" id="earningsPreview"></div>
+            `;
+
+            document.getElementById('mainContent').innerHTML = html;
+
+            // Load Trending
+            let trending = '';
+            sampleSongs.slice(0, 4).forEach(song => {
+                trending += createSongCard(song);
+            });
+            document.getElementById('trendingGrid').innerHTML = trending;
+
+            // Load Radio Preview
+            let radio = '';
+            radioStations.slice(0, 3).forEach(station => {
+                radio += `
+                    <div class="radio-card" onclick="playRadio(${station.id})">
+                        <span class="live-badge">LIVE</span>
+                        <h2>${station.emoji}</h2>
+                        <h3>${station.name}</h3>
+                        <p>${station.country}</p>
+                    </div>
+                `;
+            });
+            document.getElementById('radioPreview').innerHTML = radio;
+
+            // Load Recommended
+            let recommended = '';
+            songs.slice(0, 4).forEach(song => {
+                recommended += createSongCard(song);
+            });
+            document.getElementById('recommendedGrid').innerHTML = recommended;
+
+            // Load Earnings Preview
+            updateEarningsPreview();
+        }
+
+        function createSongCard(song) {
+            return `
+                <div class="music-card" onclick="playSong(${song.id})">
+ 
