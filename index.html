@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Boss — premium sound experience</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Music Boss - Upload & Play</title>
     <!-- Font Awesome 6 (free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -19,6 +19,7 @@
             color: #f0f3f8;
             line-height: 1.5;
             scroll-behavior: smooth;
+            padding-bottom: 80px;
         }
 
         /* custom scroll */
@@ -90,11 +91,16 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 1.4rem 0;
+            padding: 1rem 2rem;
+            background: rgba(11, 12, 15, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .logo {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 800;
             background: linear-gradient(130deg, #ffffff, #f0b3b3);
             -webkit-background-clip: text;
@@ -110,21 +116,62 @@
         }
         .nav-links {
             display: flex;
-            gap: 2.5rem;
+            gap: 2rem;
             align-items: center;
         }
         .nav-links a {
             color: #e0e4f0;
             text-decoration: none;
             font-weight: 500;
-            font-size: 1.05rem;
+            font-size: 1rem;
             transition: 0.2s;
             border-bottom: 2px solid transparent;
             padding-bottom: 4px;
+            cursor: pointer;
         }
-        .nav-links a:hover {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: white;
             border-bottom-color: #e43d3d;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: #e43d3d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* Upload Button */
+        .upload-btn {
+            background: #e43d3d;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .upload-btn:hover {
+            background: #ff2b2b;
+            transform: scale(1.02);
         }
 
         /* hero */
@@ -152,7 +199,7 @@
             backdrop-filter: blur(4px);
         }
         .hero-content h1 {
-            font-size: 3.8rem;
+            font-size: 3.5rem;
             line-height: 1.1;
             margin-bottom: 1.5rem;
             background: linear-gradient(to right, #ffffff, #d6dae8);
@@ -178,388 +225,455 @@
             gap: 1.2rem;
             flex-wrap: wrap;
         }
-        .hero-visual {
-            flex: 1 1 350px;
-            background: radial-gradient(circle at 30% 30%, #2f2a42, #0c0b14);
-            border-radius: 38px;
-            padding: 2rem 2rem;
-            box-shadow: 0 40px 50px -15px black;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(8px);
-            display: flex;
-            flex-direction: column;
-            gap: 1.8rem;
+
+        /* Upload Section */
+        .upload-section {
+            background: #13151d;
+            border-radius: 30px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #2a2d38;
+            display: none;
         }
-        .now-playing {
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
+
+        .upload-section.active {
+            display: block;
         }
-        .cover-art {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #b87474, #4d2f2f);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 12px 18px -5px #1f0c0c;
+
+        .upload-section h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #e43d3d;
         }
-        .cover-art i {
-            font-size: 2.2rem;
-            color: white;
-            opacity: 0.9;
+
+        .upload-area {
+            border: 2px dashed #e43d3d;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: 0.3s;
         }
-        .track-info p {
-            color: #d1d5e6;
-            font-weight: 500;
+
+        .upload-area:hover {
+            background: rgba(228, 61, 61, 0.1);
         }
-        .track-info .artist {
+
+        .upload-area i {
+            font-size: 3rem;
+            color: #e43d3d;
+            margin-bottom: 1rem;
+        }
+
+        .upload-area h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-area p {
+            color: #9299b0;
             font-size: 0.9rem;
-            color: #9aa1b8;
         }
-        .progress-area {
+
+        .upload-form {
+            margin-top: 1.5rem;
+        }
+
+        .upload-form input,
+        .upload-form select {
             width: 100%;
-        }
-        .progress-bar {
-            height: 6px;
-            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: #0b0c0f;
+            border: 1px solid #2a2d38;
             border-radius: 10px;
-            margin: 0.6rem 0 0.3rem;
+            color: white;
+            font-size: 1rem;
         }
-        .progress-fill {
-            width: 67%;
-            height: 6px;
-            background: linear-gradient(90deg, #e43d3d, #ffa576);
-            border-radius: 10px;
+
+        .upload-form input:focus,
+        .upload-form select:focus {
+            outline: none;
+            border-color: #e43d3d;
         }
-        .time-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            color: #9aa1b8;
-        }
-        .controls {
-            display: flex;
-            gap: 1.5rem;
-            font-size: 1.4rem;
-            justify-content: center;
-            margin-top: 0.5rem;
-        }
-        .controls i {
-            background: rgba(255,255,255,0.05);
-            padding: 0.8rem;
-            border-radius: 50%;
-            transition: 0.15s;
-            cursor: default;
-        }
-        .controls i:hover {
+
+        .upload-form button {
+            width: 100%;
+            padding: 1rem;
             background: #e43d3d;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .upload-form button:hover {
+            background: #ff2b2b;
         }
 
         /* featured section */
         .featured {
-            padding: 4rem 0;
+            padding: 3rem 0;
             border-top: 1px solid rgba(255,255,255,0.05);
         }
         .section-header {
             display: flex;
-            align-items: baseline;
+            align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
             margin-bottom: 2rem;
+        }
+        .section-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0;
         }
         .section-header a {
             color: #e43d3d;
             text-decoration: none;
             font-weight: 500;
+            cursor: pointer;
         }
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1.5rem;
         }
         .music-card {
             background: #13151d;
-            border-radius: 24px;
-            padding: 1.4rem 1rem 1.4rem 1rem;
+            border-radius: 20px;
+            padding: 1rem;
             transition: 0.2s ease;
             border: 1px solid #2a2d38;
-            backdrop-filter: blur(2px);
-            text-align: center;
+            cursor: pointer;
+            position: relative;
         }
         .music-card:hover {
             background: #1b1e2a;
-            transform: translateY(-8px);
+            transform: translateY(-5px);
             border-color: #e43d3d60;
-            box-shadow: 0 30px 35px -16px #e43d3d40;
         }
         .card-img {
             width: 100%;
             aspect-ratio: 1/1;
             background: linear-gradient(145deg, #333842, #181b24);
-            border-radius: 18px;
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.6rem;
+            font-size: 2.5rem;
             color: #dd8585;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+        }
+        .play-btn {
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            background: #e43d3d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: 0.3s;
+        }
+        .music-card:hover .play-btn,
+        .music-card:active .play-btn {
+            opacity: 1;
         }
         .music-card h4 {
-            font-size: 1.2rem;
+            font-size: 1rem;
             margin-bottom: 0.2rem;
         }
         .music-card p {
             color: #9299b0;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
-
-        /* top charts / playlist */
-        .playlist-row {
+        .upload-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e43d3d;
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            font-size: 0.7rem;
             display: flex;
-            flex-wrap: wrap;
-            gap: 2.5rem;
-            background: #0f1117ee;
-            border-radius: 42px;
-            padding: 2.5rem 2rem;
-            border: 1px solid #2c2f3b;
-            margin: 3rem 0;
-        }
-        .chart-item {
-            display: flex;
-            gap: 1.2rem;
             align-items: center;
-            flex: 1 1 300px;
+            gap: 3px;
         }
-        .chart-cover {
-            width: 70px;
-            height: 70px;
-            background: #262a36;
-            border-radius: 18px;
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #dc3545;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            color: #e43d3d;
+            cursor: pointer;
+            opacity: 0;
+            transition: 0.3s;
+            z-index: 10;
         }
-        .chart-meta h4 {
-            font-size: 1.2rem;
-        }
-        .chart-meta span {
-            color: #9097af;
-        }
-        .trending-tag {
-            margin-left: auto;
-            background: #e43d3d20;
-            color: #ff9f9f;
-            padding: 0.2rem 1rem;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            border: 1px solid #e43d3d40;
+        .music-card:hover .delete-btn,
+        .music-card:active .delete-btn {
+            opacity: 1;
         }
 
-        /* cta banner */
-        .boss-cta {
-            background: linear-gradient(130deg, #1b131f, #0f0c1a);
-            border-radius: 60px;
-            padding: 4rem 3rem;
-            margin: 3rem 0;
-            border: 1px solid #3a2b36;
-            display: flex;
-            flex-direction: column;
+        /* Player Bar */
+        .player-bar {
+            background: #13151d;
+            border-top: 1px solid #2a2d38;
+            padding: 0.8rem 1rem;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: none;
             align-items: center;
-            text-align: center;
+            justify-content: space-between;
+            z-index: 1000;
         }
-        .boss-cta h2 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            -webkit-text-fill-color: white;
-            background: none;
-        }
-        .boss-cta .boss-highlight {
-            color: #ff5e5e;
-            font-weight: 800;
-        }
-        .cta-small {
-            color: #b2b9d0;
-            max-width: 550px;
-            margin: 1.5rem 0 2rem;
-        }
-
-        /* footer */
-        .footer {
-            border-top: 1px solid #1f212b;
-            padding: 3rem 0 4rem;
-            margin-top: 2rem;
-            color: #8e95ad;
-        }
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 2.5rem;
-        }
-        .footer-col p {
-            margin: 0.8rem 0;
-        }
-        .footer-logo {
-            font-size: 2rem;
-            font-weight: 800;
-            background: linear-gradient(130deg, #fff, #cfc3c3);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .social-icons {
+        .now-playing {
             display: flex;
-            gap: 1.2rem;
-            margin-top: 1.2rem;
+            align-items: center;
+            gap: 1rem;
+            width: 40%;
         }
-        .social-icons i {
+        .now-playing-img {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #e43d3d, #8b3d3d);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.5rem;
-            color: #a7aecb;
-            transition: 0.2s;
+            background-size: cover;
+            background-position: center;
         }
-        .social-icons i:hover {
+        .now-playing-info h4 {
+            font-size: 0.95rem;
+            margin-bottom: 0.2rem;
+        }
+        .now-playing-info p {
+            font-size: 0.8rem;
+            color: #9299b0;
+        }
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .player-controls i {
+            font-size: 1.2rem;
+            color: white;
+            cursor: pointer;
+        }
+        .player-controls .fa-play-circle {
+            font-size: 2.2rem;
             color: #e43d3d;
         }
-        .copyright {
-            text-align: center;
-            padding-top: 3rem;
-            font-size: 0.95rem;
+        .progress-container {
+            position: absolute;
+            top: -5px;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: #2a2d38;
+        }
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: #e43d3d;
         }
 
-        /* responsive */
-        @media (max-width: 700px) {
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: #13151d;
+            padding: 2rem;
+            border-radius: 30px;
+            width: 100%;
+            max-width: 350px;
+            border: 1px solid #2a2d38;
+        }
+        .modal-content h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #e43d3d;
+        }
+        .modal-content input {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: #0b0c0f;
+            border: 1px solid #2a2d38;
+            border-radius: 10px;
+            color: white;
+        }
+        .modal-content button {
+            width: 100%;
+            padding: 1rem;
+            background: #e43d3d;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .modal-footer {
+            text-align: center;
+            margin-top: 1rem;
+            color: #9299b0;
+        }
+        .modal-footer span {
+            color: #e43d3d;
+            cursor: pointer;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e43d3d;
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            display: none;
+            z-index: 2001;
+            font-size: 0.95rem;
+            box-shadow: 0 5px 20px rgba(228,61,61,0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
             .navbar {
-                flex-direction: column;
-                gap: 0.8rem;
+                padding: 0.8rem 1rem;
+            }
+            .logo {
+                font-size: 1.4rem;
+            }
+            .nav-links {
+                display: none;
             }
             .hero-content h1 {
-                font-size: 2.8rem;
+                font-size: 2.5rem;
+            }
+            .container {
+                padding: 0 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- header -->
-        <nav class="navbar">
-            <div class="logo">
-                <i class="fas fa-crown"></i> Music Boss
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-crown"></i> Music Boss
+        </div>
+        <div class="nav-links">
+            <a class="active" onclick="showSection('home')">Home</a>
+            <a onclick="showSection('uploads')">My Uploads</a>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <button class="upload-btn" onclick="toggleUpload()">
+                <i class="fas fa-upload"></i> Upload
+            </button>
+            <div class="user-profile" onclick="toggleAuth()">
+                <div class="avatar" id="userAvatar">G</div>
             </div>
-            <div class="nav-links">
-                <a href="#">Home</a>
-                <a href="#">Trending</a>
-                <a href="#">Playlists</a>
-                <a href="#">Artists</a>
-                <a href="#">Podcasts</a>
-            </div>
-            <button class="btn-outline" style="padding: 0.5rem 1.5rem;"><i class="fas fa-user"></i> Sign in</button>
-        </nav>
+        </div>
+    </nav>
 
-        <!-- hero + music player mock -->
+    <!-- Main Content -->
+    <div class="container" id="mainContent">
+        <!-- Hero Section -->
         <div class="hero">
             <div class="hero-content">
-                <span class="badge"><i class="fas fa-bolt"></i> STUDIO QUALITY</span>
-                <h1>Own the sound. <br><span>Be the Boss.</span></h1>
-                <p class="hero-desc">70M+ tracks, exclusive podcasts and ad‑free music. Created for those who command the rhythm.</p>
+                <span class="badge"><i class="fas fa-bolt"></i> UPLOAD & PLAY</span>
+                <h1>Upload your music. <br><span>Be the Boss.</span></h1>
+                <p class="hero-desc">Upload songs with posters, play them anytime. Your personal music library.</p>
                 <div class="hero-buttons">
-                    <button class="btn-primary"><i class="fas fa-play"></i> LISTEN NOW</button>
-                    <button class="btn-outline"><i class="far fa-heart"></i> DISCOVER</button>
-                </div>
-                <div style="margin-top: 2rem; display: flex; gap: 2rem;">
-                    <span><i class="fas fa-waveform" style="color:#e43d3d;"></i> lossless audio</span>
-                    <span><i class="fas fa-circle-check" style="color:#e43d3d;"></i> 100M+ songs</span>
-                </div>
-            </div>
-            <div class="hero-visual">
-                <div class="now-playing">
-                    <div class="cover-art"><i class="fas fa-headphones"></i></div>
-                    <div class="track-info">
-                        <p>BOSS MODE</p>
-                        <div class="artist">BossBeats · The empire</div>
-                    </div>
-                </div>
-                <div class="progress-area">
-                    <div class="progress-bar"><div class="progress-fill"></div></div>
-                    <div class="time-row"><span>1:24</span><span>3:56</span></div>
-                </div>
-                <div class="controls">
-                    <i class="fas fa-backward-step"></i>
-                    <i class="fas fa-circle-play" style="color:#e43d3d; font-size: 2.2rem;"></i>
-                    <i class="fas fa-forward-step"></i>
-                </div>
-                <div style="display: flex; justify-content: center; gap: 0.8rem; color: #aaa; font-size:0.9rem;">
-                    <i class="fas fa-volume-high"></i> mastered · MB
+                    <button class="btn-primary" onclick="playFeatured()"><i class="fas fa-play"></i> PLAY NOW</button>
+                    <button class="btn-outline" onclick="toggleUpload()"><i class="fas fa-upload"></i> UPLOAD SONG</button>
                 </div>
             </div>
         </div>
 
-        <!-- featured releases -->
+        <!-- Upload Section -->
+        <div class="upload-section" id="uploadSection">
+            <h3><i class="fas fa-cloud-upload-alt"></i> Upload New Song</h3>
+            
+            <!-- Hidden Inputs -->
+            <input type="file" id="audioFile" accept="audio/*" style="display: none;" onchange="handleAudioSelect(event)">
+            <input type="file" id="posterFile" accept="image/*" style="display: none;" onchange="handlePosterSelect(event)">
+            
+            <!-- Audio Upload Area -->
+            <div class="upload-area" onclick="document.getElementById('audioFile').click()">
+                <i class="fas fa-music"></i>
+                <h4>Select Audio File</h4>
+                <p id="audioFileName">MP3, WAV, M4A supported</p>
+            </div>
+
+            <!-- Poster Upload Area -->
+            <div class="upload-area" onclick="document.getElementById('posterFile').click()">
+                <i class="fas fa-image"></i>
+                <h4>Select Poster Image</h4>
+                <p id="posterFileName">JPG, PNG, GIF supported</p>
+            </div>
+
+            <!-- Upload Form -->
+            <div class="upload-form">
+                <input type="text" id="songTitle" placeholder="Song Title" value="">
+                <input type="text" id="songArtist" placeholder="Artist Name" value="">
+                <select id="songGenre">
+                    <option value="Pop">Pop</option>
+                    <option value="Rock">Rock</option>
+                    <option value="Hip Hop">Hip Hop</option>
+                    <option value="Bollywood">Bollywood</option>
+                    <option value="Classical">Classical</option>
+                </select>
+                <button onclick="uploadSong()"><i class="fas fa-cloud-upload-alt"></i> Upload Now</button>
+            </div>
+        </div>
+
+        <!-- My Uploads Section -->
+        <div class="featured" id="uploadsSection">
+            <div class="section-header">
+                <h2><i class="fas fa-cloud-upload-alt"></i> My Uploads</h2>
+                <span class="view-all" onclick="showUploads()">View All</span>
+            </div>
+            <div class="card-grid" id="myUploads"></div>
+        </div>
+
+        <!-- Recently Added -->
         <div class="featured">
             <div class="section-header">
-                <h2>🔥 fresh boss hits</h2>
-                <a href="#">see all <i class="fas fa-arrow-right"></i></a>
-            </div>
-            <div class="card-grid">
-                <div class="music-card"><div class="card-img"><i class="fas fa-microphone-alt"></i></div><h4>loyalty</h4><p>K. Dot · 3M</p></div>
-                <div class="music-card"><div class="card-img"><i class="fas fa-guitar"></i></div><h4>neon skies</h4><p>BOSS x rio</p></div>
-                <div class="music-card"><div class="card-img"><i class="fas fa-drum"></i></div><h4>thunderdome</h4><p>DVSN · 2M</p></div>
-                <div class="music-card"><div class="card-img"><i class="fas fa-compact-disc"></i></div><h4>midnight code</h4><p>BossBeats</p></div>
-                <div class="music-card"><div class="card-img"><i class="fas fa-saxophone"></i></div><h4>smooth bossa</h4><p>nova jazz</p></div>
-            </div>
-        </div>
-
-        <!-- boss playlist / charts -->
-        <div class="playlist-row">
-            <div style="flex:1; min-width:200px;">
-                <h2 style="margin-bottom: 0.5rem; font-size:2rem;">🎧 top 50 boss charts</h2>
-                <p style="color:#a8b0c8;">India's biggest hits updated daily.</p>
-            </div>
-            <div style="flex:2; display: flex; flex-direction: column; gap:1.2rem;">
-                <div class="chart-item"><span class="chart-cover"><i class="fas fa-circle"></i></span><div class="chart-meta"><h4>kuthu boss <span>· 129M</span></h4><span>ar rahman, duo</span></div><span class="trending-tag">#1</span></div>
-                <div class="chart-item"><span class="chart-cover"><i class="fas fa-circle"></i></span><div class="chart-meta"><h4>bossy back <span>· 98M</span></h4><span>divine, karan</span></div><span class="trending-tag">#2</span></div>
-                <div class="chart-item"><span class="chart-cover"><i class="fas fa-circle"></i></span><div class="chart-meta"><h4>rule the city <span>· 87M</span></h4><span>BOSS, AP DHILLON</span></div><span class="trending-tag">+3</span></div>
-            </div>
-        </div>
-
-        <!-- genres / quick picks -->
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin: 2rem 0;">
-            <span style="background:#1d1f2b; padding:0.5rem 1.8rem; border-radius:40px;">hip-hop <i class="fas fa-crown" style="color:#e43d3d;"></i></span>
-            <span style="background:#1d1f2b; padding:0.5rem 1.8rem; border-radius:40px;">Bollywood boss</span>
-            <span style="background:#1d1f2b; padding:0.5rem 1.8rem; border-radius:40px;">indie electronica</span>
-            <span style="background:#1d1f2b; padding:0.5rem 1.8rem; border-radius:40px;">boss classics</span>
-            <span style="background:#1d1f2b; padding:0.5rem 1.8rem; border-radius:40px;">podcast trending</span>
-        </div>
-
-        <!-- big boss cta -->
-        <div class="boss-cta">
-            <h2>become a <span class="boss-highlight">music boss</span> 🎧</h2>
-            <div class="cta-small">Ad-free music + high fidelity + offline boss mode. First month free.</div>
-            <div style="display: flex; gap:1rem;">
-                <button class="btn-primary"><i class="fab fa-apple"></i> try free</button>
-                <button class="btn-outline"><i class="fab fa-google-play"></i> learn more</button>
-            </div>
-            <div style="margin-top: 1.8rem; font-size:0.9rem; color:#a8b0c8;"><i class="fas fa-check-circle" style="color:#e43d3d;"></i> cancel anytime · 70M+ songs</div>
-        </div>
-    </div>
-
-    <!-- footer -->
-    <footer class="footer">
-        <div class="container footer-grid">
-            <div class="footer-col">
-                <div class="footer-logo"><i class="fas fa-crown" style="color:#e43d3d;"></i> Music Boss</div>
-                <p>command the rhythm</p>
-                <div class="social-icons">
-                    <i class="fab fa-instagram"></i>
-                    <i class="fab fa-x-twitter"></i>
-                    <i class="fab fa-facebook"></i>
-                    <i class="fab fa-youtube"></i>
-                </div>
-            </div>
-            <div class="footer-col"><h4>company</h4><p>about</p><p>careers</p><p>boss labs</p></div>
-            <div class="footer-col"><h4>support</h4><p>help center</p><p>community</p><p>legal</p></div>
-            <div class="footer-col"><h4>listen</h4><p>playlists</p><p>charts</p><p>podcasts</p></div>
-        </div>
-  
+                <h2>🔥 Recently Added</h2>
+          
