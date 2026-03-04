@@ -1,419 +1,597 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Music Boss - Permanent Storage</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif;}
+body{background:#000;color:#fff;padding:15px;padding-bottom:100px;}
+.gold{color:#FFD700;}
+.header{background:#111;border:2px solid #FFD700;border-radius:30px;padding:20px;text-align:center;margin-bottom:20px;}
+.header h1{color:#FFD700;font-size:40px;}
+.nav{display:flex;gap:5px;margin-bottom:20px;flex-wrap:wrap;}
+.nav-btn{background:#111;color:#FFD700;border:1px solid #FFD700;padding:12px;border-radius:25px;flex:1;cursor:pointer;font-weight:bold;}
+.nav-btn:hover,.nav-btn.active{background:#FFD700;color:#000;}
+.user{background:#111;border:1px solid #FFD700;border-radius:50px;padding:12px 20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;}
+.avatar{width:40px;height:40px;background:#FFD700;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-weight:bold;cursor:pointer;}
+.section-title{color:#FFD700;font-size:22px;margin:20px 0 10px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:20px;}
+.card{background:#111;border:1px solid #FFD700;border-radius:15px;padding:15px;cursor:pointer;transition:0.3s;}
+.card:hover{transform:translateY(-5px);box-shadow:0 5px 20px rgba(255,215,0,0.3);}
+.card-img{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#FFD700,#000);border-radius:10px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:40px;}
+.play-btn-small{background:#FFD700;color:#000;border:none;padding:5px 10px;border-radius:15px;font-size:12px;font-weight:bold;cursor:pointer;margin-top:5px;}
+.play-btn-small:hover{background:#FFA500;}
+.delete-btn-small{background:#ff4444;color:#fff;border:none;padding:5px 10px;border-radius:15px;font-size:12px;font-weight:bold;cursor:pointer;margin-top:5px;}
+.delete-btn-small:hover{background:#ff0000;}
+.button-group{display:flex;gap:5px;margin-top:5px;}
+.radio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;}
+.radio-card{background:linear-gradient(135deg,#FFD700,#B8860B);border-radius:15px;padding:20px;cursor:pointer;position:relative;}
+.live{position:absolute;top:10px;right:10px;background:red;color:white;padding:3px 8px;border-radius:10px;font-size:10px;}
+.player-bar{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:2px solid #FFD700;padding:15px;display:none;z-index:100;}
+.player-info{display:flex;align-items:center;gap:15px;margin-bottom:10px;}
+.player-img{width:50px;height:50px;background:#FFD700;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;}
+.player-controls{display:flex;align-items:center;justify-content:center;gap:30px;}
+.player-controls i{font-size:24px;color:#fff;cursor:pointer;}
+.player-controls .fa-play-circle{color:#FFD700;font-size:36px;}
+.progress-bar{width:100%;height:5px;background:#333;border-radius:5px;cursor:pointer;}
+.progress{width:0%;height:100%;background:#FFD700;border-radius:5px;}
+.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:1000;align-items:center;justify-content:center;}
+.modal.active{display:flex;}
+.modal-content{background:#111;border:2px solid #FFD700;border-radius:30px;padding:30px;width:90%;max-width:350px;}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#FFD700;color:#000;padding:10px 20px;border-radius:50px;display:none;z-index:2000;}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+<h1>👑 MUSIC BOSS</h1>
+<p style="color:#FFD700;">गाने सुनो • पैसे कमाओ</p>
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav">
+<button class="nav-btn active" onclick="showPage('home')">Home</button>
+<button class="nav-btn" onclick="showPage('upload')">Upload</button>
+<button class="nav-btn" onclick="showPage('radio')">Radio</button>
+<button class="nav-btn" onclick="showPage('earnings')">Earnings</button>
+<button class="nav-btn" onclick="showPage('library')">Library</button>
+</div>
+
+<!-- USER SECTION -->
+<div class="user">
+<span id="userName"><i class="fas fa-user"></i> Guest</span>
+<div class="avatar" id="userAvatar" onclick="showAuth()">G</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="mainContent"></div>
+
+<!-- PLAYER BAR -->
+<div class="player-bar" id="playerBar">
+<div class="player-info">
+<div class="player-img" id="playerImg">🎵</div>
+<div>
+<h4 id="playerTitle">Not Playing</h4>
+<p id="playerArtist" style="color:#FFD700;">-</p>
+</div>
+</div>
+<div class="progress-bar" onclick="seekTo(event)">
+<div class="progress" id="progress"></div>
+</div>
+<div class="player-controls">
+<i class="fas fa-step-backward" onclick="prevSong()"></i>
+<i class="fas fa-play-circle" id="playBtn" onclick="playPause()"></i>
+<i class="fas fa-step-forward" onclick="nextSong()"></i>
+</div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="modal" id="authModal">
+<div class="modal-content">
+<h2 style="color:#FFD700;" id="authTitle">Login</h2>
+<input type="email" id="email" placeholder="Email" value="demo">
+<input type="password" id="password" placeholder="Password" value="123">
+<button onclick="handleAuth()" id="authBtn">Login</button>
+<button class="sec" style="background:#333;" onclick="toggleAuth()" id="toggleAuth">Sign Up</button>
+</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
 <script>
-const audioPlayer = document.getElementById("audioPlayer");
-const songUpload = document.getElementById("songUpload");
-const posterUpload = document.getElementById("posterUpload");
-
-songUpload.addEventListener("change", function(){
-    const file = this.files[0];
-    if(file){
-        const url = URL.createObjectURL(file);
-        audioPlayer.src = url;
-        audioPlayer.play();
-        alert("Song Uploaded & Playing!");
-    }
-});
-
-posterUpload.addEventListener("change", function(){
-    const file = this.files[0];
-    if(file){
-        const url = URL.createObjectURL(file);
-        document.querySelector(".cover-art").style.backgroundImage = `url(${url})`;
-        document.querySelector(".cover-art").style.backgroundSize = "cover";
-        document.querySelector(".cover-art").innerHTML = "";
-        alert("Poster Uploaded!");
-    }
-});
-</script>
-const UNSPLASH_KEY = "f7rgPa7m5QOuti0APoXGZtqUI6oDFFzeYylqRTVm8nY"; // ← ये बदल दो
-// Firebase Config (अपना config डालो - Firebase Console से copy)
-const firebaseConfig = {
-  apiKey: "AIzaSy...your-api-key...",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "your-sender-id",
-  appId: "1:your-app-id:web:your-web-id"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const storage = firebase.storage();
-
-// Global variables
+// ========== GLOBAL VARIABLES ==========
+let user = null;
 let songs = [];
-let currentSongIndex = -1;
+let currentSong = null;
 let isPlaying = false;
-const audio = document.getElementById('audio-player');
+let audio = new Audio();
+let radioInterval = null;
+let currentRadio = null;
+let earnings = 0;
+let plays = 0;
+let hours = 0;
 
-// Load songs from Firestore
-async function loadAllSongs() {
-  try {
-    const snapshot = await db.collection('songs')
-      .orderBy('uploadedAt', 'desc')
-      .get();
+// ========== SAMPLE SONGS WITH REAL AUDIO ==========
+const sampleSongs = [
+{id:1, title:'Blinding Lights', artist:'The Weeknd', emoji:'🎤', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'},
+{id:2, title:'Levitating', artist:'Dua Lipa', emoji:'✨', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'},
+{id:3, title:'Peaches', artist:'Justin Bieber', emoji:'🍑', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3'},
+{id:4, title:'Stay', artist:'Kid Laroi', emoji:'⭐', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3'},
+];
 
-    songs = [];
-    snapshot.forEach(doc => {
-      songs.push({
-        id: doc.id,
-        ...doc.data()
-      });
-    });
+// ========== RADIO STATIONS ==========
+const radios = [
+{id:1, name:'Bollywood Hits', country:'India', emoji:'🇮🇳'},
+{id:2, name:'English Pop', country:'USA', emoji:'🇺🇸'},
+{id:3, name:'Punjabi Beats', country:'India', emoji:'🇮🇳'},
+{id:4, name:'K-Pop', country:'Korea', emoji:'🇰🇷'},
+];
 
-    renderSongs('popular-songs-grid', songs);
-    renderSongs('made-for-you', songs.slice(0, 5));
-  } catch (error) {
-    console.error("Load error:", error);
-    alert("Songs load nahi hue – internet check karo");
-  }
-}
-function renderPlaylists() {
-  const container = document.getElementById('playlists');
-  container.innerHTML = '';
-  playlists.forEach(pl => {
-    const card = document.createElement('div');
-    card.className = 'card bg-gray-800 p-6 rounded-xl cursor-pointer';
-    card.innerHTML = `
-      <h4 class="font-bold text-xl">${pl.name}</h4>
-      <p class="text-sm text-gray-400">${pl.songs.length} songs</p>
-    `;
-    card.onclick = () => showPlaylistSongs(pl);
-    container.appendChild(card);
-  });
-}
-
-function showPlaylistSongs(playlist) {
-  document.getElementById('playlist-title').textContent = playlist.name;
-  const list = document.getElementById('playlist-songs-list');
-  list.innerHTML = '';
-  playlist.songs.forEach(song => {
-    const div = document.createElement('div');
-    div.className = 'bg-gray-700 p-4 rounded-lg flex justify-between items-center';
-    div.innerHTML = `
-      <div>
-        <p class="font-medium">${song.title}</p>
-        <p class="text-sm text-gray-400">${song.artist}</p>
-      </div>
-      <button onclick="playSong({title: '${song.title}', artist: '${song.artist}', audio: '${song.audio}'})" class="text-cyan-400">
-        <i class="fas fa-play"></i>
-      </button>
-    `;
-    list.appendChild(div);
-  });
-  document.getElementById('playlist-songs').classList.remove('hidden');
-}
-
-// Create new playlist
-function createPlaylist() {
-  const name = prompt("Playlist का नाम डालो:");
-  if (name) {
-    playlists.push({ name, songs: [] });
-    localStorage.setItem('playlists', JSON.stringify(playlists));
-    renderPlaylists();
-    alert("Playlist बन गई!");
-  }
-}
-
-// Initial render
-renderPlaylists();
-// renderSongs function में card HTML में ये add करो
-div.innerHTML = `
-  <p class="font-bold">${song.title}</p>
-  <p class="text-sm text-gray-400">${song.artist}</p>
-  <button onclick="addToPlaylist('${song.title}', '${song.artist}', '${song.audio}')" class="mt-2 text-cyan-400 hover:text-cyan-300">
-    <i class="fas fa-plus-circle text-xl"></i> Add to Playlist
-  </button>
-`;
-// Upload Song
-await db.collection('songs').add({
-  title,
-  artist,
-  audio: songUrl, // URL.createObjectURL
-  cover: coverUrl,
-  uploadedAt: new Date()
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded',()=>{
+loadData();
+checkUser();
+showHome();
 });
-async function uploadSong() {
-  const fileInput = document.getElementById('upload-file');
-  const file = fileInput.files[0];
 
-  if (!file) {
-    alert("MP3 file चुनो!");
-    return;
-  }
-
-  function loadData(){
+// ========== LOAD DATA FROM LOCALSTORAGE (REFRESH KE BAAD BHI RAHEGA) ==========
+function loadData(){
+// Load uploaded songs
 let savedSongs = localStorage.getItem('songs');
 if(savedSongs){
+try {
 songs = JSON.parse(savedSongs);
+// Make sure URLs are valid
+songs = songs.map(s => {
+if(s.url && s.url.startsWith('blob:')){
+// Blob URLs need to be recreated - but we'll keep them as is
+}
+return s;
+});
+} catch(e){
+console.log('Error loading songs');
+songs = [];
+}
 } else {
 songs = [];
 }
+
 // Add sample songs if no songs
 if(songs.length === 0){
 songs = [...sampleSongs];
 saveSongs();
 }
-  }
-    const title = document.getElementById('upload-title').value.trim() || "New Song";
-  const artist = document.getElementById('upload-artist').value.trim() || "Unknown";
 
-  // Step 1: Unsplash से random music cover generate
-  let coverUrl = "https://picsum.photos/300/300"; // fallback
+// Load user data
+let savedEarnings = localStorage.getItem('earnings');
+let savedPlays = localStorage.getItem('plays');
+let savedHours = localStorage.getItem('hours');
 
-  try {
-    const res = await fetch(`https://api.unsplash.com/photos/random?query=music,wave,beat&orientation=squarish&client_id=${UNSPLASH_KEY}`);
-    const data = await res.json();
-    if (data.urls?.regular) {
-      coverUrl = data.urls.regular; // high quality image
-      console.log("Unsplash cover:", coverUrl);
-    }
-  } catch (err) {
-    console.log("Unsplash error, using fallback:", err);
-  }
+earnings = savedEarnings ? parseFloat(savedEarnings) : 0;
+plays = savedPlays ? parseInt(savedPlays) : 0;
+hours = savedHours ? parseFloat(savedHours) : 0;
+}
 
-  // Step 2: Local file URL create
-  const songUrl = URL.createObjectURL(file);
-
-  // Step 3: New song object
-    function saveSongs(){
+// ========== SAVE SONGS TO LOCALSTORAGE ==========
+function saveSongs(){
+try {
+// Filter out sample songs before saving
 let songsToSave = songs.filter(s => !sampleSongs.find(sample => sample.id === s.id));
 localStorage.setItem('songs', JSON.stringify(songsToSave));
-    }
-  const newSong = {
-    title,
-    artist,
-    audio: songUrl,
-    cover: coverUrl
-  };
-
-  // Add to library / liked songs
-  likedSongs.push(newSong);
-  localStorage.setItem('likedSongs', JSON.stringify(likedSongs));
-
-  alert(`"${title}" by ${artist} uploaded! Cover auto-generated from Unsplash 🎨`);
-
-  // Refresh library view
-  renderLibrary();
-
-  // Clear inputs
-  fileInput.value = '';
-  document.getElementById('upload-title').value = '';
-  document.getElementById('upload-artist').value = '';
+} catch(e){
+console.log('Error saving songs');
+}
 }
 
-  try {
-    const fileName = `${title}-${artist}-${Date.now()}.mp3`;
-    const storageRef = storage.ref(`songs/${fileName}`);
-    await storageRef.put(file);
-    const audioUrl = await storageRef.getDownloadURL();
-
-    await db.collection('songs').add({
-      title,
-      artist,
-      audio: audioUrl,
-      cover: "https://picsum.photos/300/300",
-      uploadedAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    alert("Song uploaded and saved! 🎵");
-    hideUploadModal();
-    loadAllSongs();  // Refresh list
-    fileInput.value = '';
-  } catch (error) {
-    console.error(error);
-    alert("Upload fail: " + error.message);
-  }
+// ========== SAVE USER DATA ==========
+function saveUserData(){
+localStorage.setItem('earnings', earnings.toString());
+localStorage.setItem('plays', plays.toString());
+localStorage.setItem('hours', hours.toString());
 }
 
-// Render songs (simple version – तुम्हारा पुराना render function अगर है तो replace)
-function renderSongs(containerId, list) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
+function checkUser(){
+let savedUser = localStorage.getItem('user');
+if(savedUser){
+let users = JSON.parse(localStorage.getItem('users')||'[]');
+user = users.find(u=>u.email===savedUser);
+if(user){
+document.getElementById('userName').innerHTML = '<i class="fas fa-user"></i> '+user.name;
+document.getElementById('userAvatar').innerText = user.name[0].toUpperCase();
+}
+}
+}
 
-  container.innerHTML = '';
-  list.forEach((song, index) => {
-    const card = document.createElement('div');
-    card.className = 'song-card bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer p-4';
-    card.innerHTML = `
-      <img src="${song.cover}" class="w-full rounded-lg mb-2">
-      <p class="font-semibold">${song.title}</p>
-      <p class="text-sm text-zinc-400">${song.artist}</p>
-    `;
-    card.onclick = () => playSong(index);
-    container.appendChild(card);
-  });
-}let songs = []; // खाली array – Firestore से भरेगी
+// ========== AUTH ==========
+function showAuth(){
+document.getElementById('authModal').classList.add('active');
+}
 
-// Page load पर songs लोड करो
-window.onload = () => {
-  loadAllSongs();
+function toggleAuth(){
+let t = document.getElementById('authTitle');
+if(t.innerText === 'Login'){
+t.innerText = 'Sign Up';
+document.getElementById('authBtn').innerText = 'Sign Up';
+document.getElementById('toggleAuth').innerText = 'Back to Login';
+}else{
+t.innerText = 'Login';
+document.getElementById('authBtn').innerText = 'Login';
+document.getElementById('toggleAuth').innerText = 'Sign Up';
+}
+}
+
+function handleAuth(){
+let email = document.getElementById('email').value;
+let pass = document.getElementById('password').value;
+let title = document.getElementById('authTitle').innerText;
+if(!email||!pass){toast('Fill all fields');return;}
+let users = JSON.parse(localStorage.getItem('users')||'[]');
+if(title === 'Sign Up'){
+if(users.find(u=>u.email===email)){toast('User exists');return;}
+let newUser = {email:email, pass:pass, name:email.split('@')[0]};
+users.push(newUser);
+localStorage.setItem('users', JSON.stringify(users));
+user = newUser;
+localStorage.setItem('user', email);
+toast('Account created!');
+}else{
+let u = users.find(u=>u.email===email && u.pass===pass);
+if(u){
+user = u;
+localStorage.setItem('user', email);
+toast('Login success!');
+}else{toast('Wrong credentials');return;}
+}
+document.getElementById('authModal').classList.remove('active');
+document.getElementById('userName').innerHTML = '<i class="fas fa-user"></i> '+user.name;
+document.getElementById('userAvatar').innerText = user.name[0].toUpperCase();
+}
+
+// ========== PAGE NAVIGATION ==========
+function showPage(page){
+document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+event.currentTarget.classList.add('active');
+if(page === 'home') showHome();
+if(page === 'upload') showUpload();
+if(page === 'radio') showRadio();
+if(page === 'earnings') showEarnings();
+if(page === 'library') showLibrary();
+}
+
+// ========== HOME PAGE ==========
+function showHome(){
+let html = `
+<div class="section-title">🔥 Trending Now</div>
+<div class="grid" id="trendingGrid"></div>
+<div class="section-title">📻 Live Radio</div>
+<div class="radio-grid" id="radioGrid"></div>
+`;
+document.getElementById('mainContent').innerHTML = html;
+
+let trending = '';
+songs.forEach(s => {
+trending += `<div class="card">
+<div class="card-img">${s.emoji}</div>
+<h3>${s.title}</h3>
+<p style="color:#FFD700;">${s.artist}</p>
+<div class="button-group">
+<button class="play-btn-small" onclick="playSong(${s.id})">▶️ Play</button>
+<button class="delete-btn-small" onclick="deleteSong(${s.id})">🗑️ Delete</button>
+</div>
+</div>`;
+});
+document.getElementById('trendingGrid').innerHTML = trending;
+
+let radio = '';
+radios.forEach(r => {
+radio += `<div class="radio-card" onclick="playRadio('${r.name}')">
+<span class="live">LIVE</span>
+<div style="font-size:45px;">${r.emoji}</div>
+<h3>${r.name}</h3>
+<p>${r.country}</p>
+</div>`;
+});
+document.getElementById('radioGrid').innerHTML = radio;
+}
+
+// ========== PLAY SONG ==========
+function playSong(id){
+let song = songs.find(s => s.id === id);
+if(!song) {
+toast('Song not found');
+return;
+}
+
+// Stop radio if playing
+if(currentRadio){
+clearInterval(radioInterval);
+currentRadio = null;
+}
+
+// Stop current song
+if(isPlaying){
+audio.pause();
+isPlaying = false;
+}
+
+// Set new song
+currentSong = song;
+audio.src = song.url;
+
+// Play audio
+audio.play().then(() => {
+isPlaying = true;
+document.getElementById('playerBar').style.display = 'block';
+document.getElementById('playerTitle').innerText = song.title;
+document.getElementById('playerArtist').innerText = song.artist;
+document.getElementById('playerImg').innerHTML = song.emoji;
+document.getElementById('playBtn').className = 'fas fa-pause-circle';
+toast('🎵 Playing: '+song.title);
+
+// Track earnings
+if(song.user){
+plays++;
+earnings += 0.45;
+hours += 0.1;
+saveUserData();
+}
+}).catch(error => {
+toast('Error playing song. Try again.');
+});
+}
+
+// ========== PLAY RADIO ==========
+function playRadio(name){
+if(currentRadio) clearInterval(radioInterval);
+currentRadio = name;
+document.getElementById('playerBar').style.display = 'block';
+document.getElementById('playerTitle').innerText = name + ' Radio';
+document.getElementById('playerArtist').innerText = 'Live Streaming';
+document.getElementById('playerImg').innerHTML = '📻';
+isPlaying = true;
+document.getElementById('playBtn').className = 'fas fa-pause-circle';
+let progress = 0;
+radioInterval = setInterval(() => {
+progress = (progress + 0.1) % 100;
+document.getElementById('progress').style.width = progress+'%';
+}, 1000);
+toast('📻 '+name+' Radio Live');
+}
+
+// ========== PLAYER CONTROLS ==========
+function playPause(){
+if(currentRadio){
+if(isPlaying){
+clearInterval(radioInterval);
+document.getElementById('playBtn').className = 'fas fa-play-circle';
+} else {
+playRadio(currentRadio);
+}
+isPlaying = !isPlaying;
+return;
+}
+
+if(!currentSong){
+if(songs.length>0) playSong(songs[0].id);
+return;
+}
+
+if(isPlaying){
+audio.pause();
+document.getElementById('playBtn').className = 'fas fa-play-circle';
+} else {
+audio.play().then(() => {
+document.getElementById('playBtn').className = 'fas fa-pause-circle';
+}).catch(error => {
+toast('Cannot play');
+});
+}
+isPlaying = !isPlaying;
+}
+
+function nextSong(){
+if(currentRadio) return;
+if(!currentSong || songs.length===0) return;
+let index = songs.findIndex(s => s.id === currentSong.id);
+let next = (index+1) % songs.length;
+playSong(songs[next].id);
+}
+
+function prevSong(){
+if(currentRadio) return;
+if(!currentSong || songs.length===0) return;
+let index = songs.findIndex(s => s.id === currentSong.id);
+let prev = (index-1+songs.length) % songs.length;
+playSong(songs[prev].id);
+}
+
+function seekTo(e){
+if(!audio.duration || currentRadio) return;
+let bar = e.currentTarget;
+let pos = (e.clientX - bar.getBoundingClientRect().left)/bar.offsetWidth;
+audio.currentTime = pos * audio.duration;
+}
+
+audio.ontimeupdate = function(){
+if(audio.duration && !currentRadio){
+let progress = (audio.currentTime/audio.duration)*100;
+document.getElementById('progress').style.width = progress+'%';
+}
 };
 
-// Firestore से गाने लोड करो
-async function loadAllSongs() {
-  try {
-    const snapshot = await db.collection('Songs').orderBy('uploadedAt', 'desc').get();
-    songs = [];
-    snapshot.forEach(doc => {
-      songs.push({
-        id: doc.id,
-        ...doc.data()
-      });
-    });
-    console.log("Loaded songs from Firestore:", songs.length); // console में चेक करो
-    renderSongs('popular-songs-grid', songs);
-    renderSongs('made-for-you', songs.slice(0, 5));
-    renderSongs('library-grid', songs); // Library में भी दिखाओ
-  } catch (error) {
-    console.error("Firestore load error:", error);
-  }
+// ========== DELETE SONG (ABHI SAVE BHI HOTA HAI) ==========
+function deleteSong(id){
+if(!confirm('Delete this song?')) return;
+
+// Remove from array
+songs = songs.filter(s => s.id !== id);
+
+// Save to localStorage
+saveSongs();
+
+// If currently playing this song, stop it
+if(currentSong && currentSong.id === id){
+audio.pause();
+currentSong = null;
+isPlaying = false;
+document.getElementById('playerBar').style.display = 'none';
 }
 
-// Upload के बाद list refresh
-async function uploadSong() {
-  // ... तुम्हारा upload code (Storage + Firestore add)
-
-  // Success होने पर
-  alert("Song uploaded and saved!");
-  await loadAllSongs(); // तुरंत refresh
+toast('Song deleted');
+showHome(); // Refresh display
 }
 
-// Play, toggle, download etc. functions (तुम्हारे पुराने वाले रख सकते हो या ये यूज करो)
-function playSong(index) {
-  currentSongIndex = index;
-  const song = songs[index];
-  audio.src = song.audio;
-  audio.play();
-  isPlaying = true;
-  document.getElementById('play-btn').innerHTML = '<i class="fas fa-pause"></i>';
-  // बाकी UI update...
-}
-function togglePlay(){
-    if(audioPlayer.paused){
-        audioPlayer.play();
-    } else {
-        audioPlayer.pause();
-    }
-}
-
-function togglePlay() {
-  if (isPlaying) audio.pause();
-  else audio.play();
-  isPlaying = !isPlaying;
-  // UI change...
+// ========== UPLOAD PAGE ==========
+function showUpload(){
+if(!user){toast('Login first');showAuth();return;}
+let html = `
+<div style="background:#111;border:2px solid #FFD700;border-radius:20px;padding:20px;margin:20px 0;">
+<h2 style="color:#FFD700;">📤 Upload Song</h2>
+<input type="file" id="audio" accept="audio/*">
+<input type="text" id="title" placeholder="Song Title">
+<input type="text" id="artist" placeholder="Artist Name">
+<button onclick="uploadSong()">Upload Song</button>
+</div>
+<div class="section-title">Your Uploads</div>
+<div class="grid" id="userUploads"></div>
+`;
+document.getElementById('mainContent').innerHTML = html;
+showUserUploads();
 }
 
-function downloadCurrentSong() {
-  if (currentSongIndex === -1) return alert("No song!");
-  const song = songs[currentSongIndex];
-  const link = document.createElement('a');
-  link.href = song.audio;
-  link.download = `${song.title}.mp3`;
-  link.click();
-}
+// ========== UPLOAD SONG (ABHI SAVE HOTA HAI) ==========
+function uploadSong(){
+let file = document.getElementById('audio').files[0];
+let title = document.getElementById('title').value;
+let artist = document.getElementById('artist').value;
 
-// Modal functions (show/hide)
-function showUploadModal() { document.getElementById('upload-modal').classList.remove('hidden'); }
-function hideUploadModal() { document.getElementById('upload-modal').classList.add('hidden'); }
+if(!file){toast('Select audio file');return;}
+if(!title){toast('Enter title');return;}
+if(!artist){toast('Enter artist');return;}
 
-// Page load
-window.onload = () => {
-  loadAllSongs();
-};
-</script>saveSongs(); // Delete ke baad save
-function switchTab(tab) {
-  // ... existing code for active class
+// Create URL for the file
+let url = URL.createObjectURL(file);
 
-  const contentArea = document.getElementById('main-content');
-  contentArea.innerHTML = ''; // पुराना content clear
-
-  if (tab === 0) { // Home
-    // Home content (hero + made for you + popular)
-    contentArea.innerHTML = /* तुम्हारा home HTML */;
-    renderSongs('popular-songs-grid', songs);
-    renderSongs('made-for-you', songs.slice(0, 5));
-  } else if (tab === 2) { // Your Library
-    contentArea.innerHTML = `
-      <div class="px-12 py-10">
-        <h2 class="text-3xl font-bold mb-6">Your Library</h2>
-        <div id="library-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"></div>
-      </div>
-    `;
-    renderSongs('library-grid', songs); // यहीं songs दिखेंगे
-  }
-  // Search tab के लिए भी add कर सकते हो
-}
-// Firebase init (head में SDK add है तो ये काम करेगा)
-const firebaseConfig = {
-  // अपना config डालो (Firebase Console से copy)
-  apiKey: "AIzaSy...",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "your-sender-id",
-  appId: "1:your-app-id:web:your-web-id"
+let newSong = {
+id: Date.now(),
+title: title,
+artist: artist,
+emoji: '🎵',
+url: url,
+user: user.email,
+plays: 0
 };
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+// Add to songs array
+songs.push(newSong);
 
-// Load songs from Firestore
-async function loadAllSongs() {
-  try {
-    const snapshot = await db.collection('Songs').orderBy('uploadedAt', 'desc').get();
-    const firestoreSongs = [];
-    snapshot.forEach(doc => {
-      firestoreSongs.push({
-        id: doc.id,
-        ...doc.data()
-      });
-    });
+// Save to localStorage
+saveSongs();
 
-    // पुरानी example songs + new Firestore songs merge
-    songs = [...songs, ...firestoreSongs];
-    console.log("Total songs:", songs.length);
-
-    // Render all sections
-    renderSongs('popular-songs-grid', songs);
-    renderSongs('made-for-you', songs.slice(0, 5));
-    renderSongs('library-grid', songs); // Library में भी
-  } catch (error) {
-    console.error("Firestore load error:", error);
-  }
+toast('Song uploaded!');
+showUpload();
 }
 
-// Upload के बाद refresh
-async function uploadSong() {
-  // ... तुम्हारा upload code (Storage + Firestore add)
-saveSongs(); // Upload ke baad save
-  if (success) {
-    alert("Song saved!");
-    await loadAllSongs(); // list update
-  }
+// ========== SHOW USER UPLOADS ==========
+function showUserUploads(){
+let userSongs = songs.filter(s => s.user === user?.email);
+let html = '';
+userSongs.forEach(s => {
+html += `<div class="card">
+<div class="card-img">${s.emoji}</div>
+<h3>${s.title}</h3>
+<p style="color:#FFD700;">${s.artist}</p>
+<div class="button-group">
+<button class="play-btn-small" onclick="playSong(${s.id})">▶️ Play</button>
+<button class="delete-btn-small" onclick="deleteSong(${s.id})">🗑️ Delete</button>
+</div>
+</div>`;
+});
+document.getElementById('userUploads').innerHTML = html || '<p>No uploads</p>';
 }
 
-// Page load पर call
-window.onload = () => {
-  loadAllSongs();
-};
-function addToPlaylist(title, artist, audio) {
-  if (!playlists.length) {
-    alert("पहले कोई playlist बनाओ!");
-    return;
-  }
-
-  // पहली playlist में add कर दो (या prompt से पूछो)
-  const playlistName = prompt("किस playlist में add करना है?", playlists[0].name);
-  const playlist = playlists.find(p => p.name === playlistName);
-
-  if (playlist) {
-    playlist.songs.push({ title, artist, audio });
-    localStorage.setItem('playlists', JSON.stringify(playlists));
-    alert(`"${title}" added to "${playlistName}"!`);
-  } else {
-    alert("Playlist नहीं मिली");
-  }
-  const snapshot = await db.collection('songs').get();
-snapshot.forEach(doc => songs.push(doc.data()));
+// ========== RADIO PAGE ==========
+function showRadio(){
+let html = '<div class="section-title">📻 All Radio Stations</div><div class="radio-grid" id="allRadio"></div>';
+document.getElementById('mainContent').innerHTML = html;
+let radio = '';
+radios.forEach(r => {
+radio += `<div class="radio-card" onclick="playRadio('${r.name}')">
+<span class="live">LIVE</span>
+<div style="font-size:50px;">${r.emoji}</div>
+<h3>${r.name}</h3>
+<p>${r.country}</p>
+</div>`;
+});
+document.getElementById('allRadio').innerHTML = radio;
 }
+
+// ========== EARNINGS PAGE ==========
+function showEarnings(){
+if(!user){toast('Login first');showAuth();return;}
+let userSongs = songs.filter(s => s.user === user?.email);
+let totalEarned = earnings;
+let progress = (hours/500)*100;
+
+let html = `
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:20px 0;">
+<div style="background:#FFD700;color:#000;padding:20px;border-radius:15px;text-align:center;">
+<h2>$${totalEarned.toFixed(2)}</h2>
+<p>Total Earnings</p>
+</div>
+<div style="background:#FFD700;color:#000;padding:20px;border-radius:15px;text-align:center;">
+<h2>${plays}</h2>
+<p>Total Plays</p>
+</div>
+</div>
+
+<div style="background:#111;border:2px solid #FFD700;border-radius:20px;padding:20px;margin:20px 0;">
+<h3 style="color:#FFD700;">💰 500 Hours Rule</h3>
+<div style="background:#333;height:10px;border-radius:5px;margin:10px 0;">
+<div style="width:${progress}%;height:100%;background:#FFD700;border-radius:5px;"></div>
+</div>
+<p>${hours.toFixed(1)}/500 Hours Completed</p>
+</div>
+
+<div class="section-title">Your Songs</div>
+<div class="grid" id="earningsGrid"></div>
+`;
+document.getElementById('mainContent').innerHTML = html;
+
+let songsHtml = '';
+userSongs.forEach(s => {
+songsHtml += `<div class="card">
+<div class="card-img">${s.emoji}</div>
+<h3>${s.title}</h3>
+<p style="color:#FFD700;">${s.artist}</p>
+</div>`;
+});
+document.getElementById('earningsGrid').innerHTML = songsHtml || '<p>No songs yet</p>';
+}
+
+// ========== LIBRARY PAGE ==========
+function showLibrary(){
+if(!user){toast('Login first');showAuth();return;}
+let userSongs = songs.filter(s => s.user === user?.email);
+let html = '<div class="section-title">📚 Your Library</div><div class="grid" id="libraryGrid"></div>';
+document.getElementById('mainContent').innerHTML = html;
+let songsHtml = '';
+userSongs.forEach(s => {
+songsHtml += `<div class="card">
+<div class="card-img">${s.emoji}</div>
+<h3>${s.title}</h3>
+<p style="color:#FFD700;">${s.artist}</p>
+<div class="button-group">
+<button class="play-btn-small" onclick="playSong(${s.id})">▶️ Play</button>
+<button class="delete-btn-small" onclick="deleteSong(${s.id})">🗑️ Delete</button>
+</div>
+</div>`;
+});
+document.getElementById('libraryGrid').innerHTML = songsHtml || '<p>Your library is empty</p>';
+}
+
+// ========== TOAST ==
