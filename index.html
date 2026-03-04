@@ -3,724 +3,255 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Music Boss - Golden Edition</title>
+<title>Music Boss - Golden</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif;}
-body{
-background:#0A0A0F;
-color:#fff;
-padding:15px;
-padding-bottom:100px;
-}
-
-/* GOLDEN THEME */
-:root{
---gold:#FFD700;
---gold-light:#FFE55C;
---gold-dark:#B8860B;
---gold-glow:rgba(255,215,0,0.3);
---bg-dark:#0A0A0F;
---bg-card:#12121A;
---bg-hover:#1A1A24;
---text-light:#FFFFFF;
---text-muted:#A0A0B0;
-}
-
-/* ANIMATIONS */
-@keyframes glow {
-0%{box-shadow:0 0 5px var(--gold);}
-50%{box-shadow:0 0 20px var(--gold);}
-100%{box-shadow:0 0 5px var(--gold);}
-}
-
-@keyframes float {
-0%{transform:translateY(0px);}
-50%{transform:translateY(-5px);}
-100%{transform:translateY(0px);}
-}
-
-@keyframes pulse {
-0%{opacity:1;}
-50%{opacity:0.7;}
-100%{opacity:1;}
-}
-
-/* HEADER */
-.header{
-background:linear-gradient(135deg,#1A1A24,#0A0A0F);
-border:2px solid var(--gold);
-border-radius:30px;
-padding:30px 20px;
-text-align:center;
-margin-bottom:20px;
-box-shadow:0 10px 30px var(--gold-glow);
-position:relative;
-overflow:hidden;
-}
-.header::before{
-content:'';
-position:absolute;
-top:-50%;left:-50%;
-width:200%;height:200%;
-background:radial-gradient(circle,var(--gold-glow) 0%,transparent 70%);
-animation:glow 3s infinite;
-}
-.header h1{
-font-size:48px;
-font-weight:800;
-background:linear-gradient(135deg,var(--gold),var(--gold-light));
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-position:relative;
-}
-.header p{
-color:var(--gold);
-font-size:18px;
-position:relative;
-}
-
-/* NAVIGATION */
-.nav{
-display:flex;
-gap:8px;
-margin-bottom:20px;
-flex-wrap:wrap;
-}
-.nav-btn{
-background:var(--bg-card);
-border:1px solid var(--gold);
-color:var(--text-light);
-padding:12px 15px;
-border-radius:30px;
-font-weight:bold;
-cursor:pointer;
-flex:1;
-min-width:90px;
-transition:0.3s;
-}
-.nav-btn:hover{
-background:var(--gold);
-color:#000;
-transform:translateY(-2px);
-box-shadow:0 5px 20px var(--gold-glow);
-}
-.nav-btn.active{
-background:var(--gold);
-color:#000;
-}
-
-/* USER SECTION */
-.user{
-background:var(--bg-card);
-border:1px solid var(--gold);
-border-radius:50px;
-padding:15px 20px;
-margin-bottom:20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-.avatar{
-width:45px;height:45px;
-background:linear-gradient(135deg,var(--gold),var(--gold-dark));
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:bold;
-font-size:20px;
-cursor:pointer;
-box-shadow:0 0 15px var(--gold-glow);
-}
-
-/* SECTION TITLES */
-.section-title{
-font-size:24px;
-margin:25px 0 15px;
-color:var(--gold);
-display:flex;
-align-items:center;
-gap:10px;
-}
-.section-title i{color:var(--gold);}
-
-/* CARDS GRID */
-.card-grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-gap:12px;
-margin-bottom:20px;
-}
-.music-card{
-background:var(--bg-card);
-border:1px solid var(--gold);
-border-radius:16px;
-padding:15px;
-cursor:pointer;
-transition:0.3s;
-position:relative;
-}
-.music-card:hover{
-transform:translateY(-5px);
-box-shadow:0 10px 25px var(--gold-glow);
-border-color:var(--gold-light);
-}
-.card-img{
-width:100%;aspect-ratio:1;
-background:linear-gradient(135deg,var(--gold-dark),#000);
-border-radius:12px;
-margin-bottom:10px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:40px;
-color:var(--gold);
-}
-.card-title{font-size:14px;font-weight:bold;color:var(--text-light);}
-.card-artist{font-size:12px;color:var(--text-muted);}
-
-/* RADIO GRID */
-.radio-grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
-gap:12px;
-margin-bottom:20px;
-}
-.radio-card{
-background:linear-gradient(135deg,var(--gold-dark),#000);
-border:1px solid var(--gold);
-border-radius:20px;
-padding:20px;
-cursor:pointer;
-transition:0.3s;
-position:relative;
-}
-.radio-card:hover{
-transform:scale(1.02);
-box-shadow:0 10px 25px var(--gold-glow);
-}
-.live-badge{
-position:absolute;top:10px;right:10px;
-background:#FF4444;color:#fff;
-padding:3px 8px;border-radius:12px;
-font-size:10px;animation:pulse 1.5s infinite;
-}
-.radio-card h2{font-size:45px;margin-bottom:10px;}
-.radio-card h3{font-size:16px;color:var(--gold);}
-
-/* UPLOAD SECTION */
-.upload-section{
-background:var(--bg-card);
-border:1px solid var(--gold);
-border-radius:20px;
-padding:20px;
-margin:15px 0;
-}
-.upload-area{
-background:var(--bg-dark);
-border:2px dashed var(--gold);
-border-radius:12px;
-padding:25px;
-text-align:center;
-cursor:pointer;
-margin:10px 0;
-}
-.upload-area:hover{
-background:var(--bg-hover);
-border-color:var(--gold-light);
-}
-.upload-area i{font-size:40px;color:var(--gold);}
-.file-list{
-background:var(--bg-dark);
-border-radius:8px;
-padding:10px;
-margin:10px 0;
-max-height:150px;
-overflow-y:auto;
-}
-.file-item{
-display:flex;justify-content:space-between;
-padding:8px;border-bottom:1px solid var(--gold-glow);
-font-size:12px;
-}
-.remove-file{color:#FF4444;cursor:pointer;}
-
-/* INPUTS */
-input,select{
-width:100%;
-padding:12px 15px;
-margin:8px 0;
-background:var(--bg-dark);
-border:1px solid var(--gold);
-border-radius:25px;
-color:#fff;
-font-size:14px;
-}
-input:focus{
-outline:none;
-border-color:var(--gold-light);
-box-shadow:0 0 10px var(--gold-glow);
-}
-
-/* BUTTONS */
-button{
-background:linear-gradient(135deg,var(--gold),var(--gold-dark));
-color:#000;
-border:none;
-padding:14px 20px;
-border-radius:30px;
-font-weight:bold;
-font-size:16px;
-cursor:pointer;
-width:100%;
-margin:8px 0;
-transition:0.3s;
-}
-button:hover{
-transform:translateY(-2px);
-box-shadow:0 5px 20px var(--gold-glow);
-}
-button.sec{background:#333;color:#fff;}
-
-/* EARNINGS GRID */
-.earnings-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-gap:12px;
-margin:15px 0;
-}
-.earning-card{
-background:linear-gradient(135deg,var(--gold-dark),#000);
-border:1px solid var(--gold);
-border-radius:16px;
-padding:20px;
-text-align:center;
-}
-.earning-card h3{font-size:28px;color:var(--gold);}
-
-/* PLAYER BAR */
-.player-bar{
-position:fixed;bottom:0;left:0;right:0;
-background:var(--bg-card);
-border-top:2px solid var(--gold);
-padding:15px;
-display:none;
-z-index:100;
-}
-.player-info{
-display:flex;align-items:center;gap:15px;margin-bottom:8px;
-}
-.player-img{
-width:50px;height:50px;
-background:linear-gradient(135deg,var(--gold),var(--gold-dark));
-border-radius:10px;
-display:flex;align-items:center;justify-content:center;
-font-size:24px;
-}
-.player-controls{
-display:flex;align-items:center;justify-content:center;gap:25px;
-}
-.player-controls i{
-font-size:24px;color:var(--text-muted);cursor:pointer;
-}
-.player-controls i:hover{color:var(--gold);}
-.player-controls .fa-play-circle{color:var(--gold);font-size:36px;}
-.progress-bar{
-width:100%;height:4px;
-background:#333;border-radius:2px;margin:8px 0;cursor:pointer;
-}
-.progress{
-width:0%;height:100%;
-background:linear-gradient(90deg,var(--gold),var(--gold-light));
-border-radius:2px;
-}
-
-/* MODAL */
-.modal{
-display:none;position:fixed;top:0;left:0;right:0;bottom:0;
-background:rgba(0,0,0,0.9);
-z-index:1000;align-items:center;justify-content:center;
-}
-.modal.active{display:flex;}
-.modal-content{
-background:var(--bg-card);
-border:2px solid var(--gold);
-border-radius:30px;
-padding:30px;
-width:90%;max-width:350px;
-}
-.modal-content h2{color:var(--gold);margin-bottom:20px;}
-
-/* TOAST */
-.toast{
-position:fixed;bottom:100px;left:50%;
-transform:translateX(-50%);
-background:var(--gold);
-color:#000;padding:10px 25px;
-border-radius:50px;font-weight:bold;
-display:none;z-index:2000;
-}
-
-/* DELETE BTN */
-.delete-btn{
-background:#FF4444;color:#fff;
-border:none;padding:5px 10px;
-border-radius:5px;font-size:11px;
-cursor:pointer;margin-top:5px;
-}
-
-/* RULES SECTION */
-.rules-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:15px;
-margin:20px 0;
-}
-.rule-card{
-background:var(--bg-card);
-border:1px solid var(--gold);
-border-radius:16px;
-padding:20px;
-}
-.rule-title{
-color:var(--gold);font-size:18px;
-font-weight:bold;margin-bottom:10px;
-display:flex;align-items:center;gap:10px;
-}
-.rule-desc{color:var(--text-muted);line-height:1.6;font-size:14px;}
-.rule-highlight{color:var(--gold);font-weight:bold;}
-
-/* TAGLINE */
-.tagline{
-background:linear-gradient(135deg,var(--gold-glow),transparent);
-border:1px solid var(--gold);
-border-radius:50px;
-padding:10px 20px;
-margin:5px;
-display:inline-block;
-color:var(--gold);
-font-weight:bold;
-}
+body{background:#000;color:#fff;font-family:Arial;padding:10px;}
+.gold{color:#FFD700;}
+button{background:#FFD700;color:#000;border:none;padding:12px;margin:5px;border-radius:25px;width:100%;font-weight:bold;cursor:pointer;}
+input{width:100%;padding:12px;margin:5px;background:#111;color:#fff;border:1px solid #FFD700;border-radius:25px;}
+.card{background:#111;padding:15px;margin:10px 0;border-radius:15px;border:1px solid #FFD700;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
+.nav{display:flex;gap:5px;margin:10px 0;}
+.nav-btn{background:#111;color:#FFD700;border:1px solid #FFD700;padding:10px;border-radius:20px;flex:1;cursor:pointer;}
+.nav-btn:hover{background:#FFD700;color:#000;}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="header">
-<h1>👑 MUSIC BOSS</h1>
-<div style="margin-top:10px;">
-<span class="tagline">🎵 गाने सुनो पैसे कमाओ</span>
-<span class="tagline">🎵 Listen & Earn</span>
-<span class="tagline">🎵 గానం విని డబ్బు సంపాదించండి</span>
-</div>
+<div style="text-align:center;margin:20px 0;">
+<h1 style="color:#FFD700;font-size:48px;">👑 MUSIC BOSS</h1>
+<p style="color:#FFD700;">गाने सुनो पैसे कमाओ | Listen & Earn</p>
 </div>
 
-<!-- NAVIGATION -->
 <div class="nav">
-<button class="nav-btn active" onclick="showPage('home')"><i class="fas fa-home"></i> Home</button>
-<button class="nav-btn" onclick="showPage('upload')"><i class="fas fa-upload"></i> Upload</button>
-<button class="nav-btn" onclick="showPage('radio')"><i class="fas fa-broadcast-tower"></i> Radio</button>
-<button class="nav-btn" onclick="showPage('earnings')"><i class="fas fa-chart-line"></i> Earnings</button>
-<button class="nav-btn" onclick="showPage('library')"><i class="fas fa-books"></i> Library</button>
-<button class="nav-btn" onclick="showPage('rules')"><i class="fas fa-scale-balanced"></i> Rules</button>
+<button class="nav-btn" onclick="showHome()">Home</button>
+<button class="nav-btn" onclick="showUpload()">Upload</button>
+<button class="nav-btn" onclick="showRadio()">Radio</button>
+<button class="nav-btn" onclick="showEarnings()">Earnings</button>
 </div>
 
-<!-- USER SECTION -->
-<div class="user">
-<div><i class="fas fa-user"></i> <span id="userName">Guest User</span></div>
-<div class="avatar" id="userAvatar" onclick="showAuth()">G</div>
-</div>
-
-<!-- MAIN CONTENT -->
-<div id="mainContent"></div>
-
-<!-- PLAYER BAR -->
-<div class="player-bar" id="playerBar">
-<div class="player-info">
-<div class="player-img" id="playerImg">🎵</div>
-<div>
-<h4 id="playerTitle">Not Playing</h4>
-<p id="playerArtist" style="color:var(--text-muted);">-</p>
-</div>
-</div>
-<div class="progress-bar" onclick="seekTo(event)">
-<div class="progress" id="progress"></div>
-</div>
-<div class="player-controls">
-<i class="fas fa-step-backward" onclick="prevSong()"></i>
-<i class="fas fa-play-circle" id="playBtn" onclick="playPause()"></i>
-<i class="fas fa-step-forward" onclick="nextSong()"></i>
-</div>
-</div>
-
-<!-- AUTH MODAL -->
-<div class="modal" id="authModal">
-<div class="modal-content">
-<h2 id="authTitle">Login</h2>
-<input type="email" id="email" placeholder="Email" value="demo">
-<input type="password" id="password" placeholder="Password" value="123">
-<button onclick="handleAuth()" id="authBtn">Login</button>
-<button class="sec" onclick="toggleAuth()" id="toggleAuth">Sign Up</button>
-</div>
-</div>
-
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
+<div id="main"></div>
 
 <script>
-// DATA
-let user=null;
-let songs=[];
-let current=null;
-let playing=false;
-let audio=new Audio();
-let radio=null;
-let radioInt=null;
-let earnings=0;
-let plays=0;
-let hours=0;
-let audioFiles=[];
-let imageFiles=[];
+// Simple data
+let user = localStorage.getItem('user') || null;
+let songs = JSON.parse(localStorage.getItem('songs') || '[]');
+let earnings = parseInt(localStorage.getItem('earnings') || '0');
+let hours = parseInt(localStorage.getItem('hours') || '0');
 
-// SAMPLE SONGS
-const demoSongs=[
-{id:1,title:'Blinding Lights',artist:'The Weeknd',emoji:'🎤',plays:1200,earns:45},
-{id:2,title:'Levitating',artist:'Dua Lipa',emoji:'✨',plays:800,earns:32},
-{id:3,title:'Peaches',artist:'Justin Bieber',emoji:'🍑',plays:650,earns:28},
-{id:4,title:'Stay',artist:'Kid Laroi',emoji:'⭐',plays:900,earns:40},
+// Default songs
+if(songs.length === 0){
+songs = [
+{id:1, title:'Blinding Lights', artist:'Weeknd', emoji:'🎤'},
+{id:2, title:'Levitating', artist:'Dua Lipa', emoji:'✨'},
+{id:3, title:'Peaches', artist:'JB', emoji:'🍑'},
 ];
-
-// RADIO STATIONS
-const radios=[
-{id:1,name:'Bollywood Hits',country:'India',emoji:'🇮🇳'},
-{id:2,name:'English Pop',country:'USA',emoji:'🇺🇸'},
-{id:3,name:'Punjabi Beats',country:'India',emoji:'🇮🇳'},
-{id:4,name:'K-Pop',country:'Korea',emoji:'🇰🇷'},
-{id:5,name:'Latin Hits',country:'Spain',emoji:'🇪🇸'},
-];
-
-// START
-document.addEventListener('DOMContentLoaded',()=>{
-loadData();
-checkUser();
-showHome();
-});
-
-function loadData(){
-let saved=JSON.parse(localStorage.getItem('songs')||'[]');
-songs=[...demoSongs,...saved];
+localStorage.setItem('songs', JSON.stringify(songs));
 }
 
-function checkUser(){
-let saved=localStorage.getItem('user');
-if(saved){
-let users=JSON.parse(localStorage.getItem('users')||'[]');
-user=users.find(u=>u.email===saved);
-if(user){
-document.getElementById('userName').innerText=user.name||user.email;
-document.getElementById('userAvatar').innerText=(user.name||user.email)[0];
-loadUserData();
-}
-}
-}
-
-function loadUserData(){
-let d=JSON.parse(localStorage.getItem('data_'+user?.email)||'{"earns":0,"plays":0,"hours":0}');
-earnings=d.earns;plays=d.plays;hours=d.hours;
-}
-
-function saveUserData(){
-if(!user)return;
-localStorage.setItem('data_'+user.email,JSON.stringify({earns:earnings,plays:plays,hours:hours}));
-}
-
-function showAuth(){
-document.getElementById('authModal').classList.add('active');
-}
-
-function toggleAuth(){
-let t=document.getElementById('authTitle');
-if(t.innerText==='Login'){
-t.innerText='Sign Up';
-document.getElementById('authBtn').innerText='Sign Up';
-document.getElementById('toggleAuth').innerText='Back to Login';
-}else{
-t.innerText='Login';
-document.getElementById('authBtn').innerText='Login';
-document.getElementById('toggleAuth').innerText='Sign Up';
-}
-}
-
-function handleAuth(){
-let e=document.getElementById('email').value;
-let p=document.getElementById('password').value;
-let t=document.getElementById('authTitle').innerText;
-if(!e||!p){toast('Fill all');return;}
-let users=JSON.parse(localStorage.getItem('users')||'[]');
-if(t==='Sign Up'){
-if(users.find(u=>u.email===e)){toast('Exists');return;}
-let newUser={email:e,pass:p,name:e.split('@')[0]};
-users.push(newUser);
-localStorage.setItem('users',JSON.stringify(users));
-user=newUser;
-localStorage.setItem('user',e);
-toast('Account created!');
-}else{
-let u=users.find(u=>u.email===e&&u.pass===p);
-if(u){user=u;localStorage.setItem('user',e);toast('Login success!');}
-else{toast('Wrong');return;}
-}
-document.getElementById('authModal').classList.remove('active');
-document.getElementById('userName').innerText=user.name||user.email;
-document.getElementById('userAvatar').innerText=(user.name||user.email)[0];
-loadUserData();
-showHome();
-}
-
-// PAGE NAVIGATION
-function showPage(page){
-document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-event.currentTarget.classList.add('active');
-if(page==='home')showHome();
-if(page==='upload')showUpload();
-if(page==='radio')showRadio();
-if(page==='earnings')showEarnings();
-if(page==='library')showLibrary();
-if(page==='rules')showRules();
-}
-
-// HOME PAGE
+// Show home page
 function showHome(){
-let html=`
-<div class="section-title"><i class="fas fa-fire"></i> Trending Now</div>
-<div class="card-grid" id="trending"></div>
-<div class="section-title"><i class="fas fa-broadcast-tower"></i> Live Radio</div>
-<div class="radio-grid" id="radioHome"></div>
-<div class="section-title"><i class="fas fa-coins"></i> Top Earners</div>
-<div class="card-grid" id="earners"></div>
-`;
-document.getElementById('mainContent').innerHTML=html;
-
-let t='';demoSongs.slice(0,4).forEach(s=>{t+=`<div class="music-card" onclick="playSong(${s.id})"><div class="card-img">${s.emoji}</div><div class="card-title">${s.title}</div><div class="card-artist">${s.artist}</div></div>`;});
-document.getElementById('trending').innerHTML=t;
-
-let r='';radios.slice(0,4).forEach(s=>{r+=`<div class="radio-card" onclick="playRadio(${s.id})"><span class="live-badge">LIVE</span><h2>${s.emoji}</h2><h3>${s.name}</h3><p>${s.country}</p></div>`;});
-document.getElementById('radioHome').innerHTML=r;
-
-let e='';demoSongs.slice(0,4).forEach(s=>{e+=`<div class="music-card"><div class="card-img">${s.emoji}</div><div class="card-title">${s.title}</div><div class="card-artist">${s.artist}</div><p style="color:gold;">$${s.earns}</p></div>`;});
-document.getElementById('earners').innerHTML=e;
+let html = '<h2 style="color:#FFD700;">🔥 Trending Songs</h2><div class="grid">';
+songs.forEach(song => {
+html += `<div class="card" onclick="playSong(${song.id})">
+<div style="font-size:40px;">${song.emoji}</div>
+<h3>${song.title}</h3>
+<p style="color:#FFD700;">${song.artist}</p>
+</div>`;
+});
+html += '</div>';
+document.getElementById('main').innerHTML = html;
 }
 
-// UPLOAD PAGE
+// Show upload page
 function showUpload(){
-if(!user){toast('Login first');showAuth();return;}
-audioFiles=[];imageFiles=[];
-let html=`
-<div class="upload-section">
-<h2 style="color:gold;">📤 Upload Multiple Songs</h2>
-<div class="upload-area" onclick="document.getElementById('audio').click()"><i class="fas fa-music"></i><h3>Select Audio Files</h3><p>MP3, WAV</p></div>
-<input type="file" id="audio" accept="audio/*" multiple style="display:none;" onchange="handleAudio()">
-<div id="audioList" class="file-list"></div>
-<div class="upload-area" onclick="document.getElementById('images').click()"><i class="fas fa-image"></i><h3>Select Cover Images</h3><p>JPG, PNG</p></div>
-<input type="file" id="images" accept="image/*" multiple style="display:none;" onchange="handleImages()">
-<div id="imageList" class="file-list"></div>
+if(!user){
+alert('Login first!');
+showLogin();
+return;
+}
+let html = `
+<h2 style="color:#FFD700;">📤 Upload Song</h2>
+<input type="file" id="audio" accept="audio/*">
+<input type="text" id="title" placeholder="Song Title">
 <input type="text" id="artist" placeholder="Artist Name">
-<button onclick="uploadAll()">Upload All Songs</button>
-</div>
-<div class="section-title">Your Uploads</div>
-<div class="card-grid" id="userUploads"></div>
+<button onclick="uploadSong()">Upload Song</button>
+<h3 style="color:#FFD700;margin-top:20px;">Your Uploads</h3>
+<div id="uploads"></div>
 `;
-document.getElementById('mainContent').innerHTML=html;
+document.getElementById('main').innerHTML = html;
 showUserUploads();
 }
 
-function handleAudio(){
-let f=document.getElementById('audio').files;
-audioFiles=Array.from(f);
-let h='';audioFiles.forEach((f,i)=>{h+=`<div class="file-item"><span>${f.name}</span><span class="remove-file" onclick="removeAudio(${i})">✖</span></div>`;});
-document.getElementById('audioList').innerHTML=h;
+function uploadSong(){
+let file = document.getElementById('audio').files[0];
+let title = document.getElementById('title').value;
+let artist = document.getElementById('artist').value;
+if(!file || !title || !artist){
+alert('Fill all fields');
+return;
 }
-
-function handleImages(){
-let f=document.getElementById('images').files;
-imageFiles=Array.from(f);
-let h='';imageFiles.forEach((f,i)=>{h+=`<div class="file-item"><span>${f.name}</span><span class="remove-file" onclick="removeImage(${i})">✖</span></div>`;});
-document.getElementById('imageList').innerHTML=h;
-}
-
-function removeAudio(i){audioFiles.splice(i,1);handleAudio();}
-function removeImage(i){imageFiles.splice(i,1);handleImages();}
-
-function uploadAll(){
-if(!user){toast('Login');return;}
-if(audioFiles.length===0){toast('Select audio');return;}
-let artist=document.getElementById('artist').value;
-if(!artist){toast('Enter artist name');return;}
-let up=JSON.parse(localStorage.getItem('songs')||'[]');
-audioFiles.forEach((f,i)=>{
-let t=prompt('Title for song '+(i+1),f.name.split('.')[0]);
-up.push({
-id:Date.now()+i,
-title:t||f.name,
-artist:artist,
-emoji:'🎵',
-poster:imageFiles[i]?URL.createObjectURL(imageFiles[i]):null,
-url:URL.createObjectURL(f),
-user:user.email,
-plays:0
-});
-});
-localStorage.setItem('songs',JSON.stringify(up));
-songs=[...demoSongs,...up];
-toast(audioFiles.length+' uploaded!');
+let newSong = {
+id: Date.now(),
+title: title,
+artist: artist,
+emoji: '🎵',
+url: URL.createObjectURL(file),
+user: user
+};
+songs.push(newSong);
+localStorage.setItem('songs', JSON.stringify(songs));
+alert('Song uploaded!');
 showUpload();
 }
 
 function showUserUploads(){
-let all=JSON.parse(localStorage.getItem('songs')||'[]');
-let us=all.filter(s=>s.user===user?.email);
-let h='';
-us.forEach(s=>{h+=`<div class="music-card"><div class="card-img">${s.emoji}</div><div class="card-title">${s.title}</div><div class="card-artist">${s.artist}</div><button class="delete-btn" onclick="deleteSong(${s.id})">Delete</button></div>`;});
-document.getElementById('userUploads').innerHTML=h||'<p>No uploads</p>';
+let userSongs = songs.filter(s => s.user === user);
+let html = '<div class="grid">';
+userSongs.forEach(s => {
+html += `<div class="card">
+<div style="font-size:40px;">${s.emoji}</div>
+<h3>${s.title}</h3>
+<p>${s.artist}</p>
+<button onclick="deleteSong(${s.id})" style="background:#ff4444;">Delete</button>
+</div>`;
+});
+html += '</div>';
+document.getElementById('uploads').innerHTML = html || '<p>No uploads</p>';
 }
 
 function deleteSong(id){
-if(!confirm('Delete?'))return;
-let all=JSON.parse(localStorage.getItem('songs')||'[]');
-all=all.filter(s=>s.id!==id);
-localStorage.setItem('songs',JSON.stringify(all));
-songs=[...demoSongs,...all];
-toast('Deleted');
+songs = songs.filter(s => s.id !== id);
+localStorage.setItem('songs', JSON.stringify(songs));
 showUpload();
 }
 
-// RADIO PAGE
+// Show radio page
 function showRadio(){
-let html='<div class="section-title"><i class="fas fa-broadcast-tower"></i> All Stations</div><div class="radio-grid" id="allRadio"></div>';
-document.getElementById('mainContent').innerHTML=html;
-let r='';radios.forEach(s=>{r+=`<div class="radio-card" onclick="playRadio(${s.id})"><span class="live-badge">LIVE</span><h2 style="font-size:45px;">${s.emoji}</h2><h3>${s.name}</h3><p>${s.country}</p></div>`;});
-document.getElementById('allRadio').innerHTML=r;
+let html = '<h2 style="color:#FFD700;">📻 Live Radio</h2><div class="grid">';
+let stations = [
+{name:'Bollywood', country:'India', emoji:'🇮🇳'},
+{name:'English Pop', country:'USA', emoji:'🇺🇸'},
+{name:'Punjabi', country:'India', emoji:'🇮🇳'},
+{name:'K-Pop', country:'Korea', emoji:'🇰🇷'},
+];
+stations.forEach(s => {
+html += `<div class="card" onclick="playRadio('${s.name}')">
+<div style="font-size:50px;">${s.emoji}</div>
+<h3>${s.name}</h3>
+<p>${s.country}</p>
+<span style="background:red;color:white;padding:2px 8px;border-radius:10px;">LIVE</span>
+</div>`;
+});
+html += '</div>';
+document.getElementById('main').innerHTML = html;
 }
 
-function playRadio(id){
-let r=radios.find(r=>r.id===id);
-if(!r)return;
-if(radio){clearInterval(radioInt);}
-radio=r;
-document.getElementById('playerBar').style.display='block';
-document.getElementById('playerTitle').innerText=r.name;
-document.getElementById('playerArtist').innerText=r.country+' Radio';
-document.getElementById('playerImg').innerHTML=r.emoji;
-document.getElementById('playBtn').className='fas fa-pause-circle';
-playing=true;
-let p=0;
-radioInt=setInterval(()=>{p=(p+0.1)%100;document.getElementById('progress').style.width=p+'%';},1000);
-toast('📻 '+r.name);
+function playRadio(name){
+alert('🎵 Playing ' + name + ' Radio');
 }
 
-function stopRadio(){
-if(radio){clearInterval(radioInt);radio=null;playing=false;document.getElementById('playBtn').className='fas fa-play-circle';}
+// Show earnings page
+function showEarnings(){
+if(!user){
+alert('Login first');
+showLogin();
+return;
+}
+let userSongs = songs.filter(s => s.user === user);
+let totalPlays = userSongs.length * 10;
+let totalEarns = totalPlays * 0.45;
+let progress = (hours/500)*100;
+let html = `
+<div style="background:#111;border:2px solid #FFD700;border-radius:20px;padding:20px;margin:20px 0;">
+<h2 style="color:#FFD700;">💰 Your Earnings</h2>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:20px 0;">
+<div style="background:#FFD700;color:#000;padding:20px;border-radius:15px;text-align:center;">
+<h3>$${totalEarns.toFixed(2)}</h3>
+<p>Earned</p>
+</div>
+<div style="background:#FFD700;color:#000;padding:20px;border-radius:15px;text-align:center;">
+<h3>${totalPlays}</h3>
+<p>Plays</p>
+</div>
+</div>
+<div style="background:#FFD700;color:#000;padding:20px;border-radius:15px;">
+<h3>💰 Earning Structure</h3>
+<p>Artist: $45 | Platform: $40 | Listeners: $15</p>
+<p>500 Hours Required</p>
+<div style="background:#000;height:10px;border-radius:5px;margin:10px 0;">
+<div style="width:${progress}%;height:100%;background:#FFD700;border-radius:5px;"></div>
+</div>
+<p>${hours}/500 Hours</p>
+</div>
+</div>
+<h3 style="color:#FFD700;">Your Songs</h3>
+<div class="grid" id="earnSongs"></div>
+`;
+document.getElementById('main').innerHTML = html;
+let songHtml = '';
+userSongs.forEach(s => {
+songHtml += `<div class="card">
+<div style="font-size:40px;">${s.emoji}</div>
+<h3>${s.title}</h3>
+<p>${s.artist}</p>
+<p style="color:#FFD700;">10 plays • $4.50</p>
+</div>`;
+});
+document.getElementById('earnSongs').innerHTML = songHtml || '<p>No songs</p>';
 }
 
-// EARNINGS
+// Show login page
+function showLogin(){
+let html = `
+<h2 style="color:#FFD700;">Login / Sign Up</h2>
+<input type="email" id="email" placeholder="Email" value="demo">
+<input type="password" id="password" placeholder="Password" value="123">
+<button onclick="login()">Login</button>
+<button onclick="signup()">Sign Up</button>
+`;
+document.getElementById('main').innerHTML = html;
+}
+
+function login(){
+let email = document.getElementById('email').value;
+let pass = document.getElementById('password').value;
+let users = JSON.parse(localStorage.getItem('users') || '[]');
+let found = users.find(u => u.email === email && u.pass === pass);
+if(found){
+user = email;
+localStorage.setItem('user', email);
+alert('Login success!');
+showHome();
+} else {
+alert('Wrong credentials!');
+}
+}
+
+function signup(){
+let email = document.getElementById('email').value;
+let pass = document.getElementById('password').value;
+let users = JSON.parse(localStorage.getItem('users') || '[]');
+users.push({email:email, pass:pass});
+localStorage.setItem('users', JSON.stringify(users));
+user = email;
+localStorage.setItem('user', email);
+alert('Account created!');
+showHome();
+}
+
+// Play song function
+function playSong(id){
+let song = songs.find(s => s.id === id);
+if(song){
+hours += 0.1;
+localStorage.setItem('hours', hours);
+alert('🎵 Playing: ' + song.title + '\nEarning $0.45 per play');
+}
+}
+
+// Initial load
+showHome();
+</script>
+</body>
+</html>
