@@ -142,7 +142,20 @@ async function uploadSong() {
     return;
   }
 
-  const title = document.getElementById('upload-title').value.trim() || "New Song";
+  function loadData(){
+let savedSongs = localStorage.getItem('songs');
+if(savedSongs){
+songs = JSON.parse(savedSongs);
+} else {
+songs = [];
+}
+// Add sample songs if no songs
+if(songs.length === 0){
+songs = [...sampleSongs];
+saveSongs();
+}
+  }
+    const title = document.getElementById('upload-title').value.trim() || "New Song";
   const artist = document.getElementById('upload-artist').value.trim() || "Unknown";
 
   // Step 1: Unsplash से random music cover generate
@@ -163,6 +176,10 @@ async function uploadSong() {
   const songUrl = URL.createObjectURL(file);
 
   // Step 3: New song object
+    function saveSongs(){
+let songsToSave = songs.filter(s => !sampleSongs.find(sample => sample.id === s.id));
+localStorage.setItem('songs', JSON.stringify(songsToSave));
+    }
   const newSong = {
     title,
     artist,
@@ -304,7 +321,7 @@ function hideUploadModal() { document.getElementById('upload-modal').classList.a
 window.onload = () => {
   loadAllSongs();
 };
-</script>
+</script>saveSongs(); // Delete ke baad save
 function switchTab(tab) {
   // ... existing code for active class
 
@@ -369,7 +386,7 @@ async function loadAllSongs() {
 // Upload के बाद refresh
 async function uploadSong() {
   // ... तुम्हारा upload code (Storage + Firestore add)
-
+saveSongs(); // Upload ke baad save
   if (success) {
     alert("Song saved!");
     await loadAllSongs(); // list update
