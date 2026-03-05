@@ -1,482 +1,200 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Music Boss - Complete Platform</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
-body{background:#0A1F0A;color:#fff;padding:20px;padding-bottom:100px;}
-
-/* ===== DARK GREEN THEME ===== */
-:root{
---bg:#0A1F0A;
---bg-card:#143814;
---bg-dark:#0F2B0F;
---border:#2A5A2A;
---green:#1DB954;
---gold:#FFD700;
---danger:#DC143C;
-}
-
-.header{background:var(--bg-dark);border:2px solid var(--border);border-radius:30px;padding:25px;text-align:center;margin-bottom:20px;}
-.logo{color:var(--gold);font-size:48px;font-weight:bold;margin-bottom:10px;}
-.logo i{color:var(--gold);}
-.tagline{color:#A0C0A0;font-size:16px;}
-
-.nav{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
-.nav-btn{background:var(--bg-card);border:1px solid var(--border);color:#fff;padding:12px;border-radius:25px;flex:1;cursor:pointer;font-weight:bold;font-size:14px;}
-.nav-btn:hover{background:var(--green);color:#000;}
-.nav-btn.active{background:var(--green);color:#000;}
-
-.user{background:var(--bg-dark);border:1px solid var(--border);border-radius:50px;padding:12px 20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;}
-.avatar{width:40px;height:40px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;cursor:pointer;}
-.balance{color:var(--gold);font-weight:bold;font-size:18px;}
-
-.section-title{font-size:24px;color:var(--gold);margin:25px 0 15px;display:flex;align-items:center;gap:10px;}
-
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:15px;margin-bottom:25px;}
-.card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:15px;transition:0.3s;}
-.card:hover{transform:translateY(-5px);border-color:var(--green);}
-.card-img{width:100%;aspect-ratio:1;background:var(--bg);border-radius:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;font-size:40px;background-size:cover;}
-.card-title{font-weight:bold;margin-bottom:5px;}
-.card-artist{color:#A0C0A0;font-size:13px;margin-bottom:8px;}
-.btn-group{display:flex;gap:5px;}
-.play-btn{background:var(--green);color:#000;border:none;padding:8px;border-radius:20px;font-weight:bold;cursor:pointer;flex:1;font-size:12px;}
-.del-btn{background:var(--danger);color:#fff;border:none;padding:8px;border-radius:20px;cursor:pointer;flex:1;font-size:12px;}
-
-.radio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:15px;margin-bottom:25px;}
-.radio-card{background:linear-gradient(135deg,var(--bg-card),var(--bg-dark));border:1px solid var(--border);border-radius:20px;padding:20px;cursor:pointer;position:relative;text-align:center;}
-.radio-card:hover{border-color:var(--green);}
-.live-badge{position:absolute;top:10px;right:10px;background:red;color:#fff;padding:3px 10px;border-radius:15px;font-size:10px;animation:pulse 1.5s infinite;}
-@keyframes pulse{0%{opacity:1;}50%{opacity:0.7;}100%{opacity:1;}}
-.radio-card h2{font-size:45px;margin-bottom:10px;}
-.radio-card h3{font-size:16px;margin-bottom:5px;}
-.listeners{color:#A0C0A0;font-size:12px;}
-
-.upload-section{background:var(--bg-dark);border:2px solid var(--border);border-radius:20px;padding:25px;margin:20px 0;}
-.upload-area{background:var(--bg);border:2px dashed var(--green);border-radius:15px;padding:25px;text-align:center;cursor:pointer;margin:15px 0;}
-.upload-area i{font-size:45px;color:var(--green);margin-bottom:10px;}
-.file-list{background:var(--bg);border-radius:10px;padding:12px;margin:10px 0;max-height:150px;overflow-y:auto;}
-.file-item{display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid var(--border);}
-
-.earnings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin:20px 0;}
-.earning-card{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;padding:20px;text-align:center;}
-.earning-card h3{font-size:32px;color:var(--gold);margin-bottom:5px;}
-.earning-card p{color:#A0C0A0;}
-
-.progress-box{background:var(--bg-dark);border:1px solid var(--border);border-radius:20px;padding:20px;margin:20px 0;}
-.progress-bar{width:100%;height:10px;background:var(--bg);border-radius:5px;margin:15px 0;}
-.progress-fill{height:100%;background:var(--green);border-radius:5px;transition:width 0.3s;}
-
-.player-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg-dark);border-top:2px solid var(--green);padding:12px 20px;display:none;z-index:100;}
-.player-info{display:flex;align-items:center;gap:15px;}
-.player-img{width:50px;height:50px;background:var(--green);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;background-size:cover;}
-.player-controls{display:flex;gap:20px;justify-content:center;margin-top:8px;}
-.player-controls i{font-size:24px;cursor:pointer;color:#fff;}
-.player-controls i:hover{color:var(--gold);}
-
-input,select{width:100%;padding:12px;margin:8px 0;background:var(--bg);border:1px solid var(--border);border-radius:25px;color:#fff;}
-button{background:var(--green);color:#000;border:none;padding:12px;border-radius:25px;font-weight:bold;cursor:pointer;width:100%;margin:5px 0;font-size:15px;}
-button.sec{background:var(--bg-card);color:#fff;}
-
-.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);z-index:2000;align-items:center;justify-content:center;}
-.modal.active{display:flex;}
-.modal-content{background:var(--bg-dark);border:2px solid var(--green);border-radius:30px;padding:30px;width:90%;max-width:380px;}
-.modal-content h2{color:var(--gold);margin-bottom:20px;}
-
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;padding:10px 25px;border-radius:50px;display:none;z-index:3000;font-weight:bold;}
-</style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Boss - Spotify Clone</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-crown"></i> MUSIC BOSS
+            </div>
+            <div class="user-menu">
+                <span class="balance" id="balanceDisplay">$0.00</span>
+                <div class="avatar" id="userAvatar" onclick="showAuthModal()">G</div>
+            </div>
+        </div>
+    </header>
 
-<!-- HEADER -->
-<div class="header">
-<div class="logo"><i class="fas fa-crown"></i> MUSIC BOSS</div>
-<div class="tagline">🎵 गाने सुनो • पैसे कमाओ • Listen & Earn</div>
-</div>
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-item active" onclick="showPage('home')">
+                <i class="fas fa-home"></i> Home
+            </div>
+            <div class="sidebar-item" onclick="showPage('search')">
+                <i class="fas fa-search"></i> Search
+            </div>
+            <div class="sidebar-item" onclick="showPage('library')">
+                <i class="fas fa-books"></i> Your Library
+            </div>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-item" onclick="showPage('upload')">
+                <i class="fas fa-cloud-upload-alt"></i> Upload Music
+            </div>
+            <div class="sidebar-item" onclick="showPage('radio')">
+                <i class="fas fa-broadcast-tower"></i> Radio
+            </div>
+            <div class="sidebar-item" onclick="showPage('earnings')">
+                <i class="fas fa-chart-line"></i> Earnings
+            </div>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-item" onclick="showPlaylists()">
+                <i class="fas fa-list"></i> Playlists
+            </div>
+            <div class="sidebar-item" onclick="showLiked()">
+                <i class="fas fa-heart"></i> Liked Songs
+            </div>
+        </aside>
 
-<!-- NAVIGATION -->
-<div class="nav">
-<button class="nav-btn active" onclick="showPage('home')"><i class="fas fa-home"></i> Home</button>
-<button class="nav-btn" onclick="showPage('upload')"><i class="fas fa-cloud-upload-alt"></i> Upload</button>
-<button class="nav-btn" onclick="showPage('radio')"><i class="fas fa-broadcast-tower"></i> Radio</button>
-<button class="nav-btn" onclick="showPage('earnings')"><i class="fas fa-chart-line"></i> Earnings</button>
-<button class="nav-btn" onclick="showPage('library')"><i class="fas fa-books"></i> Library</button>
-</div>
+        <!-- MAIN CONTENT -->
+        <main class="main-content" id="mainContent"></main>
+    </div>
 
-<!-- USER SECTION -->
-<div class="user">
-<div><i class="fas fa-user"></i> <span id="userName">Guest</span></div>
-<div class="balance" id="balanceDisplay">$0.00</div>
-<div class="avatar" id="userAvatar" onclick="showAuth()">G</div>
-</div>
+    <!-- PLAYER BAR -->
+    <div class="player-bar" id="playerBar">
+        <div class="player-content">
+            <div class="player-info">
+                <div class="player-img" id="playerImg">🎵</div>
+                <div class="player-details">
+                    <div class="player-title" id="playerTitle">Not Playing</div>
+                    <div class="player-artist" id="playerArtist">-</div>
+                </div>
+                <button class="like-btn" id="likeBtn" onclick="toggleLike()">
+                    <i class="far fa-heart"></i>
+                </button>
+            </div>
+            
+            <div class="player-controls">
+                <button class="control-btn" onclick="shuffle()">
+                    <i class="fas fa-random"></i>
+                </button>
+                <button class="control-btn" onclick="prevSong()">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                <button class="play-btn-large" onclick="playPause()">
+                    <i class="fas fa-play" id="playIcon"></i>
+                </button>
+                <button class="control-btn" onclick="nextSong()">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+                <button class="control-btn" onclick="repeat()">
+                    <i class="fas fa-redo-alt"></i>
+                </button>
+            </div>
 
-<!-- MAIN CONTENT -->
-<div id="mainContent"></div>
+            <div class="player-progress">
+                <span class="current-time" id="currentTime">0:00</span>
+                <div class="progress-bar" onclick="seekTo(event)">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span class="total-time" id="totalTime">3:30</span>
+            </div>
 
-<!-- PLAYER BAR -->
-<div class="player-bar" id="playerBar">
-<div class="player-info">
-<div class="player-img" id="playerImg">🎵</div>
-<div>
-<div id="playerTitle">Not Playing</div>
-<div id="playerArtist" style="color:#A0C0A0;font-size:13px;">-</div>
-</div>
-</div>
-<div class="player-controls">
-<i class="fas fa-step-backward" onclick="prevSong()"></i>
-<i class="fas fa-play-circle" id="playIcon" onclick="playPause()" style="font-size:32px;color:var(--gold);"></i>
-<i class="fas fa-step-forward" onclick="nextSong()"></i>
-</div>
-</div>
+            <div class="player-volume">
+                <i class="fas fa-volume-up" onclick="toggleMute()"></i>
+                <div class="volume-bar" onclick="setVolume(event)">
+                    <div class="volume-fill" id="volumeFill" style="width: 70%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<!-- AUTH MODAL -->
-<div class="modal" id="authModal">
-<div class="modal-content">
-<h2 id="authTitle">Login</h2>
-<input type="email" id="email" placeholder="Email" value="demo@music.com">
-<input type="password" id="password" placeholder="Password" value="123456">
-<button onclick="handleAuth()" id="authBtn">Login</button>
-<button class="sec" onclick="toggleAuth()" id="toggleBtn">Create Account</button>
-</div>
-</div>
+    <!-- AUTH MODAL -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <h2 id="authTitle">Login to Music Boss</h2>
+            <input type="email" id="email" placeholder="Email" value="demo@music.com">
+            <input type="password" id="password" placeholder="Password" value="123456">
+            <button onclick="handleAuth()" id="authBtn">Login</button>
+            <button class="sec-btn" onclick="toggleAuth()" id="toggleBtn">Create Account</button>
+        </div>
+    </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
+    <!-- UPLOAD MODAL -->
+    <div class="modal" id="uploadModal">
+        <div class="modal-content upload-modal">
+            <h2><i class="fas fa-cloud-upload-alt"></i> Upload Music</h2>
+            <div class="upload-tabs">
+                <button class="tab-btn active" onclick="showTab('single')">Single</button>
+                <button class="tab-btn" onclick="showTab('multiple')">Multiple</button>
+            </div>
+            
+            <!-- Single Upload -->
+            <div id="singleUpload" class="tab-content active">
+                <div class="upload-area" onclick="document.getElementById('singleAudio').click()">
+                    <i class="fas fa-music"></i>
+                    <h3>Select Audio File</h3>
+                    <p>MP3, WAV, M4A</p>
+                </div>
+                <input type="file" id="singleAudio" accept="audio/*" style="display:none;" onchange="previewAudio(this)">
+                
+                <div class="upload-area" onclick="document.getElementById('singleImage').click()">
+                    <i class="fas fa-image"></i>
+                    <h3>Select Cover Image</h3>
+                    <p>JPG, PNG, GIF</p>
+                </div>
+                <input type="file" id="singleImage" accept="image/*" style="display:none;" onchange="previewImage(this)">
+                
+                <div id="singlePreview" class="preview-area"></div>
+                
+                <input type="text" id="singleTitle" placeholder="Song Title">
+                <input type="text" id="singleArtist" placeholder="Artist Name">
+                <select id="singleGenre">
+                    <option>Pop</option>
+                    <option>Rock</option>
+                    <option>Hip Hop</option>
+                    <option>Bollywood</option>
+                    <option>Punjabi</option>
+                    <option>Classical</option>
+                </select>
+                
+                <button onclick="uploadSingle()">Upload Song</button>
+            </div>
+            
+            <!-- Multiple Upload -->
+            <div id="multipleUpload" class="tab-content">
+                <div class="upload-area" onclick="document.getElementById('multipleAudio').click()">
+                    <i class="fas fa-music"></i>
+                    <h3>Select Multiple Audio Files</h3>
+                    <p>Select several MP3 files</p>
+                </div>
+                <input type="file" id="multipleAudio" accept="audio/*" multiple style="display:none;" onchange="handleMultipleAudio()">
+                <div id="multipleAudioList" class="file-list"></div>
+                
+                <div class="upload-area" onclick="document.getElementById('multipleImage').click()">
+                    <i class="fas fa-image"></i>
+                    <h3>Select Multiple Cover Images</h3>
+                    <p>One image per song</p>
+                </div>
+                <input type="file" id="multipleImage" accept="image/*" multiple style="display:none;" onchange="handleMultipleImages()">
+                <div id="multipleImageList" class="file-list"></div>
+                
+                <input type="text" id="multipleArtist" placeholder="Artist Name (for all)">
+                <select id="multipleGenre">
+                    <option>Pop</option>
+                    <option>Rock</option>
+                    <option>Hip Hop</option>
+                    <option>Bollywood</option>
+                    <option>Punjabi</option>
+                </select>
+                
+                <button onclick="uploadMultiple()">Upload All Songs</button>
+            </div>
+            
+            <button class="close-btn" onclick="closeUploadModal()">Close</button>
+        </div>
+    </div>
 
-<script>
-// ========== GLOBAL DATA ==========
-let currentUser = localStorage.getItem('currentUser') || null;
-let songs = JSON.parse(localStorage.getItem('songs') || '[]');
-let earnings = parseFloat(localStorage.getItem('earnings') || '0');
-let plays = parseInt(localStorage.getItem('plays') || '0');
-let hours = parseFloat(localStorage.getItem('hours') || '0');
-let audio = new Audio();
-let currentSong = null;
-let isPlaying = false;
-let currentRadio = null;
-let radioInterval = null;
-let audioFiles = [];
-let imageFiles = [];
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="toast"></div>
 
-// ========== SAMPLE SONGS ==========
-const sampleSongs = [
-{id:1, title:'Blinding Lights', artist:'The Weeknd', emoji:'🎤', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', plays:1240000},
-{id:2, title:'Levitating', artist:'Dua Lipa', emoji:'✨', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', plays:980000},
-{id:3, title:'Peaches', artist:'Justin Bieber', emoji:'🍑', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3', plays:750000},
-{id:4, title:'Stay', artist:'Kid Laroi', emoji:'⭐', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3', plays:890000},
-];
-
-// ========== RADIO STATIONS ==========
-const radioStations = [
-{id:1, name:'Bollywood Hits', country:'India', emoji:'🇮🇳', listeners:'2.5M'},
-{id:2, name:'English Pop', country:'USA', emoji:'🇺🇸', listeners:'5M'},
-{id:3, name:'Punjabi Beats', country:'India', emoji:'🇮🇳', listeners:'1.8M'},
-{id:4, name:'K-Pop', country:'Korea', emoji:'🇰🇷', listeners:'3.2M'},
-{id:5, name:'Latin Hits', country:'Spain', emoji:'🇪🇸', listeners:'4M'},
-{id:6, name:'Arabic Hits', country:'UAE', emoji:'🇦🇪', listeners:'2.8M'},
-];
-
-// ========== INIT ==========
-if(songs.length === 0) {
-songs = [...sampleSongs];
-localStorage.setItem('songs', JSON.stringify(songs));
-}
-if(currentUser) {
-let users = JSON.parse(localStorage.getItem('users') || '[]');
-let user = users.find(u => u.email === currentUser);
-if(user) {
-document.getElementById('userName').innerText = user.name || currentUser;
-document.getElementById('userAvatar').innerText = (user.name || currentUser)[0].toUpperCase();
-}
-}
-updateBalance();
-showHome();
-
-function updateBalance() {
-document.getElementById('balanceDisplay').innerText = '$' + earnings.toFixed(2);
-}
-
-// ========== AUTH ==========
-function showAuth() {
-document.getElementById('authModal').classList.add('active');
-}
-
-function toggleAuth() {
-let title = document.getElementById('authTitle');
-if(title.innerText === 'Login') {
-title.innerText = 'Sign Up';
-document.getElementById('authBtn').innerText = 'Sign Up';
-document.getElementById('toggleBtn').innerText = 'Back to Login';
-} else {
-title.innerText = 'Login';
-document.getElementById('authBtn').innerText = 'Login';
-document.getElementById('toggleBtn').innerText = 'Create Account';
-}
-}
-
-function handleAuth() {
-let email = document.getElementById('email').value;
-let pass = document.getElementById('password').value;
-let title = document.getElementById('authTitle').innerText;
-
-if(!email || !pass) { toast('Fill all fields'); return; }
-
-let users = JSON.parse(localStorage.getItem('users') || '[]');
-
-if(title === 'Sign Up') {
-if(users.find(u => u.email === email)) { toast('User exists'); return; }
-let newUser = {email, pass, name: email.split('@')[0]};
-users.push(newUser);
-localStorage.setItem('users', JSON.stringify(users));
-currentUser = email;
-localStorage.setItem('currentUser', email);
-toast('Account created!');
-} else {
-let user = users.find(u => u.email === email && u.pass === pass);
-if(user) {
-currentUser = email;
-localStorage.setItem('currentUser', email);
-toast('Login success!');
-} else { toast('Wrong credentials'); return; }
-}
-
-document.getElementById('authModal').classList.remove('active');
-document.getElementById('userName').innerText = email.split('@')[0];
-document.getElementById('userAvatar').innerText = email[0].toUpperCase();
-}
-
-// ========== PAGE NAVIGATION ==========
-function showPage(page) {
-document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-event.target.classList.add('active');
-if(page === 'home') showHome();
-if(page === 'upload') showUpload();
-if(page === 'radio') showRadio();
-if(page === 'earnings') showEarnings();
-if(page === 'library') showLibrary();
-}
-
-// ========== HOME PAGE ==========
-function showHome() {
-let html = `
-<div class="section-title"><i class="fas fa-fire"></i> Trending Now</div>
-<div class="grid" id="trendingGrid"></div>
-<div class="section-title"><i class="fas fa-broadcast-tower"></i> Live Radio</div>
-<div class="radio-grid" id="radioGrid"></div>
-<div class="section-title"><i class="fas fa-chart-line"></i> Top Charts</div>
-<div class="grid" id="chartsGrid"></div>
-`;
-
-document.getElementById('mainContent').innerHTML = html;
-
-let trending = '';
-songs.slice(0,6).forEach(s => {
-trending += `
-<div class="card">
-<div class="card-img">${s.emoji}</div>
-<div class="card-title">${s.title}</div>
-<div class="card-artist">${s.artist}</div>
-<div class="btn-group">
-<button class="play-btn" onclick="playSong(${s.id})"><i class="fas fa-play"></i> Play</button>
-<button class="del-btn" onclick="deleteSong(${s.id})"><i class="fas fa-trash"></i> Del</button>
-</div>
-</div>`;
-});
-document.getElementById('trendingGrid').innerHTML = trending;
-
-let radio = '';
-radioStations.slice(0,4).forEach(r => {
-radio += `
-<div class="radio-card" onclick="playRadio('${r.name}')">
-<span class="live-badge">LIVE</span>
-<h2>${r.emoji}</h2>
-<h3>${r.name}</h3>
-<p class="listeners">${r.country} • ${r.listeners}</p>
-</div>`;
-});
-document.getElementById('radioGrid').innerHTML = radio;
-
-let charts = '';
-songs.slice(0,4).forEach(s => {
-charts += `
-<div class="card">
-<div class="card-img">${s.emoji}</div>
-<div class="card-title">${s.title}</div>
-<div class="card-artist">${s.artist}</div>
-</div>`;
-});
-document.getElementById('chartsGrid').innerHTML = charts;
-}
-
-// ========== UPLOAD PAGE ==========
-function showUpload() {
-if(!currentUser) { toast('Login first'); showAuth(); return; }
-audioFiles = []; imageFiles = [];
-
-let html = `
-<div class="upload-section">
-<h2 style="color:var(--green);"><i class="fas fa-cloud-upload-alt"></i> Upload Multiple Songs</h2>
-
-<div class="upload-area" onclick="document.getElementById('audioInput').click()">
-<i class="fas fa-music"></i>
-<h3>Select Audio Files</h3>
-<p>MP3, WAV (Multiple)</p>
-</div>
-<input type="file" id="audioInput" accept="audio/*" multiple style="display:none;" onchange="handleAudioSelect()">
-<div id="audioList" class="file-list"></div>
-
-<div class="upload-area" onclick="document.getElementById('imageInput').click()">
-<i class="fas fa-image"></i>
-<h3>Select Poster Images</h3>
-<p>JPG, PNG (One per song)</p>
-</div>
-<input type="file" id="imageInput" accept="image/*" multiple style="display:none;" onchange="handleImageSelect()">
-<div id="imageList" class="file-list"></div>
-
-<input type="text" id="artistName" placeholder="Artist Name (for all songs)">
-<button onclick="uploadAll()">Upload All Songs</button>
-</div>
-
-<div class="section-title">Your Uploads</div>
-<div class="grid" id="userUploadsGrid"></div>
-`;
-
-document.getElementById('mainContent').innerHTML = html;
-showUserUploads();
-}
-
-function handleAudioSelect() {
-let files = document.getElementById('audioInput').files;
-audioFiles = Array.from(files);
-let html = '<h4>Selected Audio:</h4>';
-audioFiles.forEach((f,i) => {
-html += `<div class="file-item"><span><i class="fas fa-music"></i> ${f.name}</span> <span style="color:var(--danger);cursor:pointer;" onclick="removeAudio(${i})">✖</span></div>`;
-});
-document.getElementById('audioList').innerHTML = html;
-}
-
-function handleImageSelect() {
-let files = document.getElementById('imageInput').files;
-imageFiles = Array.from(files);
-let html = '<h4>Selected Posters:</h4>';
-imageFiles.forEach((f,i) => {
-html += `<div class="file-item"><span><i class="fas fa-image"></i> ${f.name}</span> <span style="color:var(--danger);cursor:pointer;" onclick="removeImage(${i})">✖</span></div>`;
-});
-document.getElementById('imageList').innerHTML = html;
-}
-
-function removeAudio(i) { audioFiles.splice(i,1); handleAudioSelect(); }
-function removeImage(i) { imageFiles.splice(i,1); handleImageSelect(); }
-
-function uploadAll() {
-if(!currentUser) { toast('Login required'); return; }
-if(audioFiles.length === 0) { toast('Select audio files'); return; }
-let artist = document.getElementById('artistName').value;
-if(!artist) { toast('Enter artist name'); return; }
-
-let count = 0;
-audioFiles.forEach((file,i) => {
-let title = prompt('Title for song '+(i+1), file.name.split('.')[0]);
-if(!title) title = file.name;
-let poster = imageFiles[i] ? URL.createObjectURL(imageFiles[i]) : null;
-let newSong = {
-id: Date.now() + i,
-title: title,
-artist: artist,
-emoji: '🎵',
-poster: poster,
-url: URL.createObjectURL(file),
-user: currentUser,
-plays: 0
-};
-songs.push(newSong);
-count++;
-});
-
-localStorage.setItem('songs', JSON.stringify(songs));
-toast(count + ' songs uploaded!');
-showUpload();
-}
-
-function showUserUploads() {
-let userSongs = songs.filter(s => s.user === currentUser);
-let html = '';
-userSongs.forEach(s => {
-html += `
-<div class="card">
-<div class="card-img" style="${s.poster ? `background-image:url('${s.poster}');background-size:cover;` : ''}">${!s.poster ? s.emoji : ''}</div>
-<div class="card-title">${s.title}</div>
-<div class="card-artist">${s.artist}</div>
-<div class="btn-group">
-<button class="play-btn" onclick="playSong(${s.id})"><i class="fas fa-play"></i> Play</button>
-<button class="del-btn" onclick="deleteSong(${s.id})"><i class="fas fa-trash"></i> Delete</button>
-</div>
-</div>`;
-});
-document.getElementById('userUploadsGrid').innerHTML = html || '<p>No uploads yet</p>';
-}
-
-// ========== RADIO PAGE ==========
-function showRadio() {
-let html = '<div class="section-title"><i class="fas fa-broadcast-tower"></i> All Radio Stations</div><div class="radio-grid" id="allRadioGrid"></div>';
-document.getElementById('mainContent').innerHTML = html;
-let radio = '';
-radioStations.forEach(r => {
-radio += `
-<div class="radio-card" onclick="playRadio('${r.name}')">
-<span class="live-badge">LIVE</span>
-<h2 style="font-size:50px;">${r.emoji}</h2>
-<h3>${r.name}</h3>
-<p class="listeners">${r.country} • ${r.listeners}</p>
-</div>`;
-});
-document.getElementById('allRadioGrid').innerHTML = radio;
-}
-
-// ========== EARNINGS PAGE ==========
-function showEarnings() {
-if(!currentUser) { toast('Login first'); showAuth(); return; }
-let userSongs = songs.filter(s => s.user === currentUser);
-let progress = (hours / 500) * 100;
-
-let html = `
-<div class="earnings-grid">
-<div class="earning-card"><h3>$${earnings.toFixed(2)}</h3><p>Total Earnings</p></div>
-<div class="earning-card"><h3>${plays}</h3><p>Total Plays</p></div>
-<div class="earning-card"><h3>${userSongs.length}</h3><p>Your Songs</p></div>
-<div class="earning-card"><h3>${hours.toFixed(1)}h</h3><p>Hours Listened</p></div>
-</div>
-
-<div class="progress-box">
-<h3 style="color:var(--gold);">💰 500 Hours Rule</h3>
-<p>Complete 500 hours to withdraw earnings</p>
-<div class="progress-bar"><div class="progress-fill" style="width:${progress}%;"></div></div>
-<p>${hours.toFixed(1)}/500 hours (${progress.toFixed(1)}%)</p>
-<p style="margin-top:10px;">Artist: 45% | Platform: 40% | Listeners: 15%</p>
-</div>
-
-<div class="section-title">Your Songs Performance</div>
-<div class="grid" id="earningsGrid"></div>
-`;
-
-document.getElementById('mainContent').innerHTML = html;
-
-let songHtml = '';
-userSongs.forEach(s => {
-let songPlays = s.plays || Math.floor(Math.random()*100);
-songHtml += `
-<div class="card">
-<div class="card-img">${s.emoji}</div>
-<div class="card-title">${s.title}</div>
-<div class="card-artist">${s.artist}</div>
-<p style="color:var(--gold);margin-top:8px;">${songPlays} plays • $${(songPlays*0.45).toFixed(2)}</p>
-</div>`;
-});
-document.getElementById('earningsGrid').innerHTML = songHtml || '<p>No songs yet</p>';
-}
-
-// ========== LIBRARY PAGE ==========
-function showLibrary(
+    <script src="script.js"></script>
+</body>
+</html>
