@@ -1,597 +1,593 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Music Boss - Permanent Storage</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif;}
-body{background:#000;color:#fff;padding:15px;padding-bottom:100px;}
-.gold{color:#FFD700;}
-.header{background:#111;border:2px solid #FFD700;border-radius:30px;padding:20px;text-align:center;margin-bottom:20px;}
-.header h1{color:#FFD700;font-size:40px;}
-.nav{display:flex;gap:5px;margin-bottom:20px;flex-wrap:wrap;}
-.nav-btn{background:#111;color:#FFD700;border:1px solid #FFD700;padding:12px;border-radius:25px;flex:1;cursor:pointer;font-weight:bold;}
-.nav-btn:hover,.nav-btn.active{background:#FFD700;color:#000;}
-.user{background:#111;border:1px solid #FFD700;border-radius:50px;padding:12px 20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;}
-.avatar{width:40px;height:40px;background:#FFD700;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-weight:bold;cursor:pointer;}
-.section-title{color:#FFD700;font-size:22px;margin:20px 0 10px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:20px;}
-.card{background:#111;border:1px solid #FFD700;border-radius:15px;padding:15px;cursor:pointer;transition:0.3s;}
-.card:hover{transform:translateY(-5px);box-shadow:0 5px 20px rgba(255,215,0,0.3);}
-.card-img{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#FFD700,#000);border-radius:10px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:40px;}
-.play-btn-small{background:#FFD700;color:#000;border:none;padding:5px 10px;border-radius:15px;font-size:12px;font-weight:bold;cursor:pointer;margin-top:5px;}
-.play-btn-small:hover{background:#FFA500;}
-.delete-btn-small{background:#ff4444;color:#fff;border:none;padding:5px 10px;border-radius:15px;font-size:12px;font-weight:bold;cursor:pointer;margin-top:5px;}
-.delete-btn-small:hover{background:#ff0000;}
-.button-group{display:flex;gap:5px;margin-top:5px;}
-.radio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;}
-.radio-card{background:linear-gradient(135deg,#FFD700,#B8860B);border-radius:15px;padding:20px;cursor:pointer;position:relative;}
-.live{position:absolute;top:10px;right:10px;background:red;color:white;padding:3px 8px;border-radius:10px;font-size:10px;}
-.player-bar{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:2px solid #FFD700;padding:15px;display:none;z-index:100;}
-.player-info{display:flex;align-items:center;gap:15px;margin-bottom:10px;}
-.player-img{width:50px;height:50px;background:#FFD700;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;}
-.player-controls{display:flex;align-items:center;justify-content:center;gap:30px;}
-.player-controls i{font-size:24px;color:#fff;cursor:pointer;}
-.player-controls .fa-play-circle{color:#FFD700;font-size:36px;}
-.progress-bar{width:100%;height:5px;background:#333;border-radius:5px;cursor:pointer;}
-.progress{width:0%;height:100%;background:#FFD700;border-radius:5px;}
-.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:1000;align-items:center;justify-content:center;}
-.modal.active{display:flex;}
-.modal-content{background:#111;border:2px solid #FFD700;border-radius:30px;padding:30px;width:90%;max-width:350px;}
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#FFD700;color:#000;padding:10px 20px;border-radius:50px;display:none;z-index:2000;}
-</style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-
-<!-- HEADER -->
-<div class="header">
-<h1>👑 MUSIC BOSS</h1>
-<p style="color:#FFD700;">गाने सुनो • पैसे कमाओ</p>
-</div>
-
-<!-- NAVIGATION -->
-<div class="nav">
-<button class="nav-btn active" onclick="showPage('home')">Home</button>
-<button class="nav-btn" onclick="showPage('upload')">Upload</button>
-<button class="nav-btn" onclick="showPage('radio')">Radio</button>
-<button class="nav-btn" onclick="showPage('earnings')">Earnings</button>
-<button class="nav-btn" onclick="showPage('library')">Library</button>
-</div>
-
-<!-- USER SECTION -->
-<div class="user">
-<span id="userName"><i class="fas fa-user"></i> Guest</span>
-<div class="avatar" id="userAvatar" onclick="showAuth()">G</div>
-</div>
-
-<!-- MAIN CONTENT -->
-<div id="mainContent"></div>
-
-<!-- PLAYER BAR -->
-<div class="player-bar" id="playerBar">
-<div class="player-info">
-<div class="player-img" id="playerImg">🎵</div>
-<div>
-<h4 id="playerTitle">Not Playing</h4>
-<p id="playerArtist" style="color:#FFD700;">-</p>
-</div>
-</div>
-<div class="progress-bar" onclick="seekTo(event)">
-<div class="progress" id="progress"></div>
-</div>
-<div class="player-controls">
-<i class="fas fa-step-backward" onclick="prevSong()"></i>
-<i class="fas fa-play-circle" id="playBtn" onclick="playPause()"></i>
-<i class="fas fa-step-forward" onclick="nextSong()"></i>
-</div>
-</div>
-
-<!-- AUTH MODAL -->
-<div class="modal" id="authModal">
-<div class="modal-content">
-<h2 style="color:#FFD700;" id="authTitle">Login</h2>
-<input type="email" id="email" placeholder="Email" value="demo">
-<input type="password" id="password" placeholder="Password" value="123">
-<button onclick="handleAuth()" id="authBtn">Login</button>
-<button class="sec" style="background:#333;" onclick="toggleAuth()" id="toggleAuth">Sign Up</button>
-</div>
-</div>
-
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
-
-<script>
 // ========== GLOBAL VARIABLES ==========
-let user = null;
+let currentUser = null;
 let songs = [];
+let playlists = [];
 let currentSong = null;
 let isPlaying = false;
 let audio = new Audio();
-let radioInterval = null;
 let currentRadio = null;
-let earnings = 0;
-let plays = 0;
-let hours = 0;
+let radioInterval = null;
+let userEarnings = 0;
+let userPlays = 0;
+let userHours = 0;
+let likedSongs = [];
+let volume = 70;
+let isMuted = false;
+let repeatMode = 'none'; // none, all, one
+let shuffleMode = false;
+let audioFiles = [];
+let imageFiles = [];
 
-// ========== SAMPLE SONGS WITH REAL AUDIO ==========
+// ========== SAMPLE SONGS ==========
 const sampleSongs = [
-{id:1, title:'Blinding Lights', artist:'The Weeknd', emoji:'🎤', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'},
-{id:2, title:'Levitating', artist:'Dua Lipa', emoji:'✨', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'},
-{id:3, title:'Peaches', artist:'Justin Bieber', emoji:'🍑', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3'},
-{id:4, title:'Stay', artist:'Kid Laroi', emoji:'⭐', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3'},
+    {id: 1, title: 'Blinding Lights', artist: 'The Weeknd', emoji: '🎤', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', duration: 200, plays: 1240000, genre: 'Pop'},
+    {id: 2, title: 'Levitating', artist: 'Dua Lipa', emoji: '✨', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', duration: 203, plays: 980000, genre: 'Pop'},
+    {id: 3, title: 'Peaches', artist: 'Justin Bieber', emoji: '🍑', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3', duration: 198, plays: 750000, genre: 'Pop'},
+    {id: 4, title: 'Stay', artist: 'Kid Laroi', emoji: '⭐', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3', duration: 210, plays: 890000, genre: 'Pop'},
 ];
 
 // ========== RADIO STATIONS ==========
-const radios = [
-{id:1, name:'Bollywood Hits', country:'India', emoji:'🇮🇳'},
-{id:2, name:'English Pop', country:'USA', emoji:'🇺🇸'},
-{id:3, name:'Punjabi Beats', country:'India', emoji:'🇮🇳'},
-{id:4, name:'K-Pop', country:'Korea', emoji:'🇰🇷'},
+const radioStations = [
+    {id: 1, name: 'Bollywood Hits', country: 'India', emoji: '🇮🇳', listeners: '2.5M', genre: 'Bollywood'},
+    {id: 2, name: 'English Pop', country: 'USA', emoji: '🇺🇸', listeners: '5M', genre: 'Pop'},
+    {id: 3, name: 'Punjabi Beats', country: 'India', emoji: '🇮🇳', listeners: '1.8M', genre: 'Punjabi'},
+    {id: 4, name: 'K-Pop', country: 'Korea', emoji: '🇰🇷', listeners: '3.2M', genre: 'K-Pop'},
+    {id: 5, name: 'Latin Hits', country: 'Spain', emoji: '🇪🇸', listeners: '4M', genre: 'Latin'},
+    {id: 6, name: 'Arabic Hits', country: 'UAE', emoji: '🇦🇪', listeners: '2.8M', genre: 'Arabic'},
+    {id: 7, name: 'Japanese Pop', country: 'Japan', emoji: '🇯🇵', listeners: '2.1M', genre: 'J-Pop'},
+    {id: 8, name: 'French Café', country: 'France', emoji: '🇫🇷', listeners: '1.2M', genre: 'French'},
+];
+
+// ========== SAMPLE PLAYLISTS ==========
+const samplePlaylists = [
+    {id: 1, name: 'Chill Vibes', songs: [1, 2], cover: '🌊'},
+    {id: 2, name: 'Workout Hits', songs: [3, 4], cover: '💪'},
+    {id: 3, name: 'Party Mix', songs: [1, 3], cover: '🎉'},
 ];
 
 // ========== INIT ==========
-document.addEventListener('DOMContentLoaded',()=>{
-loadData();
-checkUser();
-showHome();
+document.addEventListener('DOMContentLoaded', () => {
+    loadData();
+    setupAudioListeners();
+    checkUser();
+    showHome();
 });
 
-// ========== LOAD DATA FROM LOCALSTORAGE (REFRESH KE BAAD BHI RAHEGA) ==========
-function loadData(){
-// Load uploaded songs
-let savedSongs = localStorage.getItem('songs');
-if(savedSongs){
-try {
-songs = JSON.parse(savedSongs);
-// Make sure URLs are valid
-songs = songs.map(s => {
-if(s.url && s.url.startsWith('blob:')){
-// Blob URLs need to be recreated - but we'll keep them as is
-}
-return s;
-});
-} catch(e){
-console.log('Error loading songs');
-songs = [];
-}
-} else {
-songs = [];
-}
-
-// Add sample songs if no songs
-if(songs.length === 0){
-songs = [...sampleSongs];
-saveSongs();
-}
-
-// Load user data
-let savedEarnings = localStorage.getItem('earnings');
-let savedPlays = localStorage.getItem('plays');
-let savedHours = localStorage.getItem('hours');
-
-earnings = savedEarnings ? parseFloat(savedEarnings) : 0;
-plays = savedPlays ? parseInt(savedPlays) : 0;
-hours = savedHours ? parseFloat(savedHours) : 0;
-}
-
-// ========== SAVE SONGS TO LOCALSTORAGE ==========
-function saveSongs(){
-try {
-// Filter out sample songs before saving
-let songsToSave = songs.filter(s => !sampleSongs.find(sample => sample.id === s.id));
-localStorage.setItem('songs', JSON.stringify(songsToSave));
-} catch(e){
-console.log('Error saving songs');
-}
-}
-
-// ========== SAVE USER DATA ==========
-function saveUserData(){
-localStorage.setItem('earnings', earnings.toString());
-localStorage.setItem('plays', plays.toString());
-localStorage.setItem('hours', hours.toString());
+function loadData() {
+    // Load songs
+    let savedSongs = localStorage.getItem('songs');
+    if(savedSongs) {
+        try {
+            songs = JSON.parse(savedSongs);
+        } catch(e) {
+            songs = [];
+        }
+    } else {
+        songs = [];
+    }
+    
+    if(songs.length === 0) {
+        songs = [...sampleSongs];
+        saveSongs();
+    }
+    
+    // Load playlists
+    let savedPlaylists = localStorage.getItem('playlists');
+    if(savedPlaylists) {
+        try {
+            playlists = JSON.parse(savedPlaylists);
+        } catch(e) {
+            playlists = [...samplePlaylists];
+        }
+    } else {
+        playlists = [...samplePlaylists];
+    }
+    
+    // Load liked songs
+    let savedLiked = localStorage.getItem('likedSongs');
+    if(savedLiked) {
+        try {
+            likedSongs = JSON.parse(savedLiked);
+        } catch(e) {
+            likedSongs = [];
+        }
+    }
+    
+    // Load user data
+    let savedEarnings = localStorage.getItem('earnings');
+    let savedPlays = localStorage.getItem('plays');
+    let savedHours = localStorage.getItem('hours');
+    
+    userEarnings = savedEarnings ? parseFloat(savedEarnings) : 0;
+    userPlays = savedPlays ? parseInt(savedPlays) : 0;
+    userHours = savedHours ? parseFloat(savedHours) : 0;
+    
+    updateBalance();
 }
 
-function checkUser(){
-let savedUser = localStorage.getItem('user');
-if(savedUser){
-let users = JSON.parse(localStorage.getItem('users')||'[]');
-user = users.find(u=>u.email===savedUser);
-if(user){
-document.getElementById('userName').innerHTML = '<i class="fas fa-user"></i> '+user.name;
-document.getElementById('userAvatar').innerText = user.name[0].toUpperCase();
+function saveSongs() {
+    let songsToSave = songs.filter(s => !sampleSongs.find(sample => sample.id === s.id));
+    localStorage.setItem('songs', JSON.stringify(songsToSave));
 }
+
+function savePlaylists() {
+    localStorage.setItem('playlists', JSON.stringify(playlists));
 }
+
+function saveUserData() {
+    localStorage.setItem('earnings', userEarnings.toString());
+    localStorage.setItem('plays', userPlays.toString());
+    localStorage.setItem('hours', userHours.toString());
+    updateBalance();
+}
+
+function updateBalance() {
+    document.getElementById('balanceDisplay').innerText = '$' + userEarnings.toFixed(2);
+}
+
+function checkUser() {
+    let savedUser = localStorage.getItem('currentUser');
+    if(savedUser) {
+        let users = JSON.parse(localStorage.getItem('users') || '[]');
+        currentUser = users.find(u => u.email === savedUser);
+        if(currentUser) {
+            document.getElementById('userAvatar').innerText = (currentUser.name || currentUser.email)[0].toUpperCase();
+            loadUserData();
+        }
+    }
+}
+
+function loadUserData() {
+    let userData = JSON.parse(localStorage.getItem('userData_' + currentUser.email) || '{"earnings":0,"plays":0,"hours":0}');
+    userEarnings = userData.earnings;
+    userPlays = userData.plays;
+    userHours = userData.hours;
+    updateBalance();
+}
+
+function saveUserSpecificData() {
+    if(!currentUser) return;
+    localStorage.setItem('userData_' + currentUser.email, JSON.stringify({
+        earnings: userEarnings,
+        plays: userPlays,
+        hours: userHours
+    }));
+}
+
+// ========== AUDIO SETUP ==========
+function setupAudioListeners() {
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('ended', handleSongEnd);
+    audio.addEventListener('loadedmetadata', () => {
+        document.getElementById('totalTime').innerText = formatTime(audio.duration);
+    });
+}
+
+function updateProgress() {
+    if(audio.duration) {
+        let progress = (audio.currentTime / audio.duration) * 100;
+        document.getElementById('progressFill').style.width = progress + '%';
+        document.getElementById('currentTime').innerText = formatTime(audio.currentTime);
+    }
+}
+
+function handleSongEnd() {
+    if(repeatMode === 'one') {
+        audio.currentTime = 0;
+        audio.play();
+    } else if(repeatMode === 'all' || shuffleMode) {
+        nextSong();
+    } else {
+        isPlaying = false;
+        document.getElementById('playIcon').className = 'fas fa-play';
+    }
+}
+
+function formatTime(seconds) {
+    let mins = Math.floor(seconds / 60);
+    let secs = Math.floor(seconds % 60);
+    return mins + ':' + (secs < 10 ? '0' : '') + secs;
 }
 
 // ========== AUTH ==========
-function showAuth(){
-document.getElementById('authModal').classList.add('active');
+function showAuthModal() {
+    document.getElementById('authModal').classList.add('active');
 }
 
-function toggleAuth(){
-let t = document.getElementById('authTitle');
-if(t.innerText === 'Login'){
-t.innerText = 'Sign Up';
-document.getElementById('authBtn').innerText = 'Sign Up';
-document.getElementById('toggleAuth').innerText = 'Back to Login';
-}else{
-t.innerText = 'Login';
-document.getElementById('authBtn').innerText = 'Login';
-document.getElementById('toggleAuth').innerText = 'Sign Up';
-}
+function toggleAuth() {
+    let title = document.getElementById('authTitle');
+    if(title.innerText === 'Login to Music Boss') {
+        title.innerText = 'Create Account';
+        document.getElementById('authBtn').innerText = 'Sign Up';
+        document.getElementById('toggleBtn').innerText = 'Back to Login';
+    } else {
+        title.innerText = 'Login to Music Boss';
+        document.getElementById('authBtn').innerText = 'Login';
+        document.getElementById('toggleBtn').innerText = 'Create Account';
+    }
 }
 
-function handleAuth(){
-let email = document.getElementById('email').value;
-let pass = document.getElementById('password').value;
-let title = document.getElementById('authTitle').innerText;
-if(!email||!pass){toast('Fill all fields');return;}
-let users = JSON.parse(localStorage.getItem('users')||'[]');
-if(title === 'Sign Up'){
-if(users.find(u=>u.email===email)){toast('User exists');return;}
-let newUser = {email:email, pass:pass, name:email.split('@')[0]};
-users.push(newUser);
-localStorage.setItem('users', JSON.stringify(users));
-user = newUser;
-localStorage.setItem('user', email);
-toast('Account created!');
-}else{
-let u = users.find(u=>u.email===email && u.pass===pass);
-if(u){
-user = u;
-localStorage.setItem('user', email);
-toast('Login success!');
-}else{toast('Wrong credentials');return;}
-}
-document.getElementById('authModal').classList.remove('active');
-document.getElementById('userName').innerHTML = '<i class="fas fa-user"></i> '+user.name;
-document.getElementById('userAvatar').innerText = user.name[0].toUpperCase();
+function handleAuth() {
+    let email = document.getElementById('email').value;
+    let pass = document.getElementById('password').value;
+    let title = document.getElementById('authTitle').innerText;
+    
+    if(!email || !pass) {
+        showToast('Please fill all fields');
+        return;
+    }
+    
+    let users = JSON.parse(localStorage.getItem('users') || '[]');
+    
+    if(title === 'Create Account') {
+        if(users.find(u => u.email === email)) {
+            showToast('User already exists');
+            return;
+        }
+        let newUser = {email, pass, name: email.split('@')[0]};
+        users.push(newUser);
+        localStorage.setItem('users', JSON.stringify(users));
+        currentUser = newUser;
+        localStorage.setItem('currentUser', email);
+        showToast('Account created successfully!');
+    } else {
+        let user = users.find(u => u.email === email && u.pass === pass);
+        if(user) {
+            currentUser = user;
+            localStorage.setItem('currentUser', email);
+            showToast('Login successful!');
+        } else {
+            showToast('Invalid credentials');
+            return;
+        }
+    }
+    
+    document.getElementById('authModal').classList.remove('active');
+    document.getElementById('userAvatar').innerText = (currentUser.name || currentUser.email)[0].toUpperCase();
+    loadUserData();
 }
 
 // ========== PAGE NAVIGATION ==========
-function showPage(page){
-document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-event.currentTarget.classList.add('active');
-if(page === 'home') showHome();
-if(page === 'upload') showUpload();
-if(page === 'radio') showRadio();
-if(page === 'earnings') showEarnings();
-if(page === 'library') showLibrary();
+function showPage(page) {
+    document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    
+    if(page === 'home') showHome();
+    if(page === 'search') showSearch();
+    if(page === 'library') showLibrary();
+    if(page === 'upload') showUploadModal();
+    if(page === 'radio') showRadio();
+    if(page === 'earnings') showEarnings();
 }
 
 // ========== HOME PAGE ==========
-function showHome(){
-let html = `
-<div class="section-title">🔥 Trending Now</div>
-<div class="grid" id="trendingGrid"></div>
-<div class="section-title">📻 Live Radio</div>
-<div class="radio-grid" id="radioGrid"></div>
-`;
-document.getElementById('mainContent').innerHTML = html;
-
-let trending = '';
-songs.forEach(s => {
-trending += `<div class="card">
-<div class="card-img">${s.emoji}</div>
-<h3>${s.title}</h3>
-<p style="color:#FFD700;">${s.artist}</p>
-<div class="button-group">
-<button class="play-btn-small" onclick="playSong(${s.id})">▶️ Play</button>
-<button class="delete-btn-small" onclick="deleteSong(${s.id})">🗑️ Delete</button>
-</div>
-</div>`;
-});
-document.getElementById('trendingGrid').innerHTML = trending;
-
-let radio = '';
-radios.forEach(r => {
-radio += `<div class="radio-card" onclick="playRadio('${r.name}')">
-<span class="live">LIVE</span>
-<div style="font-size:45px;">${r.emoji}</div>
-<h3>${r.name}</h3>
-<p>${r.country}</p>
-</div>`;
-});
-document.getElementById('radioGrid').innerHTML = radio;
+function showHome() {
+    let html = `
+        <div class="section-title">
+            <i class="fas fa-fire"></i> Trending Now
+        </div>
+        <div class="card-grid" id="trendingGrid"></div>
+        
+        <div class="section-title">
+            <i class="fas fa-clock"></i> Recently Played
+        </div>
+        <div class="card-grid" id="recentGrid"></div>
+        
+        <div class="section-title">
+            <i class="fas fa-broadcast-tower"></i> Live Radio
+        </div>
+        <div class="radio-grid" id="radioGrid"></div>
+        
+        <div class="section-title">
+            <i class="fas fa-chart-line"></i> Top Charts
+        </div>
+        <div class="card-grid" id="chartsGrid"></div>
+        
+        <div class="section-title">
+            <i class="fas fa-list"></i> Featured Playlists
+        </div>
+        <div class="card-grid" id="playlistGrid"></div>
+    `;
+    
+    document.getElementById('mainContent').innerHTML = html;
+    
+    // Trending songs
+    let trending = '';
+    songs.slice(0, 6).forEach(s => {
+        trending += createSongCard(s);
+    });
+    document.getElementById('trendingGrid').innerHTML = trending;
+    
+    // Recently played (simulate with some songs)
+    let recent = '';
+    songs.slice(2, 5).forEach(s => {
+        recent += createSongCard(s);
+    });
+    document.getElementById('recentGrid').innerHTML = recent;
+    
+    // Radio stations
+    let radio = '';
+    radioStations.slice(0, 4).forEach(r => {
+        radio += `
+            <div class="radio-card" onclick="playRadio(${r.id})">
+                <span class="live-badge">LIVE</span>
+                <h2>${r.emoji}</h2>
+                <h3>${r.name}</h3>
+                <p>${r.country} • ${r.listeners}</p>
+            </div>
+        `;
+    });
+    document.getElementById('radioGrid').innerHTML = radio;
+    
+    // Charts
+    let charts = '';
+    songs.slice(0, 4).forEach(s => {
+        charts += createSongCard(s);
+    });
+    document.getElementById('chartsGrid').innerHTML = charts;
+    
+    // Playlists
+    let playlistHtml = '';
+    playlists.forEach(p => {
+        playlistHtml += `
+            <div class="music-card" onclick="showPlaylist(${p.id})">
+                <div class="card-img">${p.cover}</div>
+                <div class="card-title">${p.name}</div>
+                <div class="card-artist">${p.songs.length} songs</div>
+            </div>
+        `;
+    });
+    document.getElementById('playlistGrid').innerHTML = playlistHtml;
 }
 
-// ========== PLAY SONG ==========
-function playSong(id){
-let song = songs.find(s => s.id === id);
-if(!song) {
-toast('Song not found');
-return;
+function createSongCard(song) {
+    let isLiked = likedSongs.includes(song.id) ? 'fas' : 'far';
+    return `
+        <div class="music-card" data-id="${song.id}">
+            <div class="card-img" style="${song.poster ? `background-image: url('${song.poster}')` : ''}">
+                ${!song.poster ? song.emoji : ''}
+                <div class="play-overlay" onclick="playSong(${song.id})">
+                    <i class="fas fa-play"></i>
+                </div>
+            </div>
+            <div class="card-title">${song.title}</div>
+            <div class="card-artist">${song.artist}</div>
+            ${song.user ? '<span class="card-badge">Your Upload</span>' : ''}
+            <div class="button-group">
+                <button class="play-btn" onclick="playSong(${song.id})">
+                    <i class="fas fa-play"></i> Play
+                </button>
+                <button class="delete-btn" onclick="deleteSong(${song.id})">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `;
 }
 
-// Stop radio if playing
-if(currentRadio){
-clearInterval(radioInterval);
-currentRadio = null;
+// ========== SEARCH PAGE ==========
+function showSearch() {
+    let html = `
+        <div class="section-title">
+            <i class="fas fa-search"></i> Search
+        </div>
+        <input type="text" id="searchInput" placeholder="Search songs, artists, albums..." onkeyup="searchSongs()">
+        <div class="card-grid" id="searchResults"></div>
+    `;
+    document.getElementById('mainContent').innerHTML = html;
+    document.getElementById('searchInput').focus();
 }
 
-// Stop current song
-if(isPlaying){
-audio.pause();
-isPlaying = false;
-}
-
-// Set new song
-currentSong = song;
-audio.src = song.url;
-
-// Play audio
-audio.play().then(() => {
-isPlaying = true;
-document.getElementById('playerBar').style.display = 'block';
-document.getElementById('playerTitle').innerText = song.title;
-document.getElementById('playerArtist').innerText = song.artist;
-document.getElementById('playerImg').innerHTML = song.emoji;
-document.getElementById('playBtn').className = 'fas fa-pause-circle';
-toast('🎵 Playing: '+song.title);
-
-// Track earnings
-if(song.user){
-plays++;
-earnings += 0.45;
-hours += 0.1;
-saveUserData();
-}
-}).catch(error => {
-toast('Error playing song. Try again.');
-});
-}
-
-// ========== PLAY RADIO ==========
-function playRadio(name){
-if(currentRadio) clearInterval(radioInterval);
-currentRadio = name;
-document.getElementById('playerBar').style.display = 'block';
-document.getElementById('playerTitle').innerText = name + ' Radio';
-document.getElementById('playerArtist').innerText = 'Live Streaming';
-document.getElementById('playerImg').innerHTML = '📻';
-isPlaying = true;
-document.getElementById('playBtn').className = 'fas fa-pause-circle';
-let progress = 0;
-radioInterval = setInterval(() => {
-progress = (progress + 0.1) % 100;
-document.getElementById('progress').style.width = progress+'%';
-}, 1000);
-toast('📻 '+name+' Radio Live');
-}
-
-// ========== PLAYER CONTROLS ==========
-function playPause(){
-if(currentRadio){
-if(isPlaying){
-clearInterval(radioInterval);
-document.getElementById('playBtn').className = 'fas fa-play-circle';
-} else {
-playRadio(currentRadio);
-}
-isPlaying = !isPlaying;
-return;
-}
-
-if(!currentSong){
-if(songs.length>0) playSong(songs[0].id);
-return;
-}
-
-if(isPlaying){
-audio.pause();
-document.getElementById('playBtn').className = 'fas fa-play-circle';
-} else {
-audio.play().then(() => {
-document.getElementById('playBtn').className = 'fas fa-pause-circle';
-}).catch(error => {
-toast('Cannot play');
-});
-}
-isPlaying = !isPlaying;
-}
-
-function nextSong(){
-if(currentRadio) return;
-if(!currentSong || songs.length===0) return;
-let index = songs.findIndex(s => s.id === currentSong.id);
-let next = (index+1) % songs.length;
-playSong(songs[next].id);
-}
-
-function prevSong(){
-if(currentRadio) return;
-if(!currentSong || songs.length===0) return;
-let index = songs.findIndex(s => s.id === currentSong.id);
-let prev = (index-1+songs.length) % songs.length;
-playSong(songs[prev].id);
-}
-
-function seekTo(e){
-if(!audio.duration || currentRadio) return;
-let bar = e.currentTarget;
-let pos = (e.clientX - bar.getBoundingClientRect().left)/bar.offsetWidth;
-audio.currentTime = pos * audio.duration;
-}
-
-audio.ontimeupdate = function(){
-if(audio.duration && !currentRadio){
-let progress = (audio.currentTime/audio.duration)*100;
-document.getElementById('progress').style.width = progress+'%';
-}
-};
-
-// ========== DELETE SONG (ABHI SAVE BHI HOTA HAI) ==========
-function deleteSong(id){
-if(!confirm('Delete this song?')) return;
-
-// Remove from array
-songs = songs.filter(s => s.id !== id);
-
-// Save to localStorage
-saveSongs();
-
-// If currently playing this song, stop it
-if(currentSong && currentSong.id === id){
-audio.pause();
-currentSong = null;
-isPlaying = false;
-document.getElementById('playerBar').style.display = 'none';
-}
-
-toast('Song deleted');
-showHome(); // Refresh display
-}
-
-// ========== UPLOAD PAGE ==========
-function showUpload(){
-if(!user){toast('Login first');showAuth();return;}
-let html = `
-<div style="background:#111;border:2px solid #FFD700;border-radius:20px;padding:20px;margin:20px 0;">
-<h2 style="color:#FFD700;">📤 Upload Song</h2>
-<input type="file" id="audio" accept="audio/*">
-<input type="text" id="title" placeholder="Song Title">
-<input type="text" id="artist" placeholder="Artist Name">
-<button onclick="uploadSong()">Upload Song</button>
-</div>
-<div class="section-title">Your Uploads</div>
-<div class="grid" id="userUploads"></div>
-`;
-document.getElementById('mainContent').innerHTML = html;
-showUserUploads();
-}
-
-// ========== UPLOAD SONG (ABHI SAVE HOTA HAI) ==========
-function uploadSong(){
-let file = document.getElementById('audio').files[0];
-let title = document.getElementById('title').value;
-let artist = document.getElementById('artist').value;
-
-if(!file){toast('Select audio file');return;}
-if(!title){toast('Enter title');return;}
-if(!artist){toast('Enter artist');return;}
-
-// Create URL for the file
-let url = URL.createObjectURL(file);
-
-let newSong = {
-id: Date.now(),
-title: title,
-artist: artist,
-emoji: '🎵',
-url: url,
-user: user.email,
-plays: 0
-};
-
-// Add to songs array
-songs.push(newSong);
-
-// Save to localStorage
-saveSongs();
-
-toast('Song uploaded!');
-showUpload();
-}
-
-// ========== SHOW USER UPLOADS ==========
-function showUserUploads(){
-let userSongs = songs.filter(s => s.user === user?.email);
-let html = '';
-userSongs.forEach(s => {
-html += `<div class="card">
-<div class="card-img">${s.emoji}</div>
-<h3>${s.title}</h3>
-<p style="color:#FFD700;">${s.artist}</p>
-<div class="button-group">
-<button class="play-btn-small" onclick="playSong(${s.id})">▶️ Play</button>
-<button class="delete-btn-small" onclick="deleteSong(${s.id})">🗑️ Delete</button>
-</div>
-</div>`;
-});
-document.getElementById('userUploads').innerHTML = html || '<p>No uploads</p>';
-}
-
-// ========== RADIO PAGE ==========
-function showRadio(){
-let html = '<div class="section-title">📻 All Radio Stations</div><div class="radio-grid" id="allRadio"></div>';
-document.getElementById('mainContent').innerHTML = html;
-let radio = '';
-radios.forEach(r => {
-radio += `<div class="radio-card" onclick="playRadio('${r.name}')">
-<span class="live">LIVE</span>
-<div style="font-size:50px;">${r.emoji}</div>
-<h3>${r.name}</h3>
-<p>${r.country}</p>
-</div>`;
-});
-document.getElementById('allRadio').innerHTML = radio;
-}
-
-// ========== EARNINGS PAGE ==========
-function showEarnings(){
-if(!user){toast('Login first');showAuth();return;}
-let userSongs = songs.filter(s => s.user === user?.email);
-let totalEarned = earnings;
-let progress = (hours/500)*100;
-
-let html = `
-<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:20px 0;">
-<div style="background:#FFD700;color:#000;padding:20px;border-radius:15px;text-align:center;">
-<h2>$${totalEarned.toFixed(2)}</h2>
-<p>Total Earnings</p>
-</div>
-<div style="background:#FFD700;color:#000;padding:20px;border-radius:15px;text-align:center;">
-<h2>${plays}</h2>
-<p>Total Plays</p>
-</div>
-</div>
-
-<div style="background:#111;border:2px solid #FFD700;border-radius:20px;padding:20px;margin:20px 0;">
-<h3 style="color:#FFD700;">💰 500 Hours Rule</h3>
-<div style="background:#333;height:10px;border-radius:5px;margin:10px 0;">
-<div style="width:${progress}%;height:100%;background:#FFD700;border-radius:5px;"></div>
-</div>
-<p>${hours.toFixed(1)}/500 Hours Completed</p>
-</div>
-
-<div class="section-title">Your Songs</div>
-<div class="grid" id="earningsGrid"></div>
-`;
-document.getElementById('mainContent').innerHTML = html;
-
-let songsHtml = '';
-userSongs.forEach(s => {
-songsHtml += `<div class="card">
-<div class="card-img">${s.emoji}</div>
-<h3>${s.title}</h3>
-<p style="color:#FFD700;">${s.artist}</p>
-</div>`;
-});
-document.getElementById('earningsGrid').innerHTML = songsHtml || '<p>No songs yet</p>';
+function searchSongs() {
+    let query = document.getElementById('searchInput').value.toLowerCase();
+    if(query.length < 2) {
+        document.getElementById('searchResults').innerHTML = '';
+        return;
+    }
+    
+    let results = songs.filter(s => 
+        s.title.toLowerCase().includes(query) || 
+        s.artist.toLowerCase().includes(query) ||
+        (s.genre && s.genre.toLowerCase().includes(query))
+    );
+    
+    let html = '';
+    results.forEach(s => {
+        html += createSongCard(s);
+    });
+    document.getElementById('searchResults').innerHTML = html || '<p>No results found</p>';
 }
 
 // ========== LIBRARY PAGE ==========
-function showLibrary(){
-if(!user){toast('Login first');showAuth();return;}
-let userSongs = songs.filter(s => s.user === user?.email);
-let html = '<div class="section-title">📚 Your Library</div><div class="grid" id="libraryGrid"></div>';
-document.getElementById('mainContent').innerHTML = html;
-let songsHtml = '';
-userSongs.forEach(s => {
-songsHtml += `<div class="card">
-<div class="card-img">${s.emoji}</div>
-<h3>${s.title}</h3>
-<p style="color:#FFD700;">${s.artist}</p>
-<div class="button-group">
-<button class="play-btn-small" onclick="playSong(${s.id})">▶️ Play</button>
-<button class="delete-btn-small" onclick="deleteSong(${s.id})">🗑️ Delete</button>
-</div>
-</div>`;
-});
-document.getElementById('libraryGrid').innerHTML = songsHtml || '<p>Your library is empty</p>';
+function showLibrary() {
+    if(!currentUser) {
+        showToast('Please login to view your library');
+        showAuthModal();
+        return;
+    }
+    
+    let userSongs = songs.filter(s => s.user === currentUser.email);
+    let userPlaylists = playlists.filter(p => p.user === currentUser.email);
+    
+    let html = `
+        <div class="library-filters">
+            <span class="filter-chip active" onclick="filterLibrary('all')">All</span>
+            <span class="filter-chip" onclick="filterLibrary('songs')">Songs</span>
+            <span class="filter-chip" onclick="filterLibrary('playlists')">Playlists</span>
+            <span class="filter-chip" onclick="filterLibrary('artists')">Artists</span>
+        </div>
+        
+        <div class="section-title">
+            <i class="fas fa-music"></i> Your Songs
+        </div>
+        <div class="card-grid" id="librarySongs"></div>
+        
+        <div class="section-title">
+            <i class="fas fa-list"></i> Your Playlists
+        </div>
+        <div class="card-grid" id="libraryPlaylists"></div>
+    `;
+    
+    document.getElementById('mainContent').innerHTML = html;
+    
+    // Show user songs
+    let songsHtml = '';
+    userSongs.forEach(s => {
+        songsHtml += createSongCard(s);
+    });
+    document.getElementById('librarySongs').innerHTML = songsHtml || '<p>No uploaded songs yet</p>';
+    
+    // Show playlists
+    let playlistHtml = '';
+    userPlaylists.forEach(p => {
+        playlistHtml += `
+            <div class="music-card" onclick="showPlaylist(${p.id})">
+                <div class="card-img">${p.cover}</div>
+                <div class="card-title">${p.name}</div>
+                <div class="card-artist">${p.songs.length} songs</div>
+            </div>
+        `;
+    });
+    document.getElementById('libraryPlaylists').innerHTML = playlistHtml || '<p>Create your first playlist</p>';
 }
 
-// ========== TOAST ==
+function filterLibrary(filter) {
+    document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
+    event.target.classList.add('active');
+    // Implement filtering logic
+}
+
+// ========== UPLOAD MODAL ==========
+function showUploadModal() {
+    if(!currentUser) {
+        showToast('Please login to upload');
+        showAuthModal();
+        return;
+    }
+    document.getElementById('uploadModal').classList.add('active');
+}
+
+function closeUploadModal() {
+    document.getElementById('uploadModal').classList.remove('active');
+    resetUploadForms();
+}
+
+function showTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    
+    event.target.classList.add('active');
+    document.getElementById(tab + 'Upload').classList.add('active');
+}
+
+function previewAudio(input) {
+    if(input.files && input.files[0]) {
+        let fileName = input.files[0].name;
+        showToast('Selected: ' + fileName);
+    }
+}
+
+function previewImage(input) {
+    if(input.files && input.files[0]) {
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            let preview = document.getElementById('singlePreview');
+            preview.innerHTML = `<img src="${e.target.result}" class="preview-item">`;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function handleMultipleAudio() {
+    let files = document.getElementById('multipleAudio').files;
+    audioFiles = Array.from(files);
+    let html = '<h4>Selected Audio Files:</h4>';
+    audioFiles.forEach((f, i) => {
+        html += `
+            <div class="file-item">
+                <span><i class="fas fa-music"></i> ${f.name}</span>
+                <span class="remove-file" onclick="removeAudio(${i})">✖</span>
+            </div>
+        `;
+    });
+    document.getElementById('multipleAudioList').innerHTML = html;
+}
+
+function handleMultipleImages() {
+    let files = document.getElementById('multipleImage').files;
+    imageFiles = Array.from(files);
+    let html = '<h4>Selected Images:</h4>';
+    imageFiles.forEach((f, i) => {
+        html += `
+            <div class="file-item">
+                <span><i class="fas fa-image"></i> ${f.name}</span>
+                <span class="remove-file" onclick="removeImage(${i})">✖</span>
+            </div>
+        `;
+    });
+    document.getElementById('multipleImageList').innerHTML = html;
+}
+
+function removeAudio(index) {
+    audioFiles.splice(index, 1);
+    handleMultipleAudio();
+}
+
+function removeImage(index) {
+    imageFiles.splice(index, 1);
+    handleMultipleImages();
+}
+
+function uploadSingle() {
+    let audioFile = document.getElementById('singleAudio').files[0];
+    let title = document.getElementById('singleTitle').value;
+    let artist = document.getElementById('singleArtist').value;
+    let genre = document.getElementById('singleGenre').value;
+    
+    if(!audioFile) { showToast('Select audio file'); return; }
+    if(!title || !artist) { showToast('Enter title and artist'); return; }
+    
+    let poster = null;
+    if(document.getElementById('singleImage').files[0]) {
+        poster = URL.createObjectURL(document.getElementById('singleImage').files[0]);
+    }
+    
+    let newSong = {
+        id: Date.now(),
+        title: title,
+        artist: artist,
+        genre: genre,
+        emoji: '🎵',
+        poster: poster,
+        url: URL.createObjectURL(audioFile),
+        user: currentUser.email,
+        plays: 0,
+        duration: 180
+    };
+    
+    songs.push(newSong);
+    saveSongs();
+    showToast('Song uploaded successfully!');
+    closeUploadModal();
+}
+
+function uploadMultiple() {
+    if(audioFiles.length === 0) { showToast('Select audio files'); return; }
+    
+    let artist = document.getElementById('multipleArtist').value;
+    let genre = document.getElementById('multipleGenre').value;
+    
+    if(!artist) { showToast('Enter artist name'); return; }
+    
+    let count = 0;
+    
+    audioFiles.forEach((file, i) => {
+        let title = prompt('Enter title for song ' + (i+1), file.name.split('.')[0]);
+        if(!title) title = file.name;
+        
+        let poster = imageFiles[i] ? URL.createObjectURL(imageFiles[i]) : null;
+        
+        let newSong = {
+            id: Date.now() + i,
+            title: title,
+   
