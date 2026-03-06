@@ -3,774 +3,607 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Boss - Premium Music Platform</title>
+    <title>AI MP3 Song Generator | Suno AI Style</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #fff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-        }
-
-        /* ===== PREMIUM GLASS MORPHISM ===== */
-        .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-        }
-
-        .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .glass-card:hover {
-            background: rgba(51, 65, 85, 0.8);
-            border-color: rgba(255, 215, 0, 0.5);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        /* ===== HEADER ===== */
-        .header {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-            padding: 15px 30px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
+            padding: 20px;
         }
 
-        .logo {
-            font-size: 32px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #FFD700, #FFA500);
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
-        .logo i {
-            color: #FFD700;
-            -webkit-text-fill-color: #FFD700;
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 8px 20px;
-            border-radius: 50px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-        }
-
-        .balance {
-            color: #FFD700;
-            font-weight: 600;
-            font-size: 18px;
-        }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .avatar:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-        }
-
-        /* ===== MAIN LAYOUT ===== */
-        .container {
-            display: flex;
-            max-width: 1400px;
-            margin: 20px auto;
-            padding: 0 20px;
-            gap: 20px;
-        }
-
-        /* ===== SIDEBAR ===== */
-        .sidebar {
-            width: 260px;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 24px;
-            padding: 20px;
-            height: fit-content;
-            position: sticky;
-            top: 100px;
-        }
-
-        .sidebar-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 12px 15px;
-            color: #94a3b8;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-bottom: 5px;
-        }
-
-        .sidebar-item:hover {
-            background: rgba(255, 215, 0, 0.1);
-            color: #FFD700;
-        }
-
-        .sidebar-item.active {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: #0f172a;
-            font-weight: 600;
-        }
-
-        .sidebar-item i {
-            width: 24px;
-            font-size: 20px;
-        }
-
-        .sidebar-divider {
-            height: 1px;
-            background: rgba(255, 215, 0, 0.2);
-            margin: 15px 0;
-        }
-
-        /* ===== MAIN CONTENT ===== */
-        .main-content {
-            flex: 1;
-        }
-
-        /* ===== HERO SECTION ===== */
-        .hero {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.05));
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 30px;
-            padding: 40px;
+        .subtitle {
+            text-align: center;
+            color: #666;
             margin-bottom: 30px;
-            position: relative;
-            overflow: hidden;
+            font-size: 1.1em;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .hero h1 {
-            font-size: 48px;
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .hero h1 span {
-            color: #FFD700;
-        }
-
-        .hero p {
-            color: #94a3b8;
-            font-size: 18px;
-            max-width: 600px;
-            position: relative;
-        }
-
-        .hero-stats {
-            display: flex;
+        .generator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 30px;
-            margin-top: 30px;
-            position: relative;
+            margin-bottom: 30px;
         }
 
-        .hero-stat {
-            text-align: center;
-        }
-
-        .hero-stat h3 {
-            font-size: 28px;
-            color: #FFD700;
-        }
-
-        /* ===== SECTION TITLES ===== */
-        .section-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin: 40px 0 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-title i {
-            color: #FFD700;
-            font-size: 28px;
-        }
-
-        .section-title::after {
-            content: '';
-            flex: 1;
-            height: 2px;
-            background: linear-gradient(90deg, #FFD700, transparent);
-        }
-
-        /* ===== CARDS GRID ===== */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .music-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 20px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .music-card:hover {
-            transform: translateY(-8px);
-            border-color: #FFD700;
-            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
-        }
-
-        .card-img {
-            width: 100%;
-            aspect-ratio: 1;
-            background: linear-gradient(135deg, #334155, #1e293b);
-            border-radius: 16px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .play-overlay {
-            position: absolute;
-            bottom: -50px;
-            right: 10px;
-            width: 45px;
-            height: 45px;
-            background: #FFD700;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-
-        .music-card:hover .play-overlay {
-            bottom: 10px;
-        }
-
-        .play-overlay i {
-            color: #0f172a;
-            font-size: 20px;
-        }
-
-        .card-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-            font-size: 16px;
-        }
-
-        .card-artist {
-            color: #94a3b8;
-            font-size: 14px;
-        }
-
-        .badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #FFD700;
-            color: #0f172a;
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: bold;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .btn-gold, .btn-red {
-            flex: 1;
-            padding: 8px;
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            font-size: 12px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-gold {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: #0f172a;
-        }
-
-        .btn-gold:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
-        }
-
-        .btn-red {
-            background: #ef4444;
-            color: white;
-        }
-
-        .btn-red:hover {
-            background: #dc2626;
-            transform: scale(1.05);
-        }
-
-        /* ===== RADIO GRID ===== */
-        .radio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .radio-card {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 25px;
+        .input-section {
+            background: #f8f9fa;
             padding: 25px;
-            cursor: pointer;
-            transition: 0.3s;
-            position: relative;
-            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .radio-card:hover {
-            transform: scale(1.02);
-            border-color: #FFD700;
-            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        .input-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
         }
 
-        .live-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #ef4444;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
-
-        .radio-card h2 {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-
-        .radio-card h3 {
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-
-        .radio-card p {
-            color: #94a3b8;
-            font-size: 13px;
-        }
-
-        /* ===== UPLOAD SECTION ===== */
-        .upload-section {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 30px;
-            padding: 30px;
-            margin: 20px 0;
-        }
-
-        .upload-tabs {
-            display: flex;
-            gap: 10px;
+        .form-group {
             margin-bottom: 20px;
         }
 
-        .tab-btn {
-            flex: 1;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            color: #94a3b8;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .tab-btn.active {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: #0f172a;
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
             font-weight: 600;
         }
 
-        .tab-content {
-            display: none;
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
         }
 
-        .tab-content.active {
-            display: block;
+        input[type="text"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
         }
 
-        .upload-area {
-            background: rgba(15, 23, 42, 0.8);
-            border: 2px dashed rgba(255, 215, 0, 0.5);
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            cursor: pointer;
-            margin: 15px 0;
-            transition: 0.3s;
+        textarea {
+            height: 120px;
+            resize: vertical;
         }
 
-        .upload-area:hover {
-            border-color: #FFD700;
-            background: rgba(255, 215, 0, 0.05);
-        }
-
-        .upload-area i {
-            font-size: 48px;
-            color: #FFD700;
-            margin-bottom: 15px;
-        }
-
-        .file-list {
-            background: rgba(15, 23, 42, 0.8);
-            border-radius: 15px;
-            padding: 15px;
-            margin: 10px 0;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .file-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-        }
-
-        .remove-file {
-            color: #ef4444;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        /* ===== EARNINGS DASHBOARD ===== */
-        .earnings-grid {
+        .style-options {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
         }
 
-        .earning-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 25px;
-            padding: 25px;
+        .style-btn {
+            padding: 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .style-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .style-btn:hover {
+            border-color: #667eea;
+        }
+
+        .duration-selector {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .duration-option {
+            flex: 1;
             text-align: center;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .earning-card h3 {
-            font-size: 36px;
-            color: #FFD700;
-            margin-bottom: 5px;
+        .duration-option.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
         }
 
-        .progress-container {
-            background: rgba(30, 41, 59, 0.7);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 25px;
+        .output-section {
+            background: #f8f9fa;
             padding: 25px;
-            margin: 20px 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .output-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
 
         .progress-bar {
             width: 100%;
-            height: 10px;
-            background: rgba(15, 23, 42, 0.8);
-            border-radius: 5px;
-            margin: 15px 0;
-            cursor: pointer;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 20px 0;
+            display: none;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #FFD700, #FFA500);
-            border-radius: 5px;
-            position: relative;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
         }
 
-        /* ===== PLAYER BAR ===== */
-        .player-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            border-top: 2px solid #FFD700;
-            padding: 15px 30px;
-            display: none;
-            z-index: 1000;
+        .song-list {
+            max-height: 400px;
+            overflow-y: auto;
         }
 
-        .player-content {
-            max-width: 1400px;
-            margin: 0 auto;
+        .song-item {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
         }
 
-        .player-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            min-width: 250px;
+        .song-item:hover {
+            transform: translateX(5px);
         }
 
-        .player-img {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            background-size: cover;
-        }
-
-        .player-controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .control-btn {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.3s;
-            color: white;
-        }
-
-        .control-btn:hover {
-            background: #FFD700;
-            color: #0f172a;
-        }
-
-        .play-btn-large {
-            width: 55px;
-            height: 55px;
-            background: #FFD700;
-        }
-
-        .play-btn-large i {
-            color: #0f172a;
-            font-size: 24px;
-        }
-
-        .player-progress {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .song-info {
             flex: 1;
-            max-width: 400px;
         }
 
-        /* ===== MODAL ===== */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
+        .song-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
         }
 
-        .modal.active {
+        .song-meta {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .song-actions {
             display: flex;
+            gap: 10px;
         }
 
-        .modal-content {
-            background: rgba(30, 41, 59, 0.95);
-            backdrop-filter: blur(10px);
-            border: 2px solid #FFD700;
-            border-radius: 30px;
-            padding: 40px;
-            width: 90%;
-            max-width: 450px;
-        }
-
-        .modal-content h2 {
-            color: #FFD700;
-            margin-bottom: 25px;
-            text-align: center;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 30px;
-            color: white;
-            font-size: 15px;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #FFD700;
-        }
-
-        button {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: #0f172a;
+        .play-btn, .download-btn {
+            padding: 8px 15px;
             border: none;
-            padding: 15px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 16px;
+            border-radius: 5px;
             cursor: pointer;
-            width: 100%;
-            margin: 10px 0;
-            transition: 0.3s;
+            transition: all 0.3s ease;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
-        }
-
-        .sec-btn {
-            background: transparent;
-            border: 1px solid rgba(255, 215, 0, 0.3);
+        .play-btn {
+            background: #667eea;
             color: white;
         }
 
-        /* ===== TOAST ===== */
-        .toast {
-            position: fixed;
-            bottom: 120px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #FFD700;
-            color: #0f172a;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: bold;
-            display: none;
-            z-index: 3000;
+        .play-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .download-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .download-btn:hover {
+            background: #218838;
+        }
+
+        .audio-player {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .audio-player audio {
+            width: 100%;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .feature-desc {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .generator-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .style-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+    <div class="container">
+        <h1>🎵 AI MP3 Song Generator</h1>
+        <p class="subtitle">Suno AI Style - Create Amazing Songs with AI</p>
 
-<!-- HEADER -->
-<div class="header">
-    <div class="header-content">
-        <div class="logo">
-            <i class="fas fa-crown"></i> MUSIC BOSS
+        <div class="generator-grid">
+            <div class="input-section">
+                <h2>🎤 Song Details</h2>
+                
+                <div class="form-group">
+                    <label>Song Title</label>
+                    <input type="text" id="songTitle" placeholder="Enter song title...">
+                </div>
+
+                <div class="form-group">
+                    <label>Lyrics / Description</label>
+                    <textarea id="lyrics" placeholder="Enter lyrics or describe what you want..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Music Style</label>
+                    <select id="musicStyle">
+                        <option value="pop">Pop</option>
+                        <option value="rock">Rock</option>
+                        <option value="hiphop">Hip Hop</option>
+                        <option value="electronic">Electronic</option>
+                        <option value="classical">Classical</option>
+                        <option value="jazz">Jazz</option>
+                        <option value="rnb">R&B</option>
+                        <option value="country">Country</option>
+                        <option value="folk">Folk</option>
+                        <option value="metal">Metal</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Mood</label>
+                    <div class="style-options">
+                        <button class="style-btn active" onclick="setMood('happy')">😊 Happy</button>
+                        <button class="style-btn" onclick="setMood('sad')">😢 Sad</button>
+                        <button class="style-btn" onclick="setMood('energetic')">⚡ Energetic</button>
+                        <button class="style-btn" onclick="setMood('calm')">😌 Calm</button>
+                        <button class="style-btn" onclick="setMood('romantic')">❤️ Romantic</button>
+                        <button class="style-btn" onclick="setMood('dark')">🌑 Dark</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Duration</label>
+                    <div class="duration-selector">
+                        <div class="duration-option active" onclick="setDuration(30)">30 sec</div>
+                        <div class="duration-option" onclick="setDuration(60)">1 min</div>
+                        <div class="duration-option" onclick="setDuration(120)">2 min</div>
+                        <div class="duration-option" onclick="setDuration(180)">3 min</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Voice Type</label>
+                    <select id="voiceType">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="duet">Duet</option>
+                        <option value="choir">Choir</option>
+                        <option value="instrumental">Instrumental</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Tempo</label>
+                    <input type="range" id="tempo" min="60" max="200" value="120" step="1">
+                    <span id="tempoValue">120 BPM</span>
+                </div>
+
+                <div class="form-group">
+                    <label>Key</label>
+                    <select id="key">
+                        <option value="C">C Major</option>
+                        <option value="Cm">C Minor</option>
+                        <option value="D">D Major</option>
+                        <option value="Dm">D Minor</option>
+                        <option value="E">E Major</option>
+                        <option value="Em">E Minor</option>
+                        <option value="F">F Major</option>
+                        <option value="Fm">F Minor</option>
+                        <option value="G">G Major</option>
+                        <option value="Gm">G Minor</option>
+                        <option value="A">A Major</option>
+                        <option value="Am">A Minor</option>
+                        <option value="B">B Major</option>
+                        <option value="Bm">B Minor</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="output-section">
+                <h2>🎵 Generated Songs</h2>
+                
+                <button class="generate-btn" onclick="generateSong()" id="generateBtn">
+                    Generate Song
+                </button>
+
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <div class="audio-player" id="audioPlayer" style="display: none;">
+                    <audio id="mainAudio" controls></audio>
+                </div>
+
+                <div class="song-list" id="songList">
+                    <!-- Songs will be displayed here -->
+                </div>
+            </div>
         </div>
-        <div class="user-menu">
-            <span class="balance" id="balanceDisplay">$0.00</span>
-            <div class="avatar" id="userAvatar" onclick="showAuth()">G</div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎤</div>
+                <div class="feature-title">AI Vocals</div>
+                <div class="feature-desc">Realistic AI singing voices</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎸</div>
+                <div class="feature-title">Multiple Styles</div>
+                <div class="feature-desc">10+ music genres</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎹</div>
+                <div class="feature-title">Custom Tempo</div>
+                <div class="feature-desc">Adjust BPM and key</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📥</div>
+                <div class="feature-title">Free Download</div>
+                <div class="feature-desc">Download as MP3</div>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- MAIN CONTAINER -->
-<div class="container">
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-        <div class="sidebar-item active" onclick="showPage('home')">
-            <i class="fas fa-home"></i> Home
-        </div>
-        <div class="sidebar-item" onclick="showPage('search')">
-            <i class="fas fa-search"></i> Search
-        </div>
-        <div class="sidebar-item" onclick="showPage('library')">
-            <i class="fas fa-books"></i> Your
+    <script>
+        // Global variables
+        let currentMood = 'happy';
+        let currentDuration = 30;
+        let songs = [];
+        let currentAudio = null;
+
+        // Load saved songs from localStorage
+        function loadSongs() {
+            const savedSongs = localStorage.getItem('generatedSongs');
+            if (savedSongs) {
+                songs = JSON.parse(savedSongs);
+                displaySongs();
+            }
+        }
+
+        // Set mood
+        function setMood(mood) {
+            currentMood = mood;
+            document.querySelectorAll('.style-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Set duration
+        function setDuration(duration) {
+            currentDuration = duration;
+            document.querySelectorAll('.duration-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Update tempo display
+        document.getElementById('tempo').addEventListener('input', function() {
+            document.getElementById('tempoValue').textContent = this.value + ' BPM';
+        });
+
+        // Generate song
+        async function generateSong() {
+            const generateBtn = document.getElementById('generateBtn');
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+            
+            // Get input values
+            const title = document.getElementById('songTitle').value || 'Untitled Song';
+            const lyrics = document.getElementById('lyrics').value || 'AI generated song';
+            const style = document.getElementById('musicStyle').value;
+            const voice = document.getElementById('voiceType').value;
+            const tempo = document.getElementById('tempo').value;
+            const key = document.getElementById('key').value;
+            
+            // Disable button and show progress
+            generateBtn.disabled = true;
+            progressBar.style.display = 'block';
+            
+            // Simulate generation progress
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    // Create song object
+                    const song = {
+                        id: Date.now(),
+                        title: title,
+                        style: style,
+                        mood: currentMood,
+                        duration: currentDuration,
+                        voice: voice,
+                        tempo: tempo,
+                        key: key,
+                        lyrics: lyrics,
+                        date: new Date().toLocaleString(),
+                        audioUrl: generateAudioFile(title, style, currentMood)
+                    };
+                    
+                    // Add to songs array
+                    songs.unshift(song);
+                    
+                    // Save to localStorage
+                    localStorage.setItem('generatedSongs', JSON.stringify(songs));
+                    
+                    // Display songs
+                    displaySongs();
+                    
+                    // Reset UI
+                    setTimeout(() => {
+                        progressBar.style.display = 'none';
+                        progressFill.style.width = '0%';
+                        generateBtn.disabled = false;
+                    }, 500);
+                }
+                progressFill.style.width = progress + '%';
+            }, 200);
+        }
+
+        // Generate audio file (simulated)
+        function generateAudioFile(title, style, mood) {
+            // In a real application, this would call an AI API
+            // For demo, we'll use a sample audio or create a data URL
+            const sampleAudio = 'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABIAD///////////////////////////////////////////8AAAA8TEFNRTMuMTAwAQAAAAAAAAAAABSAJMgRAAABIAAAAgABIAAAAAAAAAAQIA+2bA==';
+            return sampleAudio;
+        }
+
+        // Display songs
+        function displaySongs() {
+            const songList = document.getElementById('songList');
+            songList.innerHTML = '';
+            
+            if (songs.length === 0) {
+                songList.innerHTML = '<p style="text-align: center; color: #666;">No songs generated yet. Generate your first song!</p>';
+                return;
+            }
+            
+            songs.forEach(song => {
+                const songItem = document.createElement('div');
+                songItem.className = 'song-item';
+                songItem.innerHTML = `
+                    <div class="song-info">
+                        <div class="song-title">${song.title}</div>
+                        <div class="song-meta">
+                            ${song.style} • ${song.mood} • ${song.duration}sec • ${song.date}
+                        </div>
+                    </div>
+                    <div class="song-actions">
+                        <button class="play-btn" onclick="playSong('${song.id}')">▶ Play</button>
+                        <button class="download-btn" onclick="downloadSong('${song.id}')">⬇ Download</button>
+                    </div>
+                `;
+                s
