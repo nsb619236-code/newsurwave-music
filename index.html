@@ -22,7 +22,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             width: 100%;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
@@ -48,13 +48,14 @@
             font-size: 1.1em;
         }
 
-        .generator-grid {
+        .main-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.2fr 0.8fr;
             gap: 30px;
             margin-bottom: 30px;
         }
 
+        /* Input Section Styles */
         .input-section {
             background: #f8f9fa;
             padding: 25px;
@@ -62,10 +63,20 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .input-section h2 {
+        .section-title {
             color: #333;
             margin-bottom: 20px;
             font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
         }
 
         .form-group {
@@ -77,17 +88,19 @@
             margin-bottom: 8px;
             color: #555;
             font-weight: 600;
+            font-size: 0.95em;
         }
 
         input[type="text"],
         select,
         textarea {
             width: 100%;
-            padding: 12px;
+            padding: 12px 15px;
             border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: white;
         }
 
         input[type="text"]:focus,
@@ -95,13 +108,15 @@
         textarea:focus {
             outline: none;
             border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         textarea {
-            height: 120px;
+            height: 100px;
             resize: vertical;
         }
 
+        /* Style Options */
         .style-options {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -110,46 +125,88 @@
         }
 
         .style-btn {
-            padding: 8px;
+            padding: 10px;
             border: 2px solid #e0e0e0;
-            border-radius: 20px;
+            border-radius: 25px;
             background: white;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
         }
 
         .style-btn.active {
-            background: #667eea;
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
-            border-color: #667eea;
+            border-color: transparent;
         }
 
         .style-btn:hover {
             border-color: #667eea;
+            transform: translateY(-2px);
         }
 
+        /* Duration Selector */
         .duration-selector {
-            display: flex;
-            gap: 15px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
             margin-top: 10px;
         }
 
         .duration-option {
-            flex: 1;
             text-align: center;
             padding: 10px;
             border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .duration-option.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Range Slider */
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 3px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 50%;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .duration-option.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
         }
 
+        #tempoValue {
+            min-width: 70px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        /* Output Section */
         .output-section {
             background: #f8f9fa;
             padding: 25px;
@@ -157,29 +214,27 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .output-section h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.5em;
-        }
-
         .generate-btn {
             width: 100%;
-            padding: 15px;
+            padding: 18px;
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 18px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        .generate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        .generate-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
         }
 
         .generate-btn:disabled {
@@ -187,14 +242,22 @@
             cursor: not-allowed;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: #e0e0e0;
-            border-radius: 3px;
-            overflow: hidden;
+        .generate-btn i {
+            font-size: 20px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
             margin: 20px 0;
             display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
         }
 
         .progress-fill {
@@ -202,11 +265,70 @@
             background: linear-gradient(90deg, #667eea, #764ba2);
             width: 0%;
             transition: width 0.3s ease;
+            border-radius: 4px;
         }
 
+        .progress-text {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Audio Player */
+        .audio-player {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .audio-player audio {
+            width: 100%;
+            outline: none;
+        }
+
+        .now-playing {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .now-playing i {
+            color: #667eea;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Song List */
         .song-list {
             max-height: 400px;
             overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .song-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .song-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .song-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
         }
 
         .song-item {
@@ -214,14 +336,30 @@
             align-items: center;
             padding: 15px;
             background: white;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .song-item:hover {
             transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+
+        .song-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            margin-right: 15px;
         }
 
         .song-info {
@@ -229,27 +367,42 @@
         }
 
         .song-title {
-            font-weight: 600;
+            font-weight: 700;
             color: #333;
             margin-bottom: 5px;
+            font-size: 1.1em;
         }
 
         .song-meta {
-            font-size: 0.9em;
+            font-size: 0.85em;
             color: #666;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .song-meta span {
+            background: #f0f0f0;
+            padding: 3px 8px;
+            border-radius: 15px;
         }
 
         .song-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .play-btn, .download-btn {
+        .action-btn {
             padding: 8px 15px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .play-btn {
@@ -259,6 +412,7 @@
 
         .play-btn:hover {
             background: #5a6fd8;
+            transform: scale(1.05);
         }
 
         .download-btn {
@@ -268,20 +422,20 @@
 
         .download-btn:hover {
             background: #218838;
+            transform: scale(1.05);
         }
 
-        .audio-player {
-            margin-top: 20px;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        .delete-btn {
+            background: #dc3545;
+            color: white;
         }
 
-        .audio-player audio {
-            width: 100%;
+        .delete-btn:hover {
+            background: #c82333;
+            transform: scale(1.05);
         }
 
+        /* Features Grid */
         .features-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -292,25 +446,30 @@
         .feature-card {
             background: white;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 15px;
             text-align: center;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .feature-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
         }
 
         .feature-icon {
-            font-size: 2em;
-            margin-bottom: 10px;
+            font-size: 2.5em;
+            margin-bottom: 12px;
+            display: inline-block;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .feature-title {
-            font-weight: 600;
+            font-weight: 700;
             color: #333;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         .feature-desc {
@@ -318,17 +477,104 @@
             color: #666;
         }
 
-        @media (max-width: 768px) {
-            .generator-grid {
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 50px;
+            color: #667eea;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            border-left: 4px solid #667eea;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast i {
+            font-size: 24px;
+            color: #667eea;
+        }
+
+        .toast-message {
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-grid {
                 grid-template-columns: 1fr;
             }
             
             .features-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
             
             .style-options {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .duration-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .song-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .song-icon {
+                margin-right: 0;
+            }
+            
+            .song-actions {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -336,274 +582,112 @@
 <body>
     <div class="container">
         <h1>🎵 AI MP3 Song Generator</h1>
-        <p class="subtitle">Suno AI Style - Create Amazing Songs with AI</p>
+        <p class="subtitle">Suno AI Style - Create Professional AI Songs in Seconds</p>
 
-        <div class="generator-grid">
+        <div class="main-grid">
+            <!-- Input Section -->
             <div class="input-section">
-                <h2>🎤 Song Details</h2>
+                <div class="section-title">
+                    <span>🎤 Song Details</span>
+                </div>
                 
                 <div class="form-group">
                     <label>Song Title</label>
-                    <input type="text" id="songTitle" placeholder="Enter song title...">
+                    <input type="text" id="songTitle" placeholder="Enter a creative title...">
                 </div>
 
                 <div class="form-group">
                     <label>Lyrics / Description</label>
-                    <textarea id="lyrics" placeholder="Enter lyrics or describe what you want..."></textarea>
+                    <textarea id="lyrics" placeholder="Write your lyrics or describe the song you want..."></textarea>
                 </div>
 
-                <div class="form-group">
-                    <label>Music Style</label>
-                    <select id="musicStyle">
-                        <option value="pop">Pop</option>
-                        <option value="rock">Rock</option>
-                        <option value="hiphop">Hip Hop</option>
-                        <option value="electronic">Electronic</option>
-                        <option value="classical">Classical</option>
-                        <option value="jazz">Jazz</option>
-                        <option value="rnb">R&B</option>
-                        <option value="country">Country</option>
-                        <option value="folk">Folk</option>
-                        <option value="metal">Metal</option>
-                    </select>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Music Style</label>
+                        <select id="musicStyle">
+                            <option value="pop">Pop</option>
+                            <option value="rock">Rock</option>
+                            <option value="hiphop">Hip Hop</option>
+                            <option value="electronic">Electronic</option>
+                            <option value="classical">Classical</option>
+                            <option value="jazz">Jazz</option>
+                            <option value="rnb">R&B</option>
+                            <option value="country">Country</option>
+                            <option value="folk">Folk</option>
+                            <option value="metal">Metal</option>
+                            <option value="lofi">Lo-Fi</option>
+                            <option value="edm">EDM</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Voice Type</label>
+                        <select id="voiceType">
+                            <option value="male">Male Vocal</option>
+                            <option value="female">Female Vocal</option>
+                            <option value="duet">Duet</option>
+                            <option value="choir">Choir</option>
+                            <option value="instrumental">Instrumental</option>
+                            <option value="auto">Auto Tune</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label>Mood</label>
                     <div class="style-options">
-                        <button class="style-btn active" onclick="setMood('happy')">😊 Happy</button>
-                        <button class="style-btn" onclick="setMood('sad')">😢 Sad</button>
-                        <button class="style-btn" onclick="setMood('energetic')">⚡ Energetic</button>
-                        <button class="style-btn" onclick="setMood('calm')">😌 Calm</button>
-                        <button class="style-btn" onclick="setMood('romantic')">❤️ Romantic</button>
-                        <button class="style-btn" onclick="setMood('dark')">🌑 Dark</button>
+                        <button class="style-btn active" data-mood="happy">😊 Happy</button>
+                        <button class="style-btn" data-mood="sad">😢 Sad</button>
+                        <button class="style-btn" data-mood="energetic">⚡ Energetic</button>
+                        <button class="style-btn" data-mood="calm">😌 Calm</button>
+                        <button class="style-btn" data-mood="romantic">❤️ Romantic</button>
+                        <button class="style-btn" data-mood="dark">🌑 Dark</button>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Duration</label>
                     <div class="duration-selector">
-                        <div class="duration-option active" onclick="setDuration(30)">30 sec</div>
-                        <div class="duration-option" onclick="setDuration(60)">1 min</div>
-                        <div class="duration-option" onclick="setDuration(120)">2 min</div>
-                        <div class="duration-option" onclick="setDuration(180)">3 min</div>
+                        <button class="duration-option active" data-duration="30">30 sec</button>
+                        <button class="duration-option" data-duration="60">1 min</button>
+                        <button class="duration-option" data-duration="120">2 min</button>
+                        <button class="duration-option" data-duration="180">3 min</button>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Voice Type</label>
-                    <select id="voiceType">
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="duet">Duet</option>
-                        <option value="choir">Choir</option>
-                        <option value="instrumental">Instrumental</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Tempo</label>
-                    <input type="range" id="tempo" min="60" max="200" value="120" step="1">
-                    <span id="tempoValue">120 BPM</span>
-                </div>
-
-                <div class="form-group">
-                    <label>Key</label>
-                    <select id="key">
-                        <option value="C">C Major</option>
-                        <option value="Cm">C Minor</option>
-                        <option value="D">D Major</option>
-                        <option value="Dm">D Minor</option>
-                        <option value="E">E Major</option>
-                        <option value="Em">E Minor</option>
-                        <option value="F">F Major</option>
-                        <option value="Fm">F Minor</option>
-                        <option value="G">G Major</option>
-                        <option value="Gm">G Minor</option>
-                        <option value="A">A Major</option>
-                        <option value="Am">A Minor</option>
-                        <option value="B">B Major</option>
-                        <option value="Bm">B Minor</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="output-section">
-                <h2>🎵 Generated Songs</h2>
-                
-                <button class="generate-btn" onclick="generateSong()" id="generateBtn">
-                    Generate Song
-                </button>
-
-                <div class="progress-bar" id="progressBar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-
-                <div class="audio-player" id="audioPlayer" style="display: none;">
-                    <audio id="mainAudio" controls></audio>
-                </div>
-
-                <div class="song-list" id="songList">
-                    <!-- Songs will be displayed here -->
-                </div>
-            </div>
-        </div>
-
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">🎤</div>
-                <div class="feature-title">AI Vocals</div>
-                <div class="feature-desc">Realistic AI singing voices</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🎸</div>
-                <div class="feature-title">Multiple Styles</div>
-                <div class="feature-desc">10+ music genres</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🎹</div>
-                <div class="feature-title">Custom Tempo</div>
-                <div class="feature-desc">Adjust BPM and key</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📥</div>
-                <div class="feature-title">Free Download</div>
-                <div class="feature-desc">Download as MP3</div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Global variables
-        let currentMood = 'happy';
-        let currentDuration = 30;
-        let songs = [];
-        let currentAudio = null;
-
-        // Load saved songs from localStorage
-        function loadSongs() {
-            const savedSongs = localStorage.getItem('generatedSongs');
-            if (savedSongs) {
-                songs = JSON.parse(savedSongs);
-                displaySongs();
-            }
-        }
-
-        // Set mood
-        function setMood(mood) {
-            currentMood = mood;
-            document.querySelectorAll('.style-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-        }
-
-        // Set duration
-        function setDuration(duration) {
-            currentDuration = duration;
-            document.querySelectorAll('.duration-option').forEach(opt => {
-                opt.classList.remove('active');
-            });
-            event.target.classList.add('active');
-        }
-
-        // Update tempo display
-        document.getElementById('tempo').addEventListener('input', function() {
-            document.getElementById('tempoValue').textContent = this.value + ' BPM';
-        });
-
-        // Generate song
-        async function generateSong() {
-            const generateBtn = document.getElementById('generateBtn');
-            const progressBar = document.getElementById('progressBar');
-            const progressFill = document.getElementById('progressFill');
-            
-            // Get input values
-            const title = document.getElementById('songTitle').value || 'Untitled Song';
-            const lyrics = document.getElementById('lyrics').value || 'AI generated song';
-            const style = document.getElementById('musicStyle').value;
-            const voice = document.getElementById('voiceType').value;
-            const tempo = document.getElementById('tempo').value;
-            const key = document.getElementById('key').value;
-            
-            // Disable button and show progress
-            generateBtn.disabled = true;
-            progressBar.style.display = 'block';
-            
-            // Simulate generation progress
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += Math.random() * 15;
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(interval);
-                    
-                    // Create song object
-                    const song = {
-                        id: Date.now(),
-                        title: title,
-                        style: style,
-                        mood: currentMood,
-                        duration: currentDuration,
-                        voice: voice,
-                        tempo: tempo,
-                        key: key,
-                        lyrics: lyrics,
-                        date: new Date().toLocaleString(),
-                        audioUrl: generateAudioFile(title, style, currentMood)
-                    };
-                    
-                    // Add to songs array
-                    songs.unshift(song);
-                    
-                    // Save to localStorage
-                    localStorage.setItem('generatedSongs', JSON.stringify(songs));
-                    
-                    // Display songs
-                    displaySongs();
-                    
-                    // Reset UI
-                    setTimeout(() => {
-                        progressBar.style.display = 'none';
-                        progressFill.style.width = '0%';
-                        generateBtn.disabled = false;
-                    }, 500);
-                }
-                progressFill.style.width = progress + '%';
-            }, 200);
-        }
-
-        // Generate audio file (simulated)
-        function generateAudioFile(title, style, mood) {
-            // In a real application, this would call an AI API
-            // For demo, we'll use a sample audio or create a data URL
-            const sampleAudio = 'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABIAD///////////////////////////////////////////8AAAA8TEFNRTMuMTAwAQAAAAAAAAAAABSAJMgRAAABIAAAAgABIAAAAAAAAAAQIA+2bA==';
-            return sampleAudio;
-        }
-
-        // Display songs
-        function displaySongs() {
-            const songList = document.getElementById('songList');
-            songList.innerHTML = '';
-            
-            if (songs.length === 0) {
-                songList.innerHTML = '<p style="text-align: center; color: #666;">No songs generated yet. Generate your first song!</p>';
-                return;
-            }
-            
-            songs.forEach(song => {
-                const songItem = document.createElement('div');
-                songItem.className = 'song-item';
-                songItem.innerHTML = `
-                    <div class="song-info">
-                        <div class="song-title">${song.title}</div>
-                        <div class="song-meta">
-                            ${song.style} • ${song.mood} • ${song.duration}sec • ${song.date}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tempo (BPM)</label>
+                        <div class="range-container">
+                            <input type="range" id="tempo" min="60" max="200" value="120" step="1">
+                            <span id="tempoValue">120 BPM</span>
                         </div>
                     </div>
-                    <div class="song-actions">
-                        <button class="play-btn" onclick="playSong('${song.id}')">▶ Play</button>
-                        <button class="download-btn" onclick="downloadSong('${song.id}')">⬇ Download</button>
+
+                    <div class="form-group">
+                        <label>Key</label>
+                        <select id="key">
+                            <option value="C">C Major</option>
+                            <option value="Cm">C Minor</option>
+                            <option value="D">D Major</option>
+                            <option value="Dm">D Minor</option>
+                            <option value="E">E Major</option>
+                            <option value="Em">E Minor</option>
+                            <option value="F">F Major</option>
+                            <option value="Fm">F Minor</option>
+                            <option value="G">G Major</option>
+                            <option value="Gm">G Minor</option>
+                            <option value="A">A Major</option>
+                            <option value="Am">A Minor</option>
+                            <option value="B">B Major</option>
+                            <option value="Bm">B Minor</option>
+                        </select>
                     </div>
-                `;
-                s
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Effects</label>
+                        <select id="effects">
+                            <option value="none">None</option>
+                            <option value="reverb">Re
