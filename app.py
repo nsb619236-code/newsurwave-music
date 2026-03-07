@@ -19,7 +19,7 @@ def generate_music():
         prompt = data.get('prompt', '')
         genre = data.get('genre', 'pop')
         duration = data.get('duration', 15)
-        
+        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
         # YAHAN REAL AI API LAGEGA
         # Abhi demo ke liye sample return kar rahe hain
         
