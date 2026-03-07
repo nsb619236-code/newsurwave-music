@@ -47,3 +47,12 @@ def serve_audio(filename):
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
+    # backend/app.py mein ye add karein
+HF_TOKEN = "your_token_here"
+
+def generate_with_hf(prompt):
+    API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
+    headers = {"Authorization": f"Bearer {HF_TOKEN}"}
+    
+    response = requests.post(API_URL, headers=headers, json={"inputs": prompt})
+    return response.content
