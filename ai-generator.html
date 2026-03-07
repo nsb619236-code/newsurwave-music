@@ -1,1 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Music Generator - SurWave</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="ai-style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="logo">🎵 SurWave AI</h1>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="library.html">Library</a>
+                <a href="ai-generator.html" class="active">AI Generator</a>
+                <a href="login.html" id="authBtn">Login</a>
+            </div>
+        </div>
+    </nav>
 
+    <main class="ai-container">
+        <div class="ai-header">
+            <h1>✨ AI Music Generator</h1>
+            <p>Describe your dream song and let AI create it for you</p>
+        </div>
+
+        <div class="generator-box">
+            <div class="input-section">
+                <textarea 
+                    id="promptInput" 
+                    placeholder="Example: A romantic Hindi song with soft piano, fast beat, modern pop style..."
+                    rows="3"
+                ></textarea>
+                
+                <div class="controls">
+                    <select id="genreSelect">
+                        <option value="pop">Pop</option>
+                        <option value="rock">Rock</option>
+                        <option value="classical">Classical</option>
+                        <option value="hindi">Hindi</option>
+                        <option value="punjabi">Punjabi</option>
+                        <option value="electronic">Electronic</option>
+                    </select>
+
+                    <select id="durationSelect">
+                        <option value="15">15 seconds</option>
+                        <option value="30">30 seconds</option>
+                        <option value="60">60 seconds</option>
+                    </select>
+
+                    <button id="generateBtn" onclick="generateMusic()">
+                        <span>🎵 Generate Song</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="loadingIndicator" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Creating your music... (30-60 seconds)</p>
+            </div>
+
+            <div id="resultSection" class="result-section" style="display: none;">
+                <h3>Your Generated Song:</h3>
+                
+                <div class="music-player">
+                    <audio id="audioPlayer" controls>
+                        <source src="" type="audio/mpeg">
+                    </audio>
+                    
+                    <div class="player-controls">
+                        <button onclick="downloadSong()" class="download-btn">
+                            ⬇️ Download MP3
+                        </button>
+                        <button onclick="saveToLibrary()" class="save-btn">
+                            💾 Save to Library
+                        </button>
+                    </div>
+                </div>
+
+                <div class="share-options">
+                    <p>Share this song:</p>
+                    <div class="share-buttons">
+                        <button onclick="shareOnWhatsApp()">📱 WhatsApp</button>
+                        <button onclick="copyLink()">🔗 Copy Link</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="examples-section">
+            <h3>Try these examples:</h3>
+            <div class="example-tags">
+                <span onclick="useExample('Happy Bollywood song with dhol and tabla')">🎬 Bollywood</span>
+                <span onclick="useExample('Sad romantic song with piano and violin')">💔 Sad</span>
+                <span onclick="useExample('Energetic Punjabi beat with modern twist')">🕺 Punjabi</span>
+                <span onclick="useExample('Meditation music with flute and nature sounds')">🧘 Meditation</span>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js"></script>
+    <script src="firebase.js"></script>
+    <script src="ai-script.js"></script>
+</body>
+</html>
