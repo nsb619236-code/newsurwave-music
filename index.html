@@ -3,588 +3,388 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Song Generator | 4-5 Minute Songs</title>
-    <style>
-        /* Same CSS as before - keep it */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-<div class="nav-links">
-    <a href="index.html">Home</a>
-    <a href="library.html">Library</a>
-    <a href="ai-generator.html">AI Generator</a>  <!-- Ye line add karein -->
-    <a href="login.html" id="authBtn">Login</a>
-</div>
-        .container {
-            max-width: 1400px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 30px;
-            backdrop-filter: blur(10px);
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
-        }
-
-        .duration-badge {
-            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
-
-        .connection-status {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            padding: 10px;
-            background: #f0f0f0;
-            border-radius: 30px;
-        }
-
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .status-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #ff4444;
-            transition: all 0.3s ease;
-        }
-
-        .status-dot.connected {
-            background: #00C851;
-            box-shadow: 0 0 10px #00C851;
-        }
-
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .input-section {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .section-title {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.5em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-            font-weight: 600;
-        }
-
-        input[type="text"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 15px;
-            transition: all 0.3s ease;
-        }
-
-        input[type="text"]:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        textarea {
-            height: 100px;
-            resize: vertical;
-        }
-
-        .style-options {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .style-btn {
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 25px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .style-btn.active {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border-color: transparent;
-        }
-
-        .duration-selector {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .duration-option {
-            text-align: center;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-
-        .duration-option.active {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border-color: transparent;
-        }
-
-        .duration-option small {
-            display: block;
-            font-size: 12px;
-            font-weight: normal;
-            margin-top: 5px;
-        }
-
-        .range-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        input[type="range"] {
-            flex: 1;
-            height: 6px;
-            -webkit-appearance: none;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 3px;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border: 2px solid #667eea;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .output-section {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .generate-btn {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .generate-btn:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
-        }
-
-        .generate-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        .progress-container {
-            margin: 20px 0;
-            display: none;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #e0e0e0;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .progress-text {
-            text-align: center;
-            margin-top: 8px;
-            font-size: 14px;
-            color: #666;
-            font-weight: 500;
-        }
-
-        .audio-player {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            display: none;
-        }
-
-        .audio-player audio {
-            width: 100%;
-            outline: none;
-        }
-
-        .now-playing {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            color: #333;
-            font-weight: 600;
-        }
-
-        .song-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .song-item {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            background: white;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .song-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
-        }
-
-        .song-icon {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-            margin-right: 15px;
-        }
-
-        .song-info {
-            flex: 1;
-        }
-
-        .song-title {
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 5px;
-            font-size: 1.1em;
-        }
-
-        .song-meta {
-            font-size: 0.85em;
-            color: #666;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .song-meta span {
-            background: #f0f0f0;
-            padding: 3px 8px;
-            border-radius: 15px;
-        }
-
-        .song-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-btn {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .play-btn {
-            background: #667eea;
-            color: white;
-        }
-
-        .download-btn {
-            background: #28a745;
-            color: white;
-        }
-
-        .delete-btn {
-            background: #dc3545;
-            color: white;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .feature-icon {
-            font-size: 2.5em;
-            margin-bottom: 12px;
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-            border-left: 4px solid #667eea;
-        }
-
-        .toast.show {
-            transform: translateX(0);
-        }
-
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 1024px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+    <title>AI Music Generator Pro - SurWave</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="ai-style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>🎵 AI Song Generator</h1>
-        <p class="subtitle">4-5 Minute Full Length Songs</p>
+    <!-- Animated Background -->
+    <div class="gradient-bg">
+        <div class="gradient"></div>
+        <div class="gradient"></div>
+        <div class="gradient"></div>
+    </div>
 
-        <div class="connection-status">
-            <div class="status-indicator">
-                <span class="status-dot" id="statusDot"></span>
-                <span id="statusText">Checking server...</span>
+    <!-- Navigation -->
+    <nav class="navbar glass-morphism">
+        <div class="nav-container">
+            <h1 class="logo">
+                <i class="fas fa-magic"></i> 
+                SurWave <span class="gradient-text">AI</span>
+            </h1>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="library.html"><i class="fas fa-music"></i> Library</a>
+                <a href="ai-generator.html" class="active"><i class="fas fa-robot"></i> AI Studio</a>
+                <a href="login.html" id="authBtn"><i class="fas fa-user"></i> Login</a>
             </div>
-            <div class="duration-badge">⏱️ 4-5 Minutes</div>
+        </div>
+    </nav>
+
+    <main class="ai-container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="hero-content">
+                <span class="badge">🎵 AI MUSIC STUDIO</span>
+                <h1>Create Amazing <span class="gradient-text">5-Minute Songs</span></h1>
+                <p>Generate full-length songs with AI in seconds. Professional quality, unlimited creativity.</p>
+            </div>
         </div>
 
-        <div class="main-grid">
-            <!-- Input Section -->
-            <div class="input-section">
-                <div class="section-title">
-                    <span>🎤 Song Details</span>
+        <!-- Main Generator Card -->
+        <div class="generator-card glass-morphism">
+            <div class="card-header">
+                <h2><i class="fas fa-sliders-h"></i> Song Settings</h2>
+                <div class="header-actions">
+                    <span class="credit-badge">
+                        <i class="fas fa-bolt"></i> 50 Credits Left
+                    </span>
                 </div>
-                
-                <div class="form-group">
-                    <label>Song Title</label>
-                    <input type="text" id="songTitle" placeholder="Enter song title..." value="My 5 Minute Song">
+            </div>
+
+            <div class="generator-grid">
+                <!-- Left Column - Basic Info -->
+                <div class="left-col">
+                    <div class="input-group">
+                        <label><i class="fas fa-heading"></i> Song Title</label>
+                        <input 
+                            type="text" 
+                            id="songTitle" 
+                            placeholder="e.g., My 5 Minute Song"
+                            value="My 5 Minute Song"
+                            class="glass-input"
+                        >
+                    </div>
+
+                    <div class="input-group">
+                        <label><i class="fas fa-align-left"></i> Lyrics / Description</label>
+                        <textarea 
+                            id="promptInput" 
+                            placeholder="Describe your song or write lyrics..."
+                            rows="4"
+                            class="glass-input"
+                        >This is my 5 minute AI generated song with full structure</textarea>
+                    </div>
+
+                    <!-- Quick Prompts -->
+                    <div class="quick-prompts">
+                        <span class="prompt-chip" onclick="usePrompt('Romantic Hindi love song with piano')">
+                            ❤️ Romantic Hindi
+                        </span>
+                        <span class="prompt-chip" onclick="usePrompt('Energetic Punjabi beat with dhol')">
+                            🕺 Punjabi Beat
+                        </span>
+                        <span class="prompt-chip" onclick="usePrompt('Sad song with violin and soft vocals')">
+                            😢 Sad Melody
+                        </span>
+                        <span class="prompt-chip" onclick="usePrompt('Party pop electronic dance music')">
+                            🎉 Party Pop
+                        </span>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Lyrics / Description</label>
-                    <textarea id="lyrics" placeholder="Write your lyrics...">This is my 5 minute AI generated song with full structure</textarea>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Music Style</label>
-                        <select id="musicStyle">
-                            <option value="pop">Pop</option>
-                            <option value="rock">Rock</option>
-                            <option value="hiphop">Hip Hop</option>
-                            <option value="electronic">Electronic</option>
-                            <option value="classical">Classical</option>
-                            <option value="jazz">Jazz</option>
-                            <option value="lofi">Lo-Fi</option>
-                            <option value="edm">EDM</option>
+                <!-- Right Column - Music Style -->
+                <div class="right-col">
+                    <div class="input-group">
+                        <label><i class="fas fa-guitar"></i> Music Style</label>
+                        <select id="genreSelect" class="glass-input style-select">
+                            <option value="pop" selected>🎤 Pop</option>
+                            <option value="rock">🎸 Rock</option>
+                            <option value="hindi">🎬 Hindi Bollywood</option>
+                            <option value="punjabi">🪘 Punjabi</option>
+                            <option value="classical">🎻 Classical</option>
+                            <option value="electronic">⚡ Electronic</option>
+                            <option value="jazz">🎺 Jazz</option>
+                            <option value="folk">🌾 Folk</option>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label>Voice Type</label>
-                        <select id="voiceType">
-                            <option value="male">Male Vocal</option>
-                            <option value="female">Female Vocal</option>
-                            <option value="duet">Duet</option>
-                            <option value="instrumental">Instrumental</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Mood</label>
-                    <div class="style-options">
-                        <button class="style-btn active" data-mood="happy">😊 Happy</button>
-                        <button class="style-btn" data-mood="sad">😢 Sad</button>
-                        <button class="style-btn" data-mood="energetic">⚡ Energetic</button>
-                        <button class="style-btn" data-mood="calm">😌 Calm</button>
-                        <button class="style-btn" data-mood="romantic">❤️ Romantic</button>
-                        <button class="style-btn" data-mood="dark">🌑 Dark</button>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Duration (4-5 Minutes)</label>
-                    <div class="duration-selector">
-                        <button class="duration-option active" data-duration="240">
-                            4 Min <small>240 sec</small>
-                        </button>
-                        <button class="duration-option" data-duration="270">
-                            4.5 Min <small>270 sec</small>
-                        </button>
-                        <button class="duration-option" data-duration="300">
-                            5 Min <small>300 sec</small>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Tempo (BPM)</label>
-                        <div class="range-container">
-                            <input type="range" id="tempo" min="60" max="200" value="120" step="1">
-                            <span id="tempoValue">120 BPM</span>
+                    <div class="input-group">
+                        <label><i class="fas fa-microphone-alt"></i> Voice Type</label>
+                        <div class="voice-options">
+                            <label class="voice-option selected">
+                                <input type="radio" name="voice" value="male" checked>
+                                <i class="fas fa-male"></i>
+                                <span>Male</span>
+                            </label>
+                            <label class="voice-option">
+                                <input type="radio" name="voice" value="female">
+                                <i class="fas fa-female"></i>
+                                <span>Female</span>
+                            </label>
+                            <label class="voice-option">
+                                <input type="radio" name="voice" value="duet">
+                                <i class="fas fa-users"></i>
+                                <span>Duet</span>
+                            </label>
+                            <label class="voice-option">
+                                <input type="radio" name="voice" value="instrumental">
+                                <i class="fas fa-drum"></i>
+                                <span>Instrumental</span>
+                            </label>
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <!-- Mood Selector -->
+                    <div class="input-group">
+                        <label><i class="fas fa-heart"></i> Mood</label>
+                        <div class="mood-grid">
+                            <button class="mood-btn" data-mood="happy">
+                                <span>🎵</span> Happy
+                            </button>
+                            <button class="mood-btn" data-mood="sad">
+                                <span>😊</span> Sad
+                            </button>
+                            <button class="mood-btn active" data-mood="energetic">
+                                <span>🌙</span> Energetic
+                            </button>
+                            <button class="mood-btn" data-mood="calm">
+                                <span>😡</span> Calm
+                            </button>
+                            <button class="mood-btn" data-mood="romantic">
+                                <span>❤️</span> Romantic
+                            </button>
+                            <button class="mood-btn" data-mood="dark">
+                                <span>🔴</span> Dark
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Settings -->
+            <div class="advanced-settings">
+                <button class="toggle-advanced" onclick="toggleAdvanced()">
+                    <i class="fas fa-cog"></i> Advanced Settings
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                
+                <div id="advancedPanel" class="advanced-panel hidden">
+                    <div class="slider-group">
+                        <label>Duration <span id="durationValue">4 Min (240 sec)</span></label>
+                        <input type="range" id="durationSlider" min="1" max="5" value="4" step="0.5" oninput="updateDuration()">
+                        <div class="range-labels">
+                            <span>1 Min</span>
+                            <span>2 Min</span>
+                            <span>3 Min</span>
+                            <span>4 Min</span>
+                            <span>5 Min</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Tempo (BPM) <span id="tempoValue">120 BPM</span></label>
+                        <input type="range" id="tempoSlider" min="60" max="200" value="120" step="1" oninput="updateTempo()">
+                        <div class="range-labels">
+                            <span>Slow (60)</span>
+                            <span>Medium (120)</span>
+                            <span>Fast (200)</span>
+                        </div>
+                    </div>
+
+                    <div class="select-group">
                         <label>Key</label>
-                        <select id="key">
+                        <select id="keySelect" class="glass-input">
                             <option value="C">C Major</option>
+                            <option value="Cm">C Minor</option>
                             <option value="D">D Major</option>
+                            <option value="Dm">D Minor</option>
                             <option value="E">E Major</option>
+                            <option value="Em">E Minor</option>
                             <option value="F">F Major</option>
+                            <option value="Fm">F Minor</option>
                             <option value="G">G Major</option>
+                            <option value="Gm">G Minor</option>
                             <option value="A">A Major</option>
+                            <option value="Am">A Minor</option>
                             <option value="B">B Major</option>
+                            <option value="Bm">B Minor</option>
                         </select>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <
+            <!-- Generate Button -->
+            <div class="generate-section">
+                <button id="generateBtn" onclick="generateSong()">
+                    <span class="btn-content">
+                        <i class="fas fa-magic"></i>
+                        Generate Full Song
+                    </span>
+                    <span class="btn-glow"></span>
+                </button>
+                <p class="info-text">
+                    <i class="fas fa-clock"></i> Takes 30-60 seconds • 4 Credits per generation
+                </p>
+            </div>
+        </div>
+
+        <!-- Loading Section -->
+        <div id="loadingIndicator" class="loading-section hidden">
+            <div class="loading-card glass-morphism">
+                <div class="loading-animation">
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                </div>
+                <h3>Creating Your Masterpiece</h3>
+                <div class="loading-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <span id="progressText">Generating music...</span>
+                </div>
+                <div class="loading-tips">
+                    <i class="fas fa-lightbulb"></i>
+                    <span id="tipText">Adding magical melodies...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <div id="resultSection" class="result-section hidden">
+            <div class="result-card glass-morphism">
+                <div class="result-header">
+                    <div class="song-info">
+                        <h2><i class="fas fa-check-circle" style="color: #4CAF50;"></i> Song Generated!</h2>
+                        <div class="song-meta">
+                            <span class="meta-tag"><i class="fas fa-clock"></i> 4:00</span>
+                            <span class="meta-tag"><i class="fas fa-tag"></i> Pop</span>
+                            <span class="meta-tag"><i class="fas fa-male"></i> Male Vocal</span>
+                            <span class="meta-tag"><i class="fas fa-heart"></i> Energetic</span>
+                        </div>
+                    </div>
+                    <div class="result-actions">
+                        <button class="icon-btn" onclick="shareSong()">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                        <button class="icon-btn" onclick="addToPlaylist()">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Waveform Visualizer -->
+                <div class="waveform-container">
+                    <canvas id="waveform" width="800" height="100"></canvas>
+                </div>
+
+                <!-- Music Player -->
+                <div class="music-player">
+                    <audio id="audioPlayer" controls>
+                        <source src="" type="audio/mpeg">
+                    </audio>
+                    
+                    <div class="player-controls">
+                        <button onclick="playPreview()" class="control-btn">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <div class="time-info">
+                            <span id="currentTime">0:00</span> / <span id="duration">4:00</span>
+                        </div>
+                        <button onclick="toggleLoop()" class="control-btn">
+                            <i class="fas fa-redo-alt"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-grid">
+                    <button onclick="downloadSong()" class="action-btn primary">
+                        <i class="fas fa-download"></i>
+                        <span>Download MP3</span>
+                    </button>
+                    <button onclick="saveToLibrary()" class="action-btn secondary">
+                        <i class="fas fa-save"></i>
+                        <span>Save to Library</span>
+                    </button>
+                    <button onclick="regenerateSong()" class="action-btn">
+                        <i class="fas fa-redo"></i>
+                        <span>Regenerate</span>
+                    </button>
+                    <button onclick="editSong()" class="action-btn">
+                        <i class="fas fa-edit"></i>
+                        <span>Edit</span>
+                    </button>
+                </div>
+
+                <!-- Song Structure -->
+                <div class="song-structure">
+                    <h4>Song Structure</h4>
+                    <div class="structure-timeline">
+                        <div class="structure-part intro" style="width: 10%">
+                            <span>Intro</span>
+                        </div>
+                        <div class="structure-part verse" style="width: 25%">
+                            <span>Verse 1</span>
+                        </div>
+                        <div class="structure-part chorus" style="width: 20%">
+                            <span>Chorus</span>
+                        </div>
+                        <div class="structure-part verse" style="width: 20%">
+                            <span>Verse 2</span>
+                        </div>
+                        <div class="structure-part chorus" style="width: 15%">
+                            <span>Chorus</span>
+                        </div>
+                        <div class="structure-part outro" style="width: 10%">
+                            <span>Outro</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lyrics Preview -->
+                <div class="lyrics-preview">
+                    <h4>Lyrics Preview</h4>
+                    <p id="lyricsPreview">This is my 5 minute AI generated song with full structure...</p>
+                    <button class="text-btn">View Full Lyrics</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Suggestions -->
+        <div class="suggestions-section">
+            <h3>Try These Styles</h3>
+            <div class="suggestion-grid">
+                <div class="suggestion-card" onclick="tryStyle('romantic')">
+                    <i class="fas fa-heart" style="color: #ff6b6b;"></i>
+                    <h4>Romantic Ballad</h4>
+                    <p>Soft piano, emotional vocals</p>
+                </div>
+                <div class="suggestion-card" onclick="tryStyle('party')">
+                    <i class="fas fa-glass-cheers" style="color: #feca57;"></i>
+                    <h4>Party Anthem</h4>
+                    <p>Energetic beats, crowd vibe</p>
+                </div>
+                <div class="suggestion-card" onclick="tryStyle('workout')">
+                    <i class="fas fa-dumbbell" style="color: #48dbfb;"></i>
+                    <h4>Workout Mix</h4>
+                    <p>High BPM, motivational</p>
+                </div>
+                <div class="suggestion-card" onclick="tryStyle('meditation')">
+                    <i class="fas fa-peace" style="color: #1dd1a1;"></i>
+                    <h4>Meditation</h4>
+                    <p>Calm, relaxing, nature sounds</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js"></script>
+    <script src="firebase.js"></script>
+    <script src="ai-script.js"></script>
+</body>
+</html>
