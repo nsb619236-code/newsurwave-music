@@ -1,1 +1,36 @@
-￼Enter file contents here
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Songs</title>
+</head>
+
+<body>
+
+<h2>My Library</h2>
+
+<div id="songs"></div>
+
+<script>
+
+let songs = JSON.parse(localStorage.getItem("songs") || "[]");
+
+let container = document.getElementById("songs");
+
+songs.forEach(song=>{
+
+let div=document.createElement("div");
+
+div.innerHTML = `
+<h3>${song.title}</h3>
+<audio controls src="${song.audio}"></audio>
+`;
+
+container.appendChild(div);
+
+});
+
+</script>
+
+</body>
+</html>
