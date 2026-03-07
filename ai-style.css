@@ -1,1 +1,194 @@
+.ai-container {
+    max-width: 1200px;
+    margin: 100px auto 50px;
+    padding: 20px;
+}
 
+.ai-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.ai-header h1 {
+    font-size: 3em;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+}
+
+.generator-box {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.input-section textarea {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 15px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.input-section textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.controls {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.controls select {
+    flex: 1;
+    min-width: 150px;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 14px;
+    background: white;
+}
+
+#generateBtn {
+    flex: 2;
+    min-width: 200px;
+    padding: 15px 30px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+#generateBtn:hover {
+    transform: scale(1.05);
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.result-section {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 15px;
+}
+
+.music-player {
+    margin: 20px 0;
+}
+
+.player-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.download-btn, .save-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.download-btn {
+    background: #28a745;
+    color: white;
+}
+
+.save-btn {
+    background: #007bff;
+    color: white;
+}
+
+.share-options {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #dee2e6;
+}
+
+.share-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.share-buttons button {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background: white;
+    cursor: pointer;
+}
+
+.examples-section {
+    text-align: center;
+}
+
+.example-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.example-tags span {
+    padding: 8px 20px;
+    background: #f0f0f0;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.example-tags span:hover {
+    background: #667eea;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .ai-header h1 {
+        font-size: 2em;
+    }
+    
+    .controls {
+        flex-direction: column;
+    }
+    
+    .controls select, #generateBtn {
+        width: 100%;
+    }
+}
