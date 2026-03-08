@@ -1,154 +1,51 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Music Generator - Hugging Face</title>
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            color: #f8fafc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .app-card {
-            background-color: #1e293b;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            width: 90%;
-            max-width: 450px;
-            text-align: center;
-            border: 1px solid #334155;
-        }
-        h2 { color: #38bdf8; margin-bottom: 10px; }
-        .input-group { margin-bottom: 20px; text-align: left; }
-        label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: #94a3b8; }
-        textarea {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: 2px solid #334155;
-            background: #0f172a;
-            color: white;
-            resize: none;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            background: linear-gradient(90deg, #38bdf8, #818cf8);
-            color: #0f172a;
-            border: none;
-            padding: 15px;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        button:hover { transform: scale(1.02); opacity: 0.9; }
-        button:disabled { background: #475569; cursor: not-allowed; }
-        
-        #status-box {
-            margin-top: 20px;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            background: rgba(0,0,0,0.2);
-        }
-        audio {
-            width: 100%;
-            margin-top: 25px;
-            display: none; /* Starting mein chhupa rahega */
-        }
-        .loader {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #38bdf8;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
-            vertical-align: middle;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-    </style>
+    <title>Suno AI Music Generator</title>
 </head>
 <body>
-
-<div class="app-card">
-    <h2>🎵 AI Song Generator</h2>
-    <p style="color: #94a3b8; font-size: 0.9rem;">Hugging Face API Se Sangeet Banayein</p>
-
-    <div class="input-group">
-        <label>Gaane ka description (English mein):</label>
-        <textarea id="prompt" rows="3" placeholder="Example: Lofi chill beat, soft piano, 80bpm..."></textarea>
-    </div>
-
-    <button id="genBtn" onclick="generateMusic()">Gaana Banayein</button>
-
-    <div id="status-box">Intezaar kar raha hoon...</div>
-    
+    <h1>Generate AI Music (via Third-Party API)</h1>
+    <textarea id="lyricsInput" placeholder="Enter your lyrics or description..." rows="10" cols="50"></textarea><br>
+    <button onclick="generateMusic()">Generate Song</button>
+    <p id="status">Status: Idle</p>
     <audio id="audioPlayer" controls></audio>
-</div>
 
-<script>
-    async function generateMusic() {
-        const promptInput = document.getElementById('prompt');
-        const statusBox = document.getElementById('status-box');
-        const audio = document.getElementById('audioPlayer');
-        const btn = document.getElementById('genBtn');
+    <script>
+        // REPLACE with your actual API key and endpoint
+        const API_ENDPOINT = 'https://api.thirdpartyprovider.com'; 
+        const API_KEY = 'YOUR_API_KEY';
 
-        if (!promptInput.value.trim()) {
-            alert("Kuch toh likho dost!");
-            return;
-        }
+        async function generateMusic() {
+            const lyrics = document.getElementById('lyricsInput').value;
+            document.getElementById('status').innerText = 'Status: Generating... (might take 1-2 minutes)';
+            document.getElementById('audioPlayer').src = '';
 
-        // --- APNI DETAILS YAHAN DALEIN ---
-        const HF_TOKEN = "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";
-        const MODEL_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small";
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        prompt: lyrics,
+                        // Other parameters like 'style', 'genre' may be available
+                    })
+                });
 
-        // Loading Start
-        btn.disabled = true;
-        statusBox.innerHTML = '<div class="loader"></div> AI Sangeet bun raha hai... (60s tak lag sakte hain)';
-        audio.style.display = "none";
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
 
-        try {
-            const response = await fetch(MODEL_URL, {
-                headers: { 
-                    "Authorization": `Bearer ${HF_TOKEN}`,
-                    "Content-Type": "application/json"
-                },
-                method: "POST",
-                body: JSON.stringify({ inputs: promptInput.value }),
-            });
+                const data = await response.json();
+                const songUrl = data.audio_url_mp3; // The key name varies by provider
 
-            if (!response.ok) {
-                const err = await response.json();
-                throw new Error(err.error || "Model loading mein time le raha hai. Dobara try karein.");
+                document.getElementById('status').innerText = 'Status: Complete! Playing audio.';
+                document.getElementById('audioPlayer').src = songUrl;
+            } catch (error) {
+                document.getElementById('status').innerText = `Status: Error - ${error.message}`;
             }
-
-            const audioBlob = await response.blob();
-            const audioUrl = URL.createObjectURL(audioBlob);
-            
-            statusBox.innerHTML = "✨ **Gaana Taiyaar Hai!**";
-            audio.src = audioUrl;
-            audio.style.display = "block";
-            audio.play();
-
-        } catch (error) {
-            console.error(error);
-            statusBox.innerHTML = "❌ Error: " + error.message;
-        } finally {
-            btn.disabled = false;
         }
-    }
-</script>
-
+    </script>
 </body>
 </html>
