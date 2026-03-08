@@ -1,61 +1,44 @@
-let currentSong=null;
+<script>
+    async function generateMusic() {
+        const prompt = document.getElementById('prompt').value;
+        const status = document.getElementById('status');
+        const audio = document.getElementById('audioPlayer');
 
-async function generateSong(){
+        if (!prompt) {
+            alert("Kripya prompt likhein!");
+            return;
+        }
+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
+        // 1. Apni API Key yahan dalein
+        const API_TOKEN = "APKI_HUGGING_FACE_TOKEN_YAHAN_DAREIN"; 
+        // 2. Model ID (Example: facebook/musicgen-small)
+        const MODEL_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small";
 
-const title=document.getElementById("title").value;
-const prompt=document.getElementById("prompt").value;
+        status.innerText = "⏳ Hugging Face AI gaana bana raha hai... Isme 1 minute tak lag sakta hai.";
+        audio.style.display = "none";
 
-document.getElementById("status").innerText="Generating...";
+        try {
+            const response = await fetch(MODEL_URL, {
+                headers: { Authorization: `Bearer ${API_TOKEN}` },
+                method: "POST",
+                body: JSON.stringify({ inputs: prompt }),
+            });
 
-const res = await fetch("/api/generate",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-title,
-prompt,
-userId:"demoUser"
-})
-})
+            if (!response.ok) {
+                throw new Error("API Connection mein dikat aayi hai.");
+            }
 
-const data = await res.json();
+            const blob = await response.blob();
+            const audioUrl = URL.createObjectURL(blob);
+            
+            status.innerHTML = "✅ Gaana taiyaar hai!";
+            audio.src = audioUrl;
+            audio.style.display = "block";
+            audio.play();
 
-if(data.success){
-
-currentSong=data.song;
-
-document.getElementById("player").src=data.audio_url;
-
-document.getElementById("status").innerText="Song Ready";
-
-}else{
-
-document.getElementById("status").innerText="Error";
-
-}
-
-}
-
-function saveSong(){
-
-if(!currentSong){
-alert("Generate song first");
-return;
-}
-
-let library = JSON.parse(localStorage.getItem("songs") || "[]");
-
-library.push(currentSong);
-
-localStorage.setItem("songs",JSON.stringify(library));
-
-alert("Saved!");
-
-}
-
-function goLibrary(){
-
-window.location="library.html";
-
-}
+        } catch (error) {
+            console.error(error);
+            status.innerText = "❌ Error: " + error.message;
+        }
+    }
+</script>
