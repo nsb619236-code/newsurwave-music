@@ -1,50 +1,57 @@
 async function generateMusic() {
-    const prompt = document.getElementById('prompt').value;
-    const status = document.getElementById('status');
+    const promptInput = document.getElementById('prompt');
+    const statusBox = document.getElementById('status-box');
     const audio = document.getElementById('audioPlayer');
+    const btn = document.getElementById('genBtn');
 
-    if (!prompt) {
-        alert("Kripya kuch likhein!");
+    if (!promptInput.value.trim()) {
+        alert("Prompt likhna zaroori hai!");
         return;
     }
 
-    // --- YAHAN APNI DETAIL BHARIYE ---
-    const API_TOKEN = "// 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,
-    const MODEL_ID = "facebook/musicgen-small"; // Ye model fast aur muft hai
-    // ---------------------------------
+    // --- APNA TOKEN YAHAN DALEIN ---
+    const HF_TOKEN = " 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"; // DOOBARA CHECK KAREIN
+    const MODEL_ID = "facebook/musicgen-small";
 
-    status.innerText = "⏳ Hugging Face AI gaana bana raha hai... (Isme 30-60 seconds lag sakte hain)";
-    audio.style.display = "none";
+    btn.disabled = true;
+    statusBox.innerHTML = '<div class="loader"></div> AI Loading... (Pehli baar mein time lagta hai)';
 
     try {
         const response = await fetch(
             `https://api-inference.huggingface.co/models/${MODEL_ID}`,
             {
                 headers: { 
-                    Authorization: `Bearer ${API_TOKEN}`,
-                    "Content-Type": "application/json"
+                    "Authorization": `Bearer ${HF_TOKEN}`,
+                    "Content-Type": "application/json",
+                    "x-use-cache": "false" // Naya response lene ke liye
                 },
                 method: "POST",
-                body: JSON.stringify({ inputs: prompt }),
+                body: JSON.stringify({ inputs: promptInput.value }),
             }
         );
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || "API ne kaam nahi kiya");
+        // Agar model load ho raha hai (Status 503)
+        if (response.status === 503) {
+            statusBox.innerHTML = "⏳ Model load ho raha hai... 20 sec baad fir click karein.";
+            return;
         }
 
-        // Response ko audio file (blob) mein badalna
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
+        if (!response.ok) {
+            throw new Error("API Token check karein ya Internet connection.");
+        }
+
+        const audioBlob = await response.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
         
-        status.innerText = "✅ Gaana taiyaar hai! Enjoy 🎵";
-        audio.src = url;
+        statusBox.innerHTML = "✅ Gaana taiyaar hai!";
+        audio.src = audioUrl;
         audio.style.display = "block";
         audio.play();
 
     } catch (error) {
-        console.error("Error details:", error);
-        status.innerText = "❌ Error: " + error.message;
+        statusBox.innerHTML = "❌ Error: " + error.message;
+        console.error(error);
+    } finally {
+        btn.disabled = false;
     }
 }
