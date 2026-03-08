@@ -1,390 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Music Generator Pro - SurWave</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="ai-style.css">
+    <title>AI Music Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #1e293b;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            width: 400px;
+            text-align: center;
+        }
+        h2 { color: #38bdf8; }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: none;
+            background: #334155;
+            color: white;
+            resize: none;
+        }
+        button {
+            background-color: #38bdf8;
+            color: #0f172a;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover { background-color: #7dd3fc; }
+        #status { margin-top: 20px; font-size: 0.9rem; color: #94a3b8; }
+        audio { width: 100%; margin-top: 20px; display: none; }
+    </style>
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="gradient-bg">
-        <div class="gradient"></div>
-        <div class="gradient"></div>
-        <div class="gradient"></div>
-    </div>
 
-    <!-- Navigation -->
-    <nav class="navbar glass-morphism">
-        <div class="nav-container">
-            <h1 class="logo">
-                <i class="fas fa-magic"></i> 
-                SurWave <span class="gradient-text">AI</span>
-            </h1>
-            <div class="nav-links">
-                <a href="index.html"><i class="fas fa-home"></i> Home</a>
-                <a href="library.html"><i class="fas fa-music"></i> Library</a>
-                <a href="ai-generator.html" class="active"><i class="fas fa-robot"></i> AI Studio</a>
-                <a href="login.html" id="authBtn"><i class="fas fa-user"></i> Login</a>
-            </div>
-        </div>
-    </nav>
+<div class="container">
+    <h2>🎵 Suno AI Music</h2>
+    <p>Apne gaane ka description likhein:</p>
+    
+    <textarea id="prompt" rows="4" placeholder="Example: A happy Bollywood pop song about friendship with upbeat drums..."></textarea>
+    
+    <button onclick="generateMusic()">Gaana Banayein</button>
 
-    <main class="ai-container">
-        <!-- Hero Section -->
-        <div class="hero-section">
-            <div class="hero-content">
-                <span class="badge">🎵 AI MUSIC STUDIO</span>
-                <h1>Create Amazing <span class="gradient-text">5-Minute Songs</span></h1>
-                <p>Generate full-length songs with AI in seconds. Professional quality, unlimited creativity.</p>
-            </div>
-        </div>
+    <div id="status">Taiyaar ho? Prompt likh kar click karein.</div>
+    
+    <audio id="audioPlayer" controls>
+        Your browser does not support the audio element.
+    </audio>
+</div>
 
-        <!-- Main Generator Card -->
-        <div class="generator-card glass-morphism">
-            <div class="card-header">
-                <h2><i class="fas fa-sliders-h"></i> Song Settings</h2>
-                <div class="header-actions">
-                    <span class="credit-badge">
-                        <i class="fas fa-bolt"></i> 50 Credits Left
-                    </span>
-                </div>
-            </div>
+<script>
+    function generateMusic() {
+        const prompt = document.getElementById('prompt').value;
+        const status = document.getElementById('status');
+        const audio = document.getElementById('audioPlayer');
 
-            <div class="generator-grid">
-                <!-- Left Column - Basic Info -->
-                <div class="left-col">
-                    <div class="input-group">
-                        <label><i class="fas fa-heading"></i> Song Title</label>
-                        <input 
-                            type="text" 
-                            id="songTitle" 
-                            placeholder="e.g., My 5 Minute Song"
-                            value="My 5 Minute Song"
-                            class="glass-input"
-                        >
-                    </div>
+        if(!prompt) {
+            alert("Kripya kuch likhein!");
+            return;
+        }
 
-                    <div class="input-group">
-                        <label><i class="fas fa-align-left"></i> Lyrics / Description</label>
-                        <textarea 
-                            id="promptInput" 
-                            placeholder="Describe your song or write lyrics..."
-                            rows="4"
-                            class="glass-input"
-                        >This is my 5 minute AI generated song with full structure</textarea>
-                    </div>
+        status.innerText = "Suno AI gaana bana raha hai... Kripya intezaar karein.";
+        
+        // Note: Asli generation ke liye yahan API call karni hogi.
+        // Filhaal hum ek dummy delay dikha rahe hain.
+        setTimeout(() => {
+            status.innerHTML = "✅ Gaana taiyaar hai!";
+            audio.style.display = "block";
+            // Yahan aapka generated song link aayega
+            audio.src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"; 
+        }, 3000);
+    }
+</script>
 
-                    <!-- Quick Prompts -->
-                    <div class="quick-prompts">
-                        <span class="prompt-chip" onclick="usePrompt('Romantic Hindi love song with piano')">
-                            ❤️ Romantic Hindi
-                        </span>
-                        <span class="prompt-chip" onclick="usePrompt('Energetic Punjabi beat with dhol')">
-                            🕺 Punjabi Beat
-                        </span>
-                        <span class="prompt-chip" onclick="usePrompt('Sad song with violin and soft vocals')">
-                            😢 Sad Melody
-                        </span>
-                        <span class="prompt-chip" onclick="usePrompt('Party pop electronic dance music')">
-                            🎉 Party Pop
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Right Column - Music Style -->
-                <div class="right-col">
-                    <div class="input-group">
-                        <label><i class="fas fa-guitar"></i> Music Style</label>
-                        <select id="genreSelect" class="glass-input style-select">
-                            <option value="pop" selected>🎤 Pop</option>
-                            <option value="rock">🎸 Rock</option>
-                            <option value="hindi">🎬 Hindi Bollywood</option>
-                            <option value="punjabi">🪘 Punjabi</option>
-                            <option value="classical">🎻 Classical</option>
-                            <option value="electronic">⚡ Electronic</option>
-                            <option value="jazz">🎺 Jazz</option>
-                            <option value="folk">🌾 Folk</option>
-                        </select>
-                    </div>
-
-                    <div class="input-group">
-                        <label><i class="fas fa-microphone-alt"></i> Voice Type</label>
-                        <div class="voice-options">
-                            <label class="voice-option selected">
-                                <input type="radio" name="voice" value="male" checked>
-                                <i class="fas fa-male"></i>
-                                <span>Male</span>
-                            </label>
-                            <label class="voice-option">
-                                <input type="radio" name="voice" value="female">
-                                <i class="fas fa-female"></i>
-                                <span>Female</span>
-                            </label>
-                            <label class="voice-option">
-                                <input type="radio" name="voice" value="duet">
-                                <i class="fas fa-users"></i>
-                                <span>Duet</span>
-                            </label>
-                            <label class="voice-option">
-                                <input type="radio" name="voice" value="instrumental">
-                                <i class="fas fa-drum"></i>
-                                <span>Instrumental</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Mood Selector -->
-                    <div class="input-group">
-                        <label><i class="fas fa-heart"></i> Mood</label>
-                        <div class="mood-grid">
-                            <button class="mood-btn" data-mood="happy">
-                                <span>🎵</span> Happy
-                            </button>
-                            <button class="mood-btn" data-mood="sad">
-                                <span>😊</span> Sad
-                            </button>
-                            <button class="mood-btn active" data-mood="energetic">
-                                <span>🌙</span> Energetic
-                            </button>
-                            <button class="mood-btn" data-mood="calm">
-                                <span>😡</span> Calm
-                            </button>
-                            <button class="mood-btn" data-mood="romantic">
-                                <span>❤️</span> Romantic
-                            </button>
-                            <button class="mood-btn" data-mood="dark">
-                                <span>🔴</span> Dark
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Advanced Settings -->
-            <div class="advanced-settings">
-                <button class="toggle-advanced" onclick="toggleAdvanced()">
-                    <i class="fas fa-cog"></i> Advanced Settings
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                
-                <div id="advancedPanel" class="advanced-panel hidden">
-                    <div class="slider-group">
-                        <label>Duration <span id="durationValue">4 Min (240 sec)</span></label>
-                        <input type="range" id="durationSlider" min="1" max="5" value="4" step="0.5" oninput="updateDuration()">
-                        <div class="range-labels">
-                            <span>1 Min</span>
-                            <span>2 Min</span>
-                            <span>3 Min</span>
-                            <span>4 Min</span>
-                            <span>5 Min</span>
-                        </div>
-                    </div>
-
-                    <div class="slider-group">
-                        <label>Tempo (BPM) <span id="tempoValue">120 BPM</span></label>
-                        <input type="range" id="tempoSlider" min="60" max="200" value="120" step="1" oninput="updateTempo()">
-                        <div class="range-labels">
-                            <span>Slow (60)</span>
-                            <span>Medium (120)</span>
-                            <span>Fast (200)</span>
-                        </div>
-                    </div>
-
-                    <div class="select-group">
-                        <label>Key</label>
-                        <select id="keySelect" class="glass-input">
-                            <option value="C">C Major</option>
-                            <option value="Cm">C Minor</option>
-                            <option value="D">D Major</option>
-                            <option value="Dm">D Minor</option>
-                            <option value="E">E Major</option>
-                            <option value="Em">E Minor</option>
-                            <option value="F">F Major</option>
-                            <option value="Fm">F Minor</option>
-                            <option value="G">G Major</option>
-                            <option value="Gm">G Minor</option>
-                            <option value="A">A Major</option>
-                            <option value="Am">A Minor</option>
-                            <option value="B">B Major</option>
-                            <option value="Bm">B Minor</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Generate Button -->
-            <div class="generate-section">
-                <button id="generateBtn" onclick="generateSong()">
-                    <span class="btn-content">
-                        <i class="fas fa-magic"></i>
-                        Generate Full Song
-                    </span>
-                    <span class="btn-glow"></span>
-                </button>
-                <p class="info-text">
-                    <i class="fas fa-clock"></i> Takes 30-60 seconds • 4 Credits per generation
-                </p>
-            </div>
-        </div>
-
-        <!-- Loading Section -->
-        <div id="loadingIndicator" class="loading-section hidden">
-            <div class="loading-card glass-morphism">
-                <div class="loading-animation">
-                    <div class="wave"></div>
-                    <div class="wave"></div>
-                    <div class="wave"></div>
-                </div>
-                <h3>Creating Your Masterpiece</h3>
-                <div class="loading-progress">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
-                    </div>
-                    <span id="progressText">Generating music...</span>
-                </div>
-                <div class="loading-tips">
-                    <i class="fas fa-lightbulb"></i>
-                    <span id="tipText">Adding magical melodies...</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Result Section -->
-        <div id="resultSection" class="result-section hidden">
-            <div class="result-card glass-morphism">
-                <div class="result-header">
-                    <div class="song-info">
-                        <h2><i class="fas fa-check-circle" style="color: #4CAF50;"></i> Song Generated!</h2>
-                        <div class="song-meta">
-                            <span class="meta-tag"><i class="fas fa-clock"></i> 4:00</span>
-                            <span class="meta-tag"><i class="fas fa-tag"></i> Pop</span>
-                            <span class="meta-tag"><i class="fas fa-male"></i> Male Vocal</span>
-                            <span class="meta-tag"><i class="fas fa-heart"></i> Energetic</span>
-                        </div>
-                    </div>
-                    <div class="result-actions">
-                        <button class="icon-btn" onclick="shareSong()">
-                            <i class="fas fa-share-alt"></i>
-                        </button>
-                        <button class="icon-btn" onclick="addToPlaylist()">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Waveform Visualizer -->
-                <div class="waveform-container">
-                    <canvas id="waveform" width="800" height="100"></canvas>
-                </div>
-
-                <!-- Music Player -->
-                <div class="music-player">
-                    <audio id="audioPlayer" controls>
-                        <source src="" type="audio/mpeg">
-                    </audio>
-                    
-                    <div class="player-controls">
-                        <button onclick="playPreview()" class="control-btn">
-                            <i class="fas fa-play"></i>
-                        </button>
-                        <div class="time-info">
-                            <span id="currentTime">0:00</span> / <span id="duration">4:00</span>
-                        </div>
-                        <button onclick="toggleLoop()" class="control-btn">
-                            <i class="fas fa-redo-alt"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="action-grid">
-                    <button onclick="downloadSong()" class="action-btn primary">
-                        <i class="fas fa-download"></i>
-                        <span>Download MP3</span>
-                    </button>
-                    <button onclick="saveToLibrary()" class="action-btn secondary">
-                        <i class="fas fa-save"></i>
-                        <span>Save to Library</span>
-                    </button>
-                    <button onclick="regenerateSong()" class="action-btn">
-                        <i class="fas fa-redo"></i>
-                        <span>Regenerate</span>
-                    </button>
-                    <button onclick="editSong()" class="action-btn">
-                        <i class="fas fa-edit"></i>
-                        <span>Edit</span>
-                    </button>
-                </div>
-
-                <!-- Song Structure -->
-                <div class="song-structure">
-                    <h4>Song Structure</h4>
-                    <div class="structure-timeline">
-                        <div class="structure-part intro" style="width: 10%">
-                            <span>Intro</span>
-                        </div>
-                        <div class="structure-part verse" style="width: 25%">
-                            <span>Verse 1</span>
-                        </div>
-                        <div class="structure-part chorus" style="width: 20%">
-                            <span>Chorus</span>
-                        </div>
-                        <div class="structure-part verse" style="width: 20%">
-                            <span>Verse 2</span>
-                        </div>
-                        <div class="structure-part chorus" style="width: 15%">
-                            <span>Chorus</span>
-                        </div>
-                        <div class="structure-part outro" style="width: 10%">
-                            <span>Outro</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Lyrics Preview -->
-                <div class="lyrics-preview">
-                    <h4>Lyrics Preview</h4>
-                    <p id="lyricsPreview">This is my 5 minute AI generated song with full structure...</p>
-                    <button class="text-btn">View Full Lyrics</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Related Suggestions -->
-        <div class="suggestions-section">
-            <h3>Try These Styles</h3>
-            <div class="suggestion-grid">
-                <div class="suggestion-card" onclick="tryStyle('romantic')">
-                    <i class="fas fa-heart" style="color: #ff6b6b;"></i>
-                    <h4>Romantic Ballad</h4>
-                    <p>Soft piano, emotional vocals</p>
-                </div>
-                <div class="suggestion-card" onclick="tryStyle('party')">
-                    <i class="fas fa-glass-cheers" style="color: #feca57;"></i>
-                    <h4>Party Anthem</h4>
-                    <p>Energetic beats, crowd vibe</p>
-                </div>
-                <div class="suggestion-card" onclick="tryStyle('workout')">
-                    <i class="fas fa-dumbbell" style="color: #48dbfb;"></i>
-                    <h4>Workout Mix</h4>
-                    <p>High BPM, motivational</p>
-                </div>
-                <div class="suggestion-card" onclick="tryStyle('meditation')">
-                    <i class="fas fa-peace" style="color: #1dd1a1;"></i>
-                    <h4>Meditation</h4>
-                    <p>Calm, relaxing, nature sounds</p>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js"></script>
-    <script src="firebase.js"></script>
-    <script src="ai-script.js"></script>
 </body>
 </html>
