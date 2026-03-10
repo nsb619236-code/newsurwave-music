@@ -1,51 +1,361 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Suno AI Music Generator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Music Generator - SurWave AI Studio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="ai-style.css">
 </head>
 <body>
-    <h1>Generate AI Music (via Third-Party API)</h1>
-    <textarea id="lyricsInput" placeholder="Enter your lyrics or description..." rows="10" cols="50"></textarea><br>
-    <button onclick="generateMusic()">Generate Song</button>
-    <p id="status">Status: Idle</p>
-    <audio id="audioPlayer" controls></audio>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="gradient-sphere"></div>
+        <div class="gradient-sphere"></div>
+        <div class="gradient-sphere"></div>
+    </div>
 
-    <script>
-        // REPLACE with your actual API key and endpoint
-        const API_ENDPOINT = 'https://api.thirdpartyprovider.com'; 
-        const API_KEY = 'YOUR_API_KEY';
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-wave-square"></i>
+                <span>SurWave <span class="gradient-text">AI</span></span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="ai-generator.html" class="active">AI Studio</a>
+                <a href="index.html#features">Features</a>
+                <a href="index.html#pricing">Pricing</a>
+                <a href="login.html" class="login-btn">Login</a>
+                <a href="signup.html" class="signup-btn">Sign Up</a>
+            </div>
+        </div>
+    </nav>
 
-        async function generateMusic() {
-            const lyrics = document.getElementById('lyricsInput').value;
-            document.getElementById('status').innerText = 'Status: Generating... (might take 1-2 minutes)';
-            document.getElementById('audioPlayer').src = '';
+    <!-- Main Generator Section -->
+    <main class="generator-main">
+        <div class="generator-header">
+            <h1>AI Music <span class="gradient-text">Studio</span></h1>
+            <p>Describe your dream song and let AI create it in seconds</p>
+            
+            <div class="credit-display">
+                <i class="fas fa-bolt"></i>
+                <span>50 Credits Available</span>
+                <button class="buy-credits">Buy More</button>
+            </div>
+        </div>
 
-            try {
-                const response = await fetch(API_ENDPOINT, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${API_KEY}`
-                    },
-                    body: JSON.stringify({
-                        prompt: lyrics,
-                        // Other parameters like 'style', 'genre' may be available
-                    })
-                });
+        <!-- Generator Grid -->
+        <div class="generator-grid">
+            <!-- Left Panel - Input -->
+            <div class="input-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-pen"></i> Song Details</h2>
+                </div>
 
-                if (!response.ok) {
-                    throw new Error('API request failed');
-                }
+                <div class="input-group">
+                    <label><i class="fas fa-heading"></i> Song Title</label>
+                    <input type="text" id="songTitle" class="glass-input" placeholder="e.g., My First AI Song" value="Pyaar Ka Safar">
+                </div>
 
-                const data = await response.json();
-                const songUrl = data.audio_url_mp3; // The key name varies by provider
+                <div class="input-group">
+                    <label><i class="fas fa-align-left"></i> Lyrics / Description</label>
+                    <textarea id="promptInput" class="glass-input" rows="5" placeholder="Describe your song or write lyrics...">देखिये दिल कह रहा है
+मेरी मंजिल आप हैं
+यार बन के दिल की हर धुआंन में
+सामिल आप हैं</textarea>
+                </div>
 
-                document.getElementById('status').innerText = 'Status: Complete! Playing audio.';
-                document.getElementById('audioPlayer').src = songUrl;
-            } catch (error) {
-                document.getElementById('status').innerText = `Status: Error - ${error.message}`;
-            }
-        }
-    </script>
+                <div class="quick-prompts">
+                    <span class="prompt-chip" onclick="usePrompt('Romantic Hindi song with piano')">❤️ Romantic Hindi</span>
+                    <span class="prompt-chip" onclick="usePrompt('Energetic Punjabi beat with dhol')">🪘 Punjabi Beat</span>
+                    <span class="prompt-chip" onclick="usePrompt('Sad song with violin')">😢 Sad Melody</span>
+                    <span class="prompt-chip" onclick="usePrompt('Party EDM with drops')">🎉 Party EDM</span>
+                    <span class="prompt-chip" onclick="usePrompt('Bollywood style item song')">🎬 Bollywood</span>
+                    <span class="prompt-chip" onclick="usePrompt('Meditation with flute')">🧘 Meditation</span>
+                </div>
+            </div>
+
+            <!-- Middle Panel - Style Selection -->
+            <div class="style-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-sliders-h"></i> Music Style</h2>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-guitar"></i> Genre</label>
+                    <select id="genreSelect" class="glass-input">
+                        <optgroup label="🎵 Indian">
+                            <option value="hindi" selected>🇮🇳 Hindi Bollywood</option>
+                            <option value="punjabi">🪘 Punjabi</option>
+                            <option value="bengali">🎤 Bengali</option>
+                            <option value="tamil">🎵 Tamil</option>
+                            <option value="telugu">🎶 Telugu</option>
+                        </optgroup>
+                        <optgroup label="🌍 International">
+                            <option value="pop">🎤 Pop</option>
+                            <option value="rock">🎸 Rock</option>
+                            <option value="jazz">🎺 Jazz</option>
+                            <option value="classical">🎻 Classical</option>
+                            <option value="edm">⚡ EDM</option>
+                            <option value="hiphop">🎧 Hip Hop</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-microphone"></i> Voice Type</label>
+                    <div class="voice-grid">
+                        <label class="voice-option selected">
+                            <input type="radio" name="voice" value="male" checked hidden>
+                            <i class="fas fa-male"></i>
+                            <span>Male</span>
+                        </label>
+                        <label class="voice-option">
+                            <input type="radio" name="voice" value="female" hidden>
+                            <i class="fas fa-female"></i>
+                            <span>Female</span>
+                        </label>
+                        <label class="voice-option">
+                            <input type="radio" name="voice" value="duet" hidden>
+                            <i class="fas fa-users"></i>
+                            <span>Duet</span>
+                        </label>
+                        <label class="voice-option">
+                            <input type="radio" name="voice" value="instrumental" hidden>
+                            <i class="fas fa-drum"></i>
+                            <span>Instrumental</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-heart"></i> Mood</label>
+                    <div class="mood-grid">
+                        <button class="mood-btn" data-mood="happy">😊 Happy</button>
+                        <button class="mood-btn" data-mood="sad">😢 Sad</button>
+                        <button class="mood-btn active" data-mood="romantic">❤️ Romantic</button>
+                        <button class="mood-btn" data-mood="energetic">⚡ Energetic</button>
+                        <button class="mood-btn" data-mood="calm">😌 Calm</button>
+                        <button class="mood-btn" data-mood="dark">🌑 Dark</button>
+                    </div>
+                </div>
+
+                <!-- Advanced Toggle -->
+                <button class="advanced-toggle" onclick="toggleAdvanced()">
+                    <i class="fas fa-cog"></i>
+                    <span>Advanced Settings</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+
+                <!-- Advanced Panel -->
+                <div id="advancedPanel" class="advanced-panel hidden">
+                    <div class="slider-group">
+                        <label>Duration: <span id="durationValue">3 Minutes</span></label>
+                        <input type="range" id="durationSlider" min="1" max="5" value="3" step="0.5" oninput="updateDuration()">
+                        <div class="range-labels">
+                            <span>1m</span>
+                            <span>2m</span>
+                            <span>3m</span>
+                            <span>4m</span>
+                            <span>5m</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Tempo: <span id="tempoValue">120 BPM</span></label>
+                        <input type="range" id="tempoSlider" min="60" max="200" value="120" step="1" oninput="updateTempo()">
+                        <div class="range-labels">
+                            <span>Slow</span>
+                            <span>Medium</span>
+                            <span>Fast</span>
+                        </div>
+                    </div>
+
+                    <div class="select-group">
+                        <label>Key</label>
+                        <select id="keySelect" class="glass-input">
+                            <option value="C">C Major (Happy)</option>
+                            <option value="Am">A Minor (Sad)</option>
+                            <option value="G">G Major (Energetic)</option>
+                            <option value="Em">E Minor (Dark)</option>
+                        </select>
+                    </div>
+
+                    <div class="select-group">
+                        <label>Language</label>
+                        <select id="languageSelect" class="glass-input">
+                            <option value="hindi">Hindi</option>
+                            <option value="punjabi">Punjabi</option>
+                            <option value="english">English</option>
+                            <option value="urdu">Urdu</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Generate & Preview -->
+            <div class="generate-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-magic"></i> Generate</h2>
+                </div>
+
+                <!-- Generate Button -->
+                <button class="generate-btn" onclick="generateSong()" id="generateBtn">
+                    <span class="btn-content">
+                        <i class="fas fa-magic"></i>
+                        Generate Full Song
+                    </span>
+                    <span class="btn-glow"></span>
+                </button>
+
+                <p class="info-text">
+                    <i class="fas fa-clock"></i> Takes 30-60 seconds • 4 credits per song
+                </p>
+
+                <!-- Recent Generations -->
+                <div class="recent-section">
+                    <h3>Recent Generations</h3>
+                    <div class="recent-list">
+                        <div class="recent-item" onclick="loadRecent('romantic')">
+                            <i class="fas fa-music"></i>
+                            <div class="recent-info">
+                                <span class="recent-title">Romantic Hindi</span>
+                                <span class="recent-time">2 min ago</span>
+                            </div>
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="recent-item" onclick="loadRecent('punjabi')">
+                            <i class="fas fa-music"></i>
+                            <div class="recent-info">
+                                <span class="recent-title">Punjabi Beat</span>
+                                <span class="recent-time">1 hour ago</span>
+                            </div>
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="recent-item" onclick="loadRecent('edm')">
+                            <i class="fas fa-music"></i>
+                            <div class="recent-info">
+                                <span class="recent-title">EDM Party</span>
+                                <span class="recent-time">3 hours ago</span>
+                            </div>
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Section -->
+        <div id="loadingSection" class="loading-section hidden">
+            <div class="loading-card">
+                <div class="loading-animation">
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                </div>
+                <h3>Creating Your Masterpiece</h3>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <span id="progressText">0%</span>
+                </div>
+                <p id="loadingTip" class="loading-tip">🎵 Composing melody...</p>
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <div id="resultSection" class="result-section hidden">
+            <div class="result-card">
+                <div class="result-header">
+                    <div class="song-info">
+                        <h2><i class="fas fa-check-circle" style="color: #4CAF50;"></i> <span id="resultTitle">Pyaar Ka Safar</span></h2>
+                        <div class="song-meta">
+                            <span class="meta-tag"><i class="fas fa-clock"></i> <span id="resultDuration">3:00</span></span>
+                            <span class="meta-tag"><i class="fas fa-tag"></i> <span id="resultGenre">Hindi</span></span>
+                            <span class="meta-tag"><i class="fas fa-microphone"></i> <span id="resultVoice">Male</span></span>
+                            <span class="meta-tag"><i class="fas fa-heart"></i> <span id="resultMood">Romantic</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Waveform -->
+                <div class="waveform-container">
+                    <canvas id="waveform" width="800" height="100"></canvas>
+                </div>
+
+                <!-- Player -->
+                <div class="music-player">
+                    <audio id="audioPlayer" controls>
+                        <source src="" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-grid">
+                    <button class="action-btn primary" onclick="downloadSong()">
+                        <i class="fas fa-download"></i>
+                        <span>Download MP3</span>
+                    </button>
+                    <button class="action-btn" onclick="saveToLibrary()">
+                        <i class="fas fa-save"></i>
+                        <span>Save to Library</span>
+                    </button>
+                    <button class="action-btn" onclick="shareSong()">
+                        <i class="fas fa-share-alt"></i>
+                        <span>Share</span>
+                    </button>
+                    <button class="action-btn" onclick="regenerateSong()">
+                        <i class="fas fa-redo"></i>
+                        <span>Regenerate</span>
+                    </button>
+                </div>
+
+                <!-- Lyrics Preview -->
+                <div class="lyrics-preview">
+                    <h4>Lyrics Preview</h4>
+                    <p id="lyricsPreview">देखिये दिल कह रहा है मेरी मंजिल आप हैं...</p>
+                    <button class="text-btn" onclick="showFullLyrics()">View Full Lyrics</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Suggested Styles -->
+        <div class="suggested-section">
+            <h2>Try These <span class="gradient-text">Styles</span></h2>
+            <div class="suggestion-grid">
+                <div class="suggestion-card" onclick="tryStyle('romantic', 'Romantic Hindi song with piano and soft vocals')">
+                    <i class="fas fa-heart" style="color: #ff6b6b;"></i>
+                    <h4>Romantic Hindi</h4>
+                    <p>Soft piano, emotional vocals</p>
+                </div>
+                <div class="suggestion-card" onclick="tryStyle('punjabi', 'Energetic Punjabi song with dhol and modern beat')">
+                    <i class="fas fa-drum" style="color: #feca57;"></i>
+                    <h4>Punjabi Beat</h4>
+                    <p>Dhol, bhangra, modern</p>
+                </div>
+                <div class="suggestion-card" onclick="tryStyle('party', 'Party EDM with drops and electronic beats')">
+                    <i class="fas fa-glass-cheers" style="color: #48dbfb;"></i>
+                    <h4>Party EDM</h4>
+                    <p>Electronic, dance, drops</p>
+                </div>
+                <div class="suggestion-card" onclick="tryStyle('sad', 'Sad song with violin and soft piano')">
+                    <i class="fas fa-frown" style="color: #5f27cd;"></i>
+                    <h4>Sad Melody</h4>
+                    <p>Violin, emotional, slow</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js"></script>
+    <script src="firebase.js"></script>
+    <script src="ai-script.js"></script>
 </body>
-</html>
+    </html>
