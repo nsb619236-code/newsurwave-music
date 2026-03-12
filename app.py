@@ -20,7 +20,7 @@ def generate_music():
         duration = int(data.get('duration', 30))
         
         # Option 1: Replicate API (Best Quality)
-        if REPLICATE_API_TOKEN != "YOUR_REPLICATE_TOKEN":
+        if REPLICATE_API_TOKEN != " r8_WEXQVdSzYAdPhgQHisxth2B34XLbM233G3YqP":
             import replicate
             client = replicate.Client(api_token=REPLICATE_API_TOKEN)
             
@@ -40,7 +40,7 @@ def generate_music():
             })
         
         # Option 2: Hugging Face (Free)
-        elif HF_TOKEN != "YOUR_HF_TOKEN":
+        elif HF_TOKEN != " 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":
             API_URL = "https://api-inference.huggingface.co/models/facebook/musicgen-small"
             headers = {"Authorization": f"Bearer {HF_TOKEN}"}
             
@@ -61,14 +61,13 @@ def generate_music():
         # Option 3: Demo Mode (Always works)
         else:
             demos = [
-                'https://www2.cs.uic.edu/~i101/SoundFiles/CantinaBand60.wav',
-                'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
+                Song-1.mp3'
             ]
             import random
             return jsonify({
                 'success': True,
                 'audio_url': random.choice(demos),
-                'message': 'Demo mode - Get API keys for real AI!'
+                'message': ' - Get API keys for real AI!'
             })
             
     except Exception as e:
