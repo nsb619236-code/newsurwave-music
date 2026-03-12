@@ -1,1 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - SurWave AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            animation: slideUp 0.5s ease;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 2rem;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102,126,234,0.4);
+        }
+        
+        .social-login {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .social-btn {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .social-btn:hover {
+            background: #f5f5f5;
+        }
+        
+        .google-btn {
+            color: #DB4437;
+        }
+        
+        .links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .links a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        
+        .error-message {
+            color: #ff6b6b;
+            text-align: center;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .success-message {
+            color: #4CAF50;
+            text-align: center;
+            margin: 10px 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Welcome to <span class="gradient-text">SurWave AI</span></h2>
+        
+        <div class="error-message" id="errorMsg"></div>
+        <div class="success-message" id="successMsg"></div>
+        
+        <div class="input-group">
+            <label><i class="fas fa-envelope"></i> Email</label>
+            <input type="email" id="email" placeholder="Enter your email">
+        </div>
+        
+        <div class="input-group">
+            <label><i class="fas fa-lock"></i> Password</label>
+            <input type="password" id="password" placeholder="Enter your password">
+        </div>
+        
+        <button class="login-btn" onclick="loginUser()">
+            <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+        
+        <div class="social-login">
+            <p>Or continue with</p>
+            <button class="social-btn google-btn" onclick="googleLogin()">
+                <i class="fab fa-google"></i> Google
+            </button>
+        </div>
+        
+        <div class="links">
+            <a href="#" onclick="showSignup()">Create Account</a>
+            <a href="#" onclick="forgotPassword()">Forgot Password?</a>
+        </div>
+    </div>
 
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js"></script>
+    
+    <script>
+        // Firebase Config (Replace with yours)
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        function loginUser() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                showError('Please fill all fields');
+                return;
+            }
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    showSuccess('Login successful! Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = 'ai-generator.html';
+                    }, 1500);
+                })
+                .catch((error) => {
+                    showError(error.message);
+                });
+        }
+        
+        function googleLogin() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    // Check if new user
+                    const user = result.user;
+                    
+                    // Create user document if new
+                    db.collection('users').doc(user.uid).get().then((doc) => {
+                        if (!doc.exists) {
+                            db.collection('users').doc(user.uid).set({
+                                email: user.email,
+                                name: user.displayName,
+                                credits: 50,
+                                createdAt: new Date()
+                            });
+                        }
+                    });
+                    
+                    showSuccess('Login successful! Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = 'ai-generator.html';
+                    }, 1500);
+                })
+                .catch((error) => {
+                    showError(error.message);
+                });
+        }
+        
+        function showSignup() {
+            const email = prompt('Enter your email:');
+            const password = prompt('Enter your password (min 6 characters):');
+            
+            if (email && password) {
+                auth.createUserWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        // Create user document
+                        db.collection('users').doc(userCredential.user.uid).set({
+                            email: email,
+                            credits: 50,
+                            createdAt: new Date()
+                        });
+                        
+                        showSuccess('Account created! Please login.');
+                    })
+                    .catch((error) => {
+                        showError(error.message);
+                    });
+            }
+        }
+        
+        function forgotPassword() {
+            const email = prompt('Enter your email:');
+            if (email) {
+                auth.sendPasswordResetEmail(email)
+                    .then(() => {
+                        showSuccess('Password reset email sent!');
+                    })
+                    .catch((error) => {
+                        showError(error.message);
+                    });
+            }
+        }
+        
+        function showError(msg) {
+            const errorDiv = document.getElementById('errorMsg');
+            errorDiv.style.display = 'block';
+            errorDiv.textContent = msg;
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 3000);
+        }
+        
+        function showSuccess(msg) {
+            const successDiv = document.getElementById('successMsg');
+            successDiv.style.display = 'block';
+            successDiv.textContent = msg;
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Check if already logged in
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Already logged in, redirect to generator
+                if (window.location.pathname.includes('login.html')) {
+                    window.location.href = 'ai-generator.html';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
