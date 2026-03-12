@@ -1,1 +1,273 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - SurWave AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 100px auto 50px;
+            padding: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card i {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .songs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .song-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .song-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102,126,234,0.2);
+        }
+        
+        .song-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .song-meta {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .song-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .song-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .play-btn {
+            background: #667eea;
+            color: white;
+        }
+        
+        .download-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .delete-btn {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Same navbar as other pages -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-wave-square"></i>
+                <span>SurWave AI</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="ai-generator.html">AI Studio</a>
+                <a href="dashboard.html" class="active">Dashboard</a>
+                <a href="#" id="authBtn">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <h1 style="margin-bottom: 30px;">My Dashboard</h1>
+        
+        <!-- Stats -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <i class="fas fa-bolt"></i>
+                <div class="stat-number" id="creditCount">50</div>
+                <div>Credits Left</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-music"></i>
+                <div class="stat-number" id="songCount">0</div>
+                <div>Songs Generated</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-download"></i>
+                <div class="stat-number" id="downloadCount">0</div>
+                <div>Downloads</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-clock"></i>
+                <div class="stat-number" id="memberSince">-</div>
+                <div>Member Since</div>
+            </div>
+        </div>
+
+        <!-- My Songs -->
+        <h2 style="margin: 40px 0 20px;">My Songs</h2>
+        <div class="songs-grid" id="songsGrid">
+            <!-- Songs will be loaded here -->
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js"></script>
+    
+    <script>
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        // Check authentication
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                loadUserData(user);
+                loadUserSongs(user);
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+        
+        function loadUserData(user) {
+            db.collection('users').doc(user.uid).get().then((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    document.getElementById('creditCount').textContent = data.credits || 50;
+                    
+                    if (data.createdAt) {
+                        const date = data.createdAt.toDate();
+                        document.getElementById('memberSince').textContent = 
+                            date.toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
+                    }
+                }
+            });
+        }
+        
+        function loadUserSongs(user) {
+            db.collection('saved_songs')
+                .where('userId', '==', user.uid)
+                .orderBy('createdAt', 'desc')
+                .get()
+                .then((snapshot) => {
+                    const songsGrid = document.getElementById('songsGrid');
+                    document.getElementById('songCount').textContent = snapshot.size;
+                    
+                    if (snapshot.empty) {
+                        songsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No songs yet. Generate your first song!</p>';
+                        return;
+                    }
+                    
+                    songsGrid.innerHTML = '';
+                    snapshot.forEach((doc) => {
+                        const song = doc.data();
+                        songsGrid.innerHTML += `
+                            <div class="song-card">
+                                <div class="song-title">${song.title || 'Untitled'}</div>
+                                <div class="song-meta">
+                                    <span><i class="fas fa-tag"></i> ${song.genre || 'Pop'}</span>
+                                    <span><i class="fas fa-clock"></i> ${song.duration || 3}:00</span>
+                                </div>
+                                <div class="song-actions">
+                                    <button class="play-btn" onclick="playSong('${song.audioUrl}')">
+                                        <i class="fas fa-play"></i> Play
+                                    </button>
+                                    <button class="download-btn" onclick="downloadSong('${song.audioUrl}', '${song.title}')">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="delete-btn" onclick="deleteSong('${doc.id}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                });
+        }
+        
+        function playSong(url) {
+            const audio = new Audio(url);
+            audio.play();
+        }
+        
+        function downloadSong(url, title) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${title.replace(/\s+/g, '_')}.mp3`;
+            a.click();
+        }
+        
+        function deleteSong(songId) {
+            if (confirm('Delete this song?')) {
+                db.collection('saved_songs').doc(songId).delete()
+                    .then(() => {
+                        location.reload();
+                    });
+            }
+        }
+        
+        // Logout
+        document.getElementById('authBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            auth.signOut().then(() => {
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>
