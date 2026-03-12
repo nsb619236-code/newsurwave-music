@@ -9,8 +9,8 @@ app = Flask(__name__)
 CORS(app)
 
 # API Keys (Sign up on replicate.com for free)
-REPLICATE_API_TOKEN = "YOUR_REPLICATE_TOKEN"  # Get from https://replicate.com
-HF_TOKEN = "YOUR_HF_TOKEN"  # Get from https://huggingface.co
+REPLICATE_API_TOKEN = "r8_WEXQVdSzYAdPhgQHisxth2B34XLbM233G3YqP "  # Get from https://replicate.com
+HF_TOKEN = "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 "  # Get from https://huggingface.co
 
 @app.route('/generate', methods=['POST'])
 def generate_music():
