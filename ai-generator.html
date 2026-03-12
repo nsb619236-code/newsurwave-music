@@ -1,6 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><!-- Add this in head section -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<!-- Add this button in credit display section -->
+<button class="buy-credits" onclick="openPaymentModal()">Buy Credits</button>
+
+<!-- Add this modal at bottom of body -->
+<div id="paymentModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+    <div style="background: white; padding: 30px; border-radius: 20px; max-width: 400px; width: 90%;">
+        <h3 style="margin-bottom: 20px;">Buy Credits</h3>
+        
+        <div class="credit-package" onclick="selectPackage(100)" style="padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; margin-bottom: 10px; cursor: pointer;">
+            <div style="display: flex; justify-content: space-between;">
+                <span><strong>100 Credits</strong></span>
+                <span>₹199</span>
+            </div>
+        </div>
+        
+        <div class="credit-package" onclick="selectPackage(250)" style="padding: 15px; border: 2px solid #667eea; border-radius: 10px; margin-bottom: 10px; cursor: pointer; background: rgba(102,126,234,0.1);">
+            <div style="display: flex; justify-content: space-between;">
+                <span><strong>250 Credits</strong> (Popular)</span>
+                <span>₹399</span>
+            </div>
+            <small style="color: #667eea;">Save 20%</small>
+        </div>
+        
+        <div class="credit-package" onclick="selectPackage(500)" style="padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; margin-bottom: 20px; cursor: pointer;">
+            <div style="display: flex; justify-content: space-between;">
+                <span><strong>500 Credits</strong></span>
+                <span>₹699</span>
+            </div>
+            <small style="color: #4CAF50;">Save 30%</small>
+        </div>
+        
+        <button onclick="processPayment()" style="width: 100%; padding: 15px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 10px; font-size: 1.1rem; cursor: pointer;">
+            Proceed to Pay
+        </button>
+        
+        <button onclick="closePaymentModal()" style="width: 100%; padding: 10px; margin-top: 10px; background: none; border: none; color: #666; cursor: pointer;">
+            Cancel
+        </button>
+    </div>
+</div>
+
+<script>
+let selectedCredits = 250;
+let selectedAmount = 399;
+
+function openPaymentModal() {
+    document.getElementById('paymentModal').style.display = 'flex';
+}
+
+function closePaymentModal() {
+    document.getElementById('paymentModal').style.display = 'none';
+}
+
+function selectPackage(credits) {
+    selectedCredits = credits;
+    
+    if (credits === 100) selectedAmount = 199;
+    else if (credits === 250) selectedAmount = 399;
+    else if (credits === 500) selectedAmount = 699;
+    
+    // Highlight selected
+    document.querySelectorAll('.credit-package').forEach(el => {
+        el.style.borderColor = '#e0e0e0';
+        el.style.background = 'white';
+    });
+    
+    event.currentTarget.style.borderColor = '#667eea';
+    event.currentTarget.style.background = 'rgba(102,126,234,0.1)';
+}
+
+function processPayment() {
+    const user = firebase.auth().currentUser;
+    
+    if (!user) {
+        alert('Please login first!');
+        window.location.href = 'login.html';
+        return;
+    }
+    
+    const options = {
+        key: "YOUR_RAZORPAY_KEY_ID", // Get from razorpay.com
+        amount: selectedAmount * 100, // Amount in paise
+        currency: "INR",
+        name: "SurWave AI",
+        description: `${selectedCredits} Credits`,
+        handler: function(response) {
+            // Payment successful
+            updateUserCredits(user.uid, selectedCredits);
+            showNotification(`✅ ${selectedCredits} credits added!`, 'success');
+            closePaymentModal();
+        },
+        prefill: {
+            email: user.email
+        }
+    };
+    
+    const rzp = new Razorpay(options);
+    rzp.open();
+}
+
+function updateUserCredits(userId, credits) {
+    const db = firebase.firestore();
+    
+    db.collection('users').doc(userId).update({
+        credits: firebase.firestore.FieldValue.increment(credits)
+    });
+    
+    // Update display
+    const creditDisplay = document.querySelector('.credit-display span');
+    if (creditDisplay) {
+        const current = parseInt(creditDisplay.textContent) || 50;
+        creditDisplay.textContent = (current + credits) + ' Credits Available';
+    }
+}
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Music Generator - SurWave</title>
