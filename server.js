@@ -1,59 +1,38 @@
 const express = require("express");
+const fetch = require("node-fetch");
 const cors = require("cors");
-const path = require("path");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname,"../public")));
+const TOKEN = "r8_WEXQVdSzYAdPhgQHisxth2B34XLbM233G3YqP ";
 
-let songsDB = [];
+app.post("/generate-song", async (req,res)=>{
 
-app.post("/api/generate", async (req,res)=>{
+const prompt = req.body.prompt;
 
-const {title,prompt,userId} = req.body;
-
-if(!title || !prompt){
-return res.json({success:false});
-}
-
-const demoAudio =
-"https://cdn.pixabay.com/download/audio/2022/03/15/audio_4e6f6a89f6.mp3";
-
-const song = {
-id: Date.now(),
-title,
-prompt,
-audio: demoAudio,
-userId
-};
-
-songsDB.push(song);
-
-setTimeout(()=>{
-res.json({
-success:true,
-audio_url:demoAudio,
-song
+const response = await fetch(
+"https://api.replicate.com/v1/predictions",
+{
+method:"POST",
+headers:{
+"Authorization":`Token ${TOKEN}`,
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+version:"musicgen-version-id",
+input:{prompt:prompt}
+})
 });
-},2000)
+
+const data = await response.json();
+
+res.json(data);
 
 });
 
-app.get("/api/library/:userId",(req,res)=>{
-
-const userSongs = songsDB.filter(
-song => song.userId === req.params.userId
-)
-
-res.json(userSongs);
-
-});
-
-const PORT = 5000;
-
-app.listen(PORT,()=>{
-console.log("Server running http://localhost:5000")
+app.listen(3000,()=>{
+console.log("AI music server running");
 });
