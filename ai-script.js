@@ -1,199 +1,242 @@
 // ============================================
-// AI MUSIC GENERATOR - COMPLETE WORKING VERSION
+// SUNO AI CLONE - COMPLETE JAVASCRIPT
+// DARK GREEN THEME WITH REAL AI GENERATION
 // ============================================
 
 // Global Variables
 let currentAudioUrl = '';
 let currentSongData = {};
+let selectedVoice = 'male';
+let selectedMood = 'romantic';
+const API_URL = 'http://localhost:5000';
 
 // Initialize on Load
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🎵 AI Music Generator Initialized');
-    initializeGenerator();
-    loadSavedData();
+    console.log('🎵 Suno AI Clone Initialized');
+    
+    // Initialize particles
+    if (typeof particlesJS !== 'undefined') {
+        particlesJS.load('particles-js', {
+            particles: {
+                number: { value: 80 },
+                color: { value: '#00ff9d' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5 },
+                size: { value: 3 },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#00ff9d',
+                    opacity: 0.2,
+                    width: 1
+                },
+                move: { enable: true, speed: 2 }
+            }
+        });
+    }
+    
+    // Load recent songs
+    loadRecentSongs();
+    
+    // Set default values
+    setDefaultValues();
 });
 
-// Initialize Generator
-function initializeGenerator() {
-    // Set default values
-    document.getElementById('songTitle').value = 'Pyaar Ka Safar';
-    document.getElementById('promptInput').value = 'देखिये दिल कह रहा है\nमेरी मंजिल आप हैं\nयार बन के दिल की हर धुआंन में\nसामिल आप हैं';
+// Set Default Values
+function setDefaultValues() {
+    const titleInput = document.getElementById('songTitle');
+    if (titleInput && !titleInput.value) {
+        titleInput.value = 'Midnight Dreams';
+    }
     
-    // Setup voice selection
-    document.querySelectorAll('.voice-option').forEach(opt => {
-        opt.addEventListener('click', function() {
-            document.querySelectorAll('.voice-option').forEach(o => o.classList.remove('selected'));
-            this.classList.add('selected');
-            this.querySelector('input').checked = true;
-        });
-    });
-    
-    // Setup mood selection
-    document.querySelectorAll('.mood-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
-    
-    // Load recent generations from localStorage
-    loadRecentGenerations();
-}
-
-// Load Saved Data
-function loadSavedData() {
-    const saved = localStorage.getItem('surwave_settings');
-    if (saved) {
-        try {
-            const settings = JSON.parse(saved);
-            if (settings.genre) document.getElementById('genreSelect').value = settings.genre;
-            if (settings.duration) {
-                document.getElementById('durationSlider').value = settings.duration;
-                updateDuration();
-            }
-            if (settings.tempo) {
-                document.getElementById('tempoSlider').value = settings.tempo;
-                updateTempo();
-            }
-            if (settings.key) document.getElementById('keySelect').value = settings.key;
-        } catch (e) {}
+    const promptInput = document.getElementById('promptInput');
+    if (promptInput && !promptInput.value) {
+        promptInput.value = 'A romantic Hindi song with soft piano, emotional vocals, and modern beats';
     }
 }
 
-// ===== GENERATE SONG FUNCTION =====
-function generateSong() {
-    console.log('🎵 Generating song...');
+// ===== VOICE SELECTION =====
+function selectVoice(element, voice) {
+    document.querySelectorAll('.voice-option').forEach(el => {
+        el.classList.remove('selected');
+    });
+    element.classList.add('selected');
+    selectedVoice = voice;
+}
+
+// ===== MOOD SELECTION =====
+function selectMood(element) {
+    document.querySelectorAll('.mood-btn').forEach(el => {
+        el.classList.remove('active');
+    });
+    element.classList.add('active');
+    selectedMood = element.dataset.mood;
+}
+
+// ===== ADVANCED SETTINGS =====
+function toggleAdvanced() {
+    const panel = document.getElementById('advancedPanel');
+    const icon = document.querySelector('.advanced-toggle .fa-chevron-down');
     
-    // Get all values
-    const songData = {
-        title: document.getElementById('songTitle').value || 'My AI Song',
-        prompt: document.getElementById('promptInput').value || 'Romantic song',
-        genre: document.getElementById('genreSelect').value,
-        voice: document.querySelector('input[name="voice"]:checked')?.value || 'male',
-        mood: document.querySelector('.mood-btn.active')?.dataset.mood || 'romantic',
-        duration: document.getElementById('durationSlider')?.value || 3,
-        tempo: document.getElementById('tempoSlider')?.value || 120,
-        key: document.getElementById('keySelect')?.value || 'C',
-        language: document.getElementById('languageSelect')?.value || 'hindi'
+    panel.classList.toggle('hidden');
+    if (panel.classList.contains('hidden')) {
+        icon.style.transform = 'rotate(0deg)';
+    } else {
+        icon.style.transform = 'rotate(180deg)';
+    }
+}
+
+function updateDuration() {
+    const slider = document.getElementById('durationSlider');
+    const value = document.getElementById('durationValue');
+    const seconds = slider.value;
+    
+    if (seconds < 60) {
+        value.textContent = seconds + ' seconds';
+    } else {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        value.textContent = minutes + 'm ' + remainingSeconds + 's';
+    }
+}
+
+function updateTempo() {
+    const slider = document.getElementById('tempoSlider');
+    const value = document.getElementById('tempoValue');
+    value.textContent = slider.value + ' BPM';
+}
+
+// ===== USE PROMPT =====
+function usePrompt(text) {
+    document.getElementById('promptInput').value = text;
+}
+
+// ===== TRY STYLE =====
+function tryStyle(style, prompt) {
+    document.getElementById('promptInput').value = prompt;
+    
+    // Set genre based on style
+    const genreSelect = document.getElementById('genreSelect');
+    if (style === 'romantic') genreSelect.value = 'hindi';
+    else if (style === 'punjabi') genreSelect.value = 'punjabi';
+    else if (style === 'edm') genreSelect.value = 'edm';
+    else if (style === 'sad') genreSelect.value = 'hindi';
+    
+    // Set mood
+    document.querySelectorAll('.mood-btn').forEach(el => {
+        el.classList.remove('active');
+        if (el.dataset.mood === style || (style === 'edm' && el.dataset.mood === 'energetic')) {
+            el.classList.add('active');
+            selectedMood = el.dataset.mood;
+        }
+    });
+    
+    showNotification('✨ Style selected! Click Generate', 'info');
+}
+
+// ===== GENERATE SONG =====
+async function generateSong() {
+    const title = document.getElementById('songTitle').value;
+    const prompt = document.getElementById('promptInput').value;
+    const genre = document.getElementById('genreSelect').value;
+    const duration = document.getElementById('durationSlider')?.value || 30;
+    const tempo = document.getElementById('tempoSlider')?.value || 120;
+    const key = document.getElementById('keySelect')?.value || 'C';
+    
+    if (!title || !prompt) {
+        showNotification('Please enter song title and description', 'error');
+        return;
+    }
+    
+    // Save current song data
+    currentSongData = {
+        title, prompt, genre, duration, tempo, key,
+        voice: selectedVoice,
+        mood: selectedMood
     };
-    
-    currentSongData = songData;
-    
-    // Validate
-    if (!songData.title.trim()) {
-        showNotification('Please enter a song title', 'error');
-        return;
-    }
-    
-    if (!songData.prompt.trim()) {
-        showNotification('Please enter lyrics or description', 'error');
-        return;
-    }
     
     // Show loading
     showLoading(true);
     
-    // Simulate generation process
-    simulateGeneration(songData);
-}
-
-// Simulate Generation
-function simulateGeneration(songData) {
-    const progressFill = document.getElementById('progressFill');
-    const progressText = document.getElementById('progressText');
-    const loadingTip = document.getElementById('loadingTip');
-    
-    const tips = [
-        '🎵 Composing melody...',
-        '🎸 Adding instruments...',
-        '🎤 Generating vocals...',
-        '🎼 Creating harmony...',
-        '🥁 Beating drums...',
-        '✨ Mixing tracks...',
-        '🎹 Adding piano...',
-        '📝 Syncing lyrics...',
-        '⚡ Mastering audio...',
-        '🎯 Final touches...'
-    ];
-    
-    let progress = 0;
-    let tipIndex = 0;
-    
-    // Update tip every 2 seconds
-    const tipInterval = setInterval(() => {
-        tipIndex = (tipIndex + 1) % tips.length;
-        loadingTip.textContent = tips[tipIndex];
-    }, 2000);
-    
-    // Simulate progress
-    const interval = setInterval(() => {
-        progress += 2;
-        progressFill.style.width = progress + '%';
-        progressText.textContent = progress + '%';
+    try {
+        // Call backend API
+        const response = await fetch(`${API_URL}/generate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                prompt: prompt,
+                duration: Math.floor(duration / 15) * 15 // Round to nearest 15 seconds
+            })
+        });
         
-        if (progress >= 100) {
-            clearInterval(interval);
-            clearInterval(tipInterval);
+        const data = await response.json();
+        
+        if (data.success) {
+            currentAudioUrl = data.audio_url;
             
-            // Generation complete
-            setTimeout(() => {
-                completeGeneration(songData);
-            }, 500);
+            // Update UI
+            document.getElementById('resultTitle').textContent = title;
+            document.getElementById('resultDuration').textContent = formatDuration(duration);
+            document.getElementById('resultGenre').textContent = 
+                document.getElementById('genreSelect').selectedOptions[0].text;
+            document.getElementById('resultVoice').textContent = 
+                selectedVoice.charAt(0).toUpperCase() + selectedVoice.slice(1);
+            document.getElementById('resultMood').textContent = 
+                selectedMood.charAt(0).toUpperCase() + selectedMood.slice(1);
+            document.getElementById('lyricsPreview').textContent = 
+                prompt.length > 100 ? prompt.substring(0, 100) + '...' : prompt;
+            
+            // Set audio
+            const audioPlayer = document.getElementById('audioPlayer');
+            audioPlayer.src = currentAudioUrl;
+            audioPlayer.load();
+            
+            // Draw waveform
+            drawWaveform();
+            
+            // Hide loading, show result
+            showLoading(false);
+            
+            // Add to recent
+            addToRecent(currentSongData);
+            
+            showNotification('✨ Song generated successfully!', 'success');
+            
+            // Update credits
+            updateCredits();
+        } else {
+            throw new Error(data.error || 'Generation failed');
         }
-    }, 100);
+        
+    } catch (error) {
+        console.error('Generation error:', error);
+        showNotification('Error generating song. Using demo mode.', 'error');
+        
+        // Demo mode fallback
+        demoModeGenerate();
+    }
 }
 
-// Complete Generation
-function completeGeneration(songData) {
-    // Sample audio URLs (guaranteed to work)
-    const sampleAudios = [
-        'https://www2.cs.uic.edu/~i101/SoundFiles/CantinaBand60.wav',
-        'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-        'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-        'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3'
-    ];
-    
-    // Select random audio
-    const randomIndex = Math.floor(Math.random() * sampleAudios.length);
-    currentAudioUrl = sampleAudios[randomIndex];
-    
-    // Hide loading, show result
-    showLoading(false);
-    
-    // Update result section
-    document.getElementById('resultTitle').textContent = songData.title;
-    document.getElementById('resultDuration').textContent = songData.duration + ':00';
-    document.getElementById('resultGenre').textContent = 
-        document.getElementById('genreSelect').selectedOptions[0].text;
-    document.getElementById('resultVoice').textContent = 
-        songData.voice.charAt(0).toUpperCase() + songData.voice.slice(1);
-    document.getElementById('resultMood').textContent = 
-        songData.mood.charAt(0).toUpperCase() + songData.mood.slice(1);
-    document.getElementById('lyricsPreview').textContent = 
-        songData.prompt.substring(0, 100) + '...';
-    
-    // Set audio source
-    const audioPlayer = document.getElementById('audioPlayer');
-    audioPlayer.src = currentAudioUrl;
-    audioPlayer.load();
-    
-    // Draw waveform
-    drawWaveform();
-    
-    // Show result
-    document.getElementById('resultSection').classList.remove('hidden');
-    
-    // Save to recent
-    saveToRecent(songData);
-    
-    // Show notification
-    showNotification('✨ Song generated successfully!', 'success');
-    
-    // Update credits
-    updateCredits();
+// ===== DEMO MODE (Fallback) =====
+function demoModeGenerate() {
+    setTimeout(() => {
+        // Sample audio URLs
+        const demoSongs = [
+            'https://www2.cs.uic.edu/~i101/SoundFiles/CantinaBand60.wav',
+            'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
+        ];
+        
+        currentAudioUrl = demoSongs[Math.floor(Math.random() * demoSongs.length)];
+        
+        document.getElementById('audioPlayer').src = currentAudioUrl;
+        showLoading(false);
+        showNotification('🎵 Demo mode - Get API key for real AI!', 'info');
+    }, 3000);
 }
 
-// Show/Hide Loading
+// ===== SHOW/HIDE LOADING =====
 function showLoading(show) {
     const loadingSection = document.getElementById('loadingSection');
     const resultSection = document.getElementById('resultSection');
@@ -203,10 +246,79 @@ function showLoading(show) {
         loadingSection.classList.remove('hidden');
         resultSection.classList.add('hidden');
         generateBtn.disabled = true;
+        
+        // Simulate progress
+        simulateProgress();
     } else {
         loadingSection.classList.add('hidden');
+        resultSection.classList.remove('hidden');
         generateBtn.disabled = false;
     }
+}
+
+// ===== SIMULATE PROGRESS =====
+function simulateProgress() {
+    const progressFill = document.getElementById('progressFill');
+    const loadingTip = document.getElementById('loadingTip');
+    
+    const tips = [
+        '🎵 Composing melody...',
+        '🎸 Adding instruments...',
+        '🎤 Generating vocals...',
+        '🎼 Creating harmony...',
+        '✨ Mixing tracks...',
+        '⚡ Mastering audio...'
+    ];
+    
+    let progress = 0;
+    let tipIndex = 0;
+    
+    const interval = setInterval(() => {
+        progress += 2;
+        progressFill.style.width = progress + '%';
+        
+        if (progress % 20 === 0 && tipIndex < tips.length) {
+            loadingTip.textContent = tips[tipIndex];
+            tipIndex++;
+        }
+        
+        if (progress >= 100) {
+            clearInterval(interval);
+        }
+    }, 100);
+}
+
+// ===== WAVEFORM =====
+function drawWaveform() {
+    const canvas = document.getElementById('waveform');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.clientWidth || 800;
+    canvas.height = 100;
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Generate random waveform data
+    const data = [];
+    for (let i = 0; i < 100; i++) {
+        data.push(Math.random() * 60 + 20);
+    }
+    
+    // Draw gradient
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+    gradient.addColorStop(0, '#00ff9d');
+    gradient.addColorStop(1, '#00cc7a');
+    
+    ctx.fillStyle = gradient;
+    
+    // Draw bars
+    const barWidth = canvas.width / data.length;
+    data.forEach((value, index) => {
+        const x = index * barWidth;
+        const y = (canvas.height - value) / 2;
+        ctx.fillRect(x, y, barWidth - 2, value);
+    });
 }
 
 // ===== DOWNLOAD SONG =====
@@ -218,20 +330,15 @@ function downloadSong() {
     
     const title = document.getElementById('songTitle').value || 'AI_Song';
     
-    try {
-        const a = document.createElement('a');
-        a.href = currentAudioUrl;
-        a.download = `${title.replace(/\s+/g, '_')}_AI_Song.mp3`;
-        a.target = '_blank';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        
-        showNotification('⬇️ Download started!', 'success');
-    } catch (error) {
-        window.open(currentAudioUrl, '_blank');
-        showNotification('Audio opened in new tab', 'info');
-    }
+    const a = document.createElement('a');
+    a.href = currentAudioUrl;
+    a.download = `${title.replace(/\s+/g, '_')}_SunoAI.mp3`;
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    
+    showNotification('⬇️ Download started!', 'success');
 }
 
 // ===== SAVE TO LIBRARY =====
@@ -241,39 +348,16 @@ function saveToLibrary() {
         return;
     }
     
-    // Get user from Firebase if available
-    if (typeof firebase !== 'undefined' && firebase.auth().currentUser) {
-        // Save to Firebase
-        const user = firebase.auth().currentUser;
-        const songData = {
-            ...currentSongData,
-            audioUrl: currentAudioUrl,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            userId: user.uid
-        };
-        
-        firebase.firestore().collection('saved_songs').add(songData)
-            .then(() => {
-                showNotification('✅ Song saved to library!', 'success');
-            })
-            .catch(() => {
-                saveToLocal();
-            });
-    } else {
-        saveToLocal();
-    }
-}
-
-// Save to Local Storage
-function saveToLocal() {
-    const savedSongs = JSON.parse(localStorage.getItem('saved_songs') || '[]');
+    // Save to localStorage
+    const savedSongs = JSON.parse(localStorage.getItem('suno_saved_songs') || '[]');
     savedSongs.push({
         ...currentSongData,
         audioUrl: currentAudioUrl,
         savedAt: new Date().toISOString()
     });
-    localStorage.setItem('saved_songs', JSON.stringify(savedSongs));
-    showNotification('💾 Song saved locally!', 'success');
+    localStorage.setItem('suno_saved_songs', JSON.stringify(savedSongs));
+    
+    showNotification('💾 Song saved to library!', 'success');
 }
 
 // ===== SHARE SONG =====
@@ -299,31 +383,24 @@ function regenerateSong() {
     generateSong();
 }
 
-// ===== SAVE TO RECENT =====
-function saveToRecent(songData) {
-    const recent = JSON.parse(localStorage.getItem('recent_songs') || '[]');
-    recent.unshift({
-        ...songData,
-        time: new Date().toLocaleTimeString()
-    });
-    if (recent.length > 5) recent.pop();
-    localStorage.setItem('recent_songs', JSON.stringify(recent));
-    
-    loadRecentGenerations();
+// ===== EDIT LYRICS =====
+function editLyrics() {
+    document.getElementById('promptInput').focus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Load Recent Generations
-function loadRecentGenerations() {
-    const recent = JSON.parse(localStorage.getItem('recent_songs') || '[]');
-    const recentList = document.querySelector('.recent-list');
+// ===== RECENT SONGS =====
+function loadRecentSongs() {
+    const recent = JSON.parse(localStorage.getItem('suno_recent_songs') || '[]');
+    const recentList = document.getElementById('recentList');
     
     if (!recentList) return;
     
     recentList.innerHTML = '';
-    recent.forEach((song, index) => {
+    recent.slice(0, 3).forEach(song => {
         const item = document.createElement('div');
         item.className = 'recent-item';
-        item.onclick = () => loadRecent(song);
+        item.onclick = () => loadRecentSong(song);
         item.innerHTML = `
             <i class="fas fa-music"></i>
             <div class="recent-info">
@@ -336,8 +413,18 @@ function loadRecentGenerations() {
     });
 }
 
-// Load Recent Song
-function loadRecent(song) {
+function addToRecent(song) {
+    const recent = JSON.parse(localStorage.getItem('suno_recent_songs') || '[]');
+    recent.unshift({
+        ...song,
+        time: new Date().toLocaleTimeString()
+    });
+    if (recent.length > 5) recent.pop();
+    localStorage.setItem('suno_recent_songs', JSON.stringify(recent));
+    loadRecentSongs();
+}
+
+function loadRecentSong(song) {
     if (song.audioUrl) {
         currentAudioUrl = song.audioUrl;
         document.getElementById('audioPlayer').src = song.audioUrl;
@@ -346,105 +433,7 @@ function loadRecent(song) {
     }
 }
 
-// ===== WAVEFORM VISUALIZATION =====
-function drawWaveform() {
-    const canvas = document.getElementById('waveform');
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    canvas.width = canvas.clientWidth || 800;
-    canvas.height = 100;
-    
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Generate random waveform
-    const data = [];
-    for (let i = 0; i < 100; i++) {
-        data.push(Math.random() * 60 + 20);
-    }
-    
-    // Draw gradient
-    const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
-    gradient.addColorStop(0, '#667eea');
-    gradient.addColorStop(1, '#764ba2');
-    
-    ctx.fillStyle = gradient;
-    
-    // Draw bars
-    const barWidth = canvas.width / data.length;
-    data.forEach((value, index) => {
-        const x = index * barWidth;
-        const y = (canvas.height - value) / 2;
-        ctx.fillRect(x, y, barWidth - 2, value);
-    });
-}
-
-// ===== UI FUNCTIONS =====
-function toggleAdvanced() {
-    const panel = document.getElementById('advancedPanel');
-    const icon = document.querySelector('.advanced-toggle .fa-chevron-down');
-    
-    panel.classList.toggle('hidden');
-    icon.style.transform = panel.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
-}
-
-function updateDuration() {
-    const slider = document.getElementById('durationSlider');
-    const value = document.getElementById('durationValue');
-    const mins = slider.value;
-    value.textContent = mins + (mins == 1 ? ' Minute' : ' Minutes');
-    
-    // Save settings
-    saveSettings();
-}
-
-function updateTempo() {
-    const slider = document.getElementById('tempoSlider');
-    const value = document.getElementById('tempoValue');
-    value.textContent = slider.value + ' BPM';
-    
-    // Save settings
-    saveSettings();
-}
-
-function saveSettings() {
-    const settings = {
-        genre: document.getElementById('genreSelect').value,
-        duration: document.getElementById('durationSlider').value,
-        tempo: document.getElementById('tempoSlider').value,
-        key: document.getElementById('keySelect').value,
-        language: document.getElementById('languageSelect')?.value
-    };
-    localStorage.setItem('surwave_settings', JSON.stringify(settings));
-}
-
-function usePrompt(text) {
-    document.getElementById('promptInput').value = text;
-}
-
-function tryStyle(style, prompt) {
-    document.getElementById('promptInput').value = prompt;
-    
-    if (style === 'romantic') {
-        document.querySelector('.mood-btn[data-mood="romantic"]').click();
-    } else if (style === 'punjabi') {
-        document.getElementById('genreSelect').value = 'punjabi';
-    } else if (style === 'party') {
-        document.getElementById('genreSelect').value = 'edm';
-        document.querySelector('.mood-btn[data-mood="energetic"]').click();
-    } else if (style === 'sad') {
-        document.querySelector('.mood-btn[data-mood="sad"]').click();
-    }
-    
-    showNotification('✅ Style selected! Click Generate', 'success');
-}
-
-function showFullLyrics() {
-    const lyrics = document.getElementById('promptInput').value;
-    alert(lyrics);
-}
-
-// ===== NOTIFICATION SYSTEM =====
+// ===== NOTIFICATION =====
 function showNotification(message, type) {
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
@@ -459,75 +448,68 @@ function showNotification(message, type) {
     
     notification.style.cssText = `
         position: fixed;
-        top: 100px;
-        right: 20px;
+        bottom: 30px;
+        right: 30px;
         padding: 15px 25px;
-        background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#ff6b6b' : '#667eea'};
-        color: white;
+        background: ${type === 'success' ? '#00ff9d' : type === 'error' ? '#ff4757' : '#1e2635'};
+        color: ${type === 'success' ? '#0b0e14' : '#ffffff'};
         border-radius: 50px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        box-shadow: 0 10px 30px rgba(0, 255, 157, 0.3);
         z-index: 9999;
         font-size: 14px;
         display: flex;
         align-items: center;
         gap: 10px;
-        animation: slideIn 0.3s ease;
+        animation: slideUp 0.3s ease;
+        border: 1px solid rgba(0, 255, 157, 0.2);
     `;
     
     document.body.appendChild(notification);
     
     setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease';
+        notification.style.animation = 'slideDown 0.3s ease';
         setTimeout(() => notification.remove(), 300);
     }, 3000);
 }
 
 // ===== UPDATE CREDITS =====
 function updateCredits() {
-    const creditDisplay = document.querySelector('.credit-display span');
-    if (creditDisplay) {
-        const current = parseInt(creditDisplay.textContent) || 50;
+    const creditSpan = document.querySelector('.credit-display span');
+    if (creditSpan) {
+        const current = parseInt(creditSpan.textContent) || 50;
         const newCredits = Math.max(0, current - 4);
-        creditDisplay.textContent = newCredits + ' Credits Available';
+        creditSpan.textContent = newCredits + ' Credits Available';
     }
+}
+
+// ===== UTILITY FUNCTIONS =====
+function formatDuration(seconds) {
+    if (seconds < 60) return seconds + 's';
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return mins + 'm ' + secs + 's';
 }
 
 // ===== ADD CSS ANIMATIONS =====
 (function addStyles() {
     const style = document.createElement('style');
     style.textContent = `
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
+        @keyframes slideDown {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(100%); opacity: 0; }
         }
         
         .hidden { display: none !important; }
         
         #generateBtn:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
         }
     `;
     document.head.appendChild(style);
 })();
-
-// ===== EXPORT FUNCTIONS =====
-window.generateSong = generateSong;
-window.downloadSong = downloadSong;
-window.saveToLibrary = saveToLibrary;
-window.shareSong = shareSong;
-window.regenerateSong = regenerateSong;
-window.toggleAdvanced = toggleAdvanced;
-window.updateDuration = updateDuration;
-window.updateTempo = updateTempo;
-window.usePrompt = usePrompt;
-window.tryStyle = tryStyle;
-window.showFullLyrics = showFullLyrics;
-window.loadRecent = loadRecent;
-
-console.log('✅ All functions ready!');
