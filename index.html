@@ -3,359 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Music Generator - SurWave AI Studio</title>
+    <title>Suno AI Clone - Create Music with AI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="ai-style.css">
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="animated-bg">
-        <div class="gradient-sphere"></div>
-        <div class="gradient-sphere"></div>
-        <div class="gradient-sphere"></div>
-    </div>
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
 
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">
                 <i class="fas fa-wave-square"></i>
-                <span>SurWave <span class="gradient-text">AI</span></span>
+                <span>Suno AI</span>
             </div>
             <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="ai-generator.html" class="active">AI Studio</a>
-                <a href="index.html#features">Features</a>
-                <a href="index.html#pricing">Pricing</a>
-                <a href="login.html" class="login-btn">Login</a>
-                <a href="signup.html" class="signup-btn">Sign Up</a>
+                <a href="index.html" class="active">Home</a>
+                <a href="create.html">Create</a>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <button class="btn-primary">Sign In</button>
             </div>
         </div>
     </nav>
 
-    <!-- Main Generator Section -->
-    <main class="generator-main">
-        <div class="generator-header">
-            <h1>AI Music <span class="gradient-text">Studio</span></h1>
-            <p>Describe your dream song and let AI create it in seconds</p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="badge">✨ NEW: AI Music Generator v2.0</span>
+            <h1>Create <span class="gradient-text">Original Music</span> with AI in Seconds</h1>
+            <p>Generate studio-quality songs with our advanced AI. Choose from 100+ styles, add vocals, and download MP3 instantly.</p>
             
-            <div class="credit-display">
-                <i class="fas fa-bolt"></i>
-                <span>50 Credits Available</span>
-                <button class="buy-credits">Buy More</button>
-            </div>
-        </div>
-
-        <!-- Generator Grid -->
-        <div class="generator-grid">
-            <!-- Left Panel - Input -->
-            <div class="input-panel">
-                <div class="panel-header">
-                    <h2><i class="fas fa-pen"></i> Song Details</h2>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">2M+</span>
+                    <span class="stat-label">Songs Created</span>
                 </div>
-
-                <div class="input-group">
-                    <label><i class="fas fa-heading"></i> Song Title</label>
-                    <input type="text" id="songTitle" class="glass-input" placeholder="e.g., My First AI Song" value="Pyaar Ka Safar">
+                <div class="stat">
+                    <span class="stat-number">100K+</span>
+                    <span class="stat-label">Artists</span>
                 </div>
-
-                <div class="input-group">
-                    <label><i class="fas fa-align-left"></i> Lyrics / Description</label>
-                    <textarea id="promptInput" class="glass-input" rows="5" placeholder="Describe your song or write lyrics...">देखिये दिल कह रहा है
-मेरी मंजिल आप हैं
-यार बन के दिल की हर धुआंन में
-सामिल आप हैं</textarea>
-                </div>
-
-                <div class="quick-prompts">
-                    <span class="prompt-chip" onclick="usePrompt('Romantic Hindi song with piano')">❤️ Romantic Hindi</span>
-                    <span class="prompt-chip" onclick="usePrompt('Energetic Punjabi beat with dhol')">🪘 Punjabi Beat</span>
-                    <span class="prompt-chip" onclick="usePrompt('Sad song with violin')">😢 Sad Melody</span>
-                    <span class="prompt-chip" onclick="usePrompt('Party EDM with drops')">🎉 Party EDM</span>
-                    <span class="prompt-chip" onclick="usePrompt('Bollywood style item song')">🎬 Bollywood</span>
-                    <span class="prompt-chip" onclick="usePrompt('Meditation with flute')">🧘 Meditation</span>
+                <div class="stat">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">Countries</span>
                 </div>
             </div>
-
-            <!-- Middle Panel - Style Selection -->
-            <div class="style-panel">
-                <div class="panel-header">
-                    <h2><i class="fas fa-sliders-h"></i> Music Style</h2>
-                </div>
-
-                <div class="input-group">
-                    <label><i class="fas fa-guitar"></i> Genre</label>
-                    <select id="genreSelect" class="glass-input">
-                        <optgroup label="🎵 Indian">
-                            <option value="hindi" selected>🇮🇳 Hindi Bollywood</option>
-                            <option value="punjabi">🪘 Punjabi</option>
-                            <option value="bengali">🎤 Bengali</option>
-                            <option value="tamil">🎵 Tamil</option>
-                            <option value="telugu">🎶 Telugu</option>
-                        </optgroup>
-                        <optgroup label="🌍 International">
-                            <option value="pop">🎤 Pop</option>
-                            <option value="rock">🎸 Rock</option>
-                            <option value="jazz">🎺 Jazz</option>
-                            <option value="classical">🎻 Classical</option>
-                            <option value="edm">⚡ EDM</option>
-                            <option value="hiphop">🎧 Hip Hop</option>
-                        </optgroup>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label><i class="fas fa-microphone"></i> Voice Type</label>
-                    <div class="voice-grid">
-                        <label class="voice-option selected">
-                            <input type="radio" name="voice" value="male" checked hidden>
-                            <i class="fas fa-male"></i>
-                            <span>Male</span>
-                        </label>
-                        <label class="voice-option">
-                            <input type="radio" name="voice" value="female" hidden>
-                            <i class="fas fa-female"></i>
-                            <span>Female</span>
-                        </label>
-                        <label class="voice-option">
-                            <input type="radio" name="voice" value="duet" hidden>
-                            <i class="fas fa-users"></i>
-                            <span>Duet</span>
-                        </label>
-                        <label class="voice-option">
-                            <input type="radio" name="voice" value="instrumental" hidden>
-                            <i class="fas fa-drum"></i>
-                            <span>Instrumental</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label><i class="fas fa-heart"></i> Mood</label>
-                    <div class="mood-grid">
-                        <button class="mood-btn" data-mood="happy">😊 Happy</button>
-                        <button class="mood-btn" data-mood="sad">😢 Sad</button>
-                        <button class="mood-btn active" data-mood="romantic">❤️ Romantic</button>
-                        <button class="mood-btn" data-mood="energetic">⚡ Energetic</button>
-                        <button class="mood-btn" data-mood="calm">😌 Calm</button>
-                        <button class="mood-btn" data-mood="dark">🌑 Dark</button>
-                    </div>
-                </div>
-
-                <!-- Advanced Toggle -->
-                <button class="advanced-toggle" onclick="toggleAdvanced()">
-                    <i class="fas fa-cog"></i>
-                    <span>Advanced Settings</span>
-                    <i class="fas fa-chevron-down"></i>
+            
+            <div class="hero-buttons">
+                <a href="create.html" class="btn-primary btn-large">
+                    <i class="fas fa-magic"></i>
+                    Start Creating Free
+                </a>
+                <button class="btn-outline btn-large">
+                    <i class="fas fa-play"></i>
+                    Listen to Demos
                 </button>
-
-                <!-- Advanced Panel -->
-                <div id="advancedPanel" class="advanced-panel hidden">
-                    <div class="slider-group">
-                        <label>Duration: <span id="durationValue">3 Minutes</span></label>
-                        <input type="range" id="durationSlider" min="1" max="5" value="3" step="0.5" oninput="updateDuration()">
-                        <div class="range-labels">
-                            <span>1m</span>
-                            <span>2m</span>
-                            <span>3m</span>
-                            <span>4m</span>
-                            <span>5m</span>
-                        </div>
-                    </div>
-
-                    <div class="slider-group">
-                        <label>Tempo: <span id="tempoValue">120 BPM</span></label>
-                        <input type="range" id="tempoSlider" min="60" max="200" value="120" step="1" oninput="updateTempo()">
-                        <div class="range-labels">
-                            <span>Slow</span>
-                            <span>Medium</span>
-                            <span>Fast</span>
-                        </div>
-                    </div>
-
-                    <div class="select-group">
-                        <label>Key</label>
-                        <select id="keySelect" class="glass-input">
-                            <option value="C">C Major (Happy)</option>
-                            <option value="Am">A Minor (Sad)</option>
-                            <option value="G">G Major (Energetic)</option>
-                            <option value="Em">E Minor (Dark)</option>
-                        </select>
-                    </div>
-
-                    <div class="select-group">
-                        <label>Language</label>
-                        <select id="languageSelect" class="glass-input">
-                            <option value="hindi">Hindi</option>
-                            <option value="punjabi">Punjabi</option>
-                            <option value="english">English</option>
-                            <option value="urdu">Urdu</option>
-                        </select>
-                    </div>
-                </div>
             </div>
+        </div>
+    </section>
 
-            <!-- Right Panel - Generate & Preview -->
-            <div class="generate-panel">
-                <div class="panel-header">
-                    <h2><i class="fas fa-magic"></i> Generate</h2>
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2 class="section-title">Why Choose <span class="gradient-text">Suno AI</span></h2>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
                 </div>
+                <h3>Instant Generation</h3>
+                <p>Create full songs in under 60 seconds with our advanced AI</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-music"></i>
+                </div>
+                <h3>Original Compositions</h3>
+                <p>100% unique AI-generated music, no copyright issues</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-microphone"></i>
+                </div>
+                <h3>AI Vocals</h3>
+                <p>Choose from male, female, or duet vocals in multiple languages</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <h3>MP3 Download</h3>
+                <p>Download high-quality MP3 files, ready to use anywhere</p>
+            </div>
+        </div>
+    </section>
 
-                <!-- Generate Button -->
-                <button class="generate-btn" onclick="generateSong()" id="generateBtn">
-                    <span class="btn-content">
-                        <i class="fas fa-magic"></i>
-                        Generate Full Song
-                    </span>
-                    <span class="btn-glow"></span>
-                </button>
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <h2 class="section-title">How It <span class="gradient-text">Works</span></h2>
+        
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <i class="fas fa-pen"></i>
+                <h3>Describe Your Song</h3>
+                <p>Tell AI what kind of song you want - style, mood, lyrics</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <i class="fas fa-robot"></i>
+                <h3>AI Creates</h3>
+                <p>Our AI composes original melody, beats, and vocals</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <i class="fas fa-download"></i>
+                <h3>Download & Share</h3>
+                <p>Get your MP3 file and share with the world</p>
+            </div>
+        </div>
+    </section>
 
-                <p class="info-text">
-                    <i class="fas fa-clock"></i> Takes 30-60 seconds • 4 credits per song
-                </p>
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <h2 class="section-title">Simple <span class="gradient-text">Pricing</span></h2>
+        
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>Free</h3>
+                <div class="price">$0<span>/month</span></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> 10 songs/month</li>
+                    <li><i class="fas fa-check"></i> 30-second duration</li>
+                    <li><i class="fas fa-check"></i> Basic styles</li>
+                    <li><i class="fas fa-check"></i> MP3 download</li>
+                </ul>
+                <a href="create.html" class="btn-outline">Get Started</a>
+            </div>
+            
+            <div class="pricing-card popular">
+                <div class="popular-badge">MOST POPULAR</div>
+                <h3>Pro</h3>
+                <div class="price">$9.99<span>/month</span></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> Unlimited songs</li>
+                    <li><i class="fas fa-check"></i> 5-minute duration</li>
+                    <li><i class="fas fa-check"></i> All 100+ styles</li>
+                    <li><i class="fas fa-check"></i> AI vocals included</li>
+                </ul>
+                <a href="#" class="btn-primary">Choose Pro</a>
+            </div>
+            
+            <div class="pricing-card">
+                <h3>Business</h3>
+                <div class="price">$29.99<span>/month</span></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> Everything in Pro</li>
+                    <li><i class="fas fa-check"></i> Commercial rights</li>
+                    <li><i class="fas fa-check"></i> Priority support</li>
+                    <li><i class="fas fa-check"></i> Team accounts</li>
+                </ul>
+                <a href="#" class="btn-outline">Contact Sales</a>
+            </div>
+        </div>
+    </section>
 
-                <!-- Recent Generations -->
-                <div class="recent-section">
-                    <h3>Recent Generations</h3>
-                    <div class="recent-list">
-                        <div class="recent-item" onclick="loadRecent('romantic')">
-                            <i class="fas fa-music"></i>
-                            <div class="recent-info">
-                                <span class="recent-title">Romantic Hindi</span>
-                                <span class="recent-time">2 min ago</span>
-                            </div>
-                            <i class="fas fa-play"></i>
-                        </div>
-                        <div class="recent-item" onclick="loadRecent('punjabi')">
-                            <i class="fas fa-music"></i>
-                            <div class="recent-info">
-                                <span class="recent-title">Punjabi Beat</span>
-                                <span class="recent-time">1 hour ago</span>
-                            </div>
-                            <i class="fas fa-play"></i>
-                        </div>
-                        <div class="recent-item" onclick="loadRecent('edm')">
-                            <i class="fas fa-music"></i>
-                            <div class="recent-info">
-                                <span class="recent-title">EDM Party</span>
-                                <span class="recent-time">3 hours ago</span>
-                            </div>
-                            <i class="fas fa-play"></i>
-                        </div>
-                    </div>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="logo">
+                    <i class="fas fa-wave-square"></i>
+                    <span>Suno AI</span>
+                </div>
+                <p>Create amazing music with artificial intelligence</p>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="create.html">Create</a>
+                <a href="#">About</a>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+                <a href="#">Copyright</a>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
                 </div>
             </div>
         </div>
-
-        <!-- Loading Section -->
-        <div id="loadingSection" class="loading-section hidden">
-            <div class="loading-card">
-                <div class="loading-animation">
-                    <div class="wave"></div>
-                    <div class="wave"></div>
-                    <div class="wave"></div>
-                    <div class="wave"></div>
-                </div>
-                <h3>Creating Your Masterpiece</h3>
-                <div class="progress-container">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
-                    </div>
-                    <span id="progressText">0%</span>
-                </div>
-                <p id="loadingTip" class="loading-tip">🎵 Composing melody...</p>
-            </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 Suno AI Clone. All rights reserved.</p>
         </div>
+    </footer>
 
-        <!-- Result Section -->
-        <div id="resultSection" class="result-section hidden">
-            <div class="result-card">
-                <div class="result-header">
-                    <div class="song-info">
-                        <h2><i class="fas fa-check-circle" style="color: #4CAF50;"></i> <span id="resultTitle">Pyaar Ka Safar</span></h2>
-                        <div class="song-meta">
-                            <span class="meta-tag"><i class="fas fa-clock"></i> <span id="resultDuration">3:00</span></span>
-                            <span class="meta-tag"><i class="fas fa-tag"></i> <span id="resultGenre">Hindi</span></span>
-                            <span class="meta-tag"><i class="fas fa-microphone"></i> <span id="resultVoice">Male</span></span>
-                            <span class="meta-tag"><i class="fas fa-heart"></i> <span id="resultMood">Romantic</span></span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Waveform -->
-                <div class="waveform-container">
-                    <canvas id="waveform" width="800" height="100"></canvas>
-                </div>
-
-                <!-- Player -->
-                <div class="music-player">
-                    <audio id="audioPlayer" controls>
-                        <source src="" type="audio/mpeg">
-                    </audio>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="action-grid">
-                    <button class="action-btn primary" onclick="downloadSong()">
-                        <i class="fas fa-download"></i>
-                        <span>Download MP3</span>
-                    </button>
-                    <button class="action-btn" onclick="saveToLibrary()">
-                        <i class="fas fa-save"></i>
-                        <span>Save to Library</span>
-                    </button>
-                    <button class="action-btn" onclick="shareSong()">
-                        <i class="fas fa-share-alt"></i>
-                        <span>Share</span>
-                    </button>
-                    <button class="action-btn" onclick="regenerateSong()">
-                        <i class="fas fa-redo"></i>
-                        <span>Regenerate</span>
-                    </button>
-                </div>
-
-                <!-- Lyrics Preview -->
-                <div class="lyrics-preview">
-                    <h4>Lyrics Preview</h4>
-                    <p id="lyricsPreview">देखिये दिल कह रहा है मेरी मंजिल आप हैं...</p>
-                    <button class="text-btn" onclick="showFullLyrics()">View Full Lyrics</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Suggested Styles -->
-        <div class="suggested-section">
-            <h2>Try These <span class="gradient-text">Styles</span></h2>
-            <div class="suggestion-grid">
-                <div class="suggestion-card" onclick="tryStyle('romantic', 'Romantic Hindi song with piano and soft vocals')">
-                    <i class="fas fa-heart" style="color: #ff6b6b;"></i>
-                    <h4>Romantic Hindi</h4>
-                    <p>Soft piano, emotional vocals</p>
-                </div>
-                <div class="suggestion-card" onclick="tryStyle('punjabi', 'Energetic Punjabi song with dhol and modern beat')">
-                    <i class="fas fa-drum" style="color: #feca57;"></i>
-                    <h4>Punjabi Beat</h4>
-                    <p>Dhol, bhangra, modern</p>
-                </div>
-                <div class="suggestion-card" onclick="tryStyle('party', 'Party EDM with drops and electronic beats')">
-                    <i class="fas fa-glass-cheers" style="color: #48dbfb;"></i>
-                    <h4>Party EDM</h4>
-                    <p>Electronic, dance, drops</p>
-                </div>
-                <div class="suggestion-card" onclick="tryStyle('sad', 'Sad song with violin and soft piano')">
-                    <i class="fas fa-frown" style="color: #5f27cd;"></i>
-                    <h4>Sad Melody</h4>
-                    <p>Violin, emotional, slow</p>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js"></script>
-    <script src="firebase.js"></script>
-    <script src="ai-script.js"></script>
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS.load('particles-js', {
+            particles: {
+                number: { value: 80 },
+                color: { value: '#00ff9d' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5 },
+                size: { value: 3 },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#00ff9d',
+                    opacity: 0.2,
+                    width: 1
+                },
+                move: { enable: true, speed: 2 }
+            }
+        });
+    </script>
 </body>
-    </html>
+</html>
