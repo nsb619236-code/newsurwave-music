@@ -8,34 +8,34 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for frontend
+CORS(app)
 
-# Get Replicate API token from environment
-REPLICATE_API_TOKEN = os.environ.get("r8_WEXQVdSzYAdPhgQHisxth2B34XLbM233G3YqP ")
+# Get token from environment
+REPLICATE_API_TOKEN = os.environ.get("REPLICATE_API_TOKEN")
 
 @app.route('/generate', methods=['POST'])
 def generate_music():
     try:
         data = request.json
         prompt = data.get('prompt', '')
-        duration = int(data.get('duration', 30))
+        duration = int(data.get('duration', 15))
         
-        print(f"🎵 Generating song: {prompt[:50]}...")
+        print(f"🎵 Generating: {prompt[:50]}...")
         
-        # Check if token is configured
+        # Check token
         if not REPLICATE_API_TOKEN or REPLICATE_API_TOKEN == "r8_WEXQVdSzYAdPhgQHisxth2B34XLbM233G3YqP ":
             return jsonify({
                 'success': False,
-                'error': 'Replicate API token not configured. Please add your token to .env file',
+                'error': 'API token not configured',
                 'demo': True
             }), 500
         
-        # Initialize Replicate client
+        # Initialize client
         client = replicate.Client(api_token=REPLICATE_API_TOKEN)
         
-        # Generate music using MusicGen model
+        # ✅ NEW WORKING MODEL - Updated December 2024
         output = client.run(
-            "meta/musicgen:671ac645ce5e552cc63a54a2bbff63fcf798043055e2e9e9ab3a72a4e6f5c4f6",
+            "meta/musicgen:7a76a8258b23fae65c5a22debb8841d1d7e816b75c2f24218cd2bd8573787906",
             input={
                 "prompt": prompt,
                 "duration": duration,
@@ -50,37 +50,38 @@ def generate_music():
         return jsonify({
             'success': True,
             'audio_url': output,
-            'message': 'Song generated successfully!'
+            'message': 'Song generated!'
         })
         
+    except replicate.exceptions.ReplicateError as e:
+        print(f"❌ Replicate Error: {e}")
+        if "404" in str(e):
+            return jsonify({
+                'success': False,
+                'error': 'Model not found. Using demo mode.',
+                'demo': True
+            }), 200  # Return 200 with demo flag
+        return jsonify({'success': False, 'error': str(e)}), 500
     except Exception as e:
-        print(f"❌ Error: {str(e)}")
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
+        print(f"❌ Error: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/health', methods=['GET'])
-def health_check():
-    token_status = "✅ Configured" if REPLICATE_API_TOKEN and REPLICATE_API_TOKEN != "your_token_here" else "❌ Not configured"
+def health():
     return jsonify({
-        'status': 'healthy',
-        'token': token_status,
-        'message': 'Suno AI Clone Backend is running'
+        'status': 'ok',
+        'token': '✅' if REPLICATE_API_TOKEN else '❌',
+        'message': 'Server running'
     })
 
 if __name__ == '__main__':
     print("=" * 50)
-    print("🎵 SUNO AI CLONE BACKEND")
+    print("🎵 AI MUSIC GENERATOR")
     print("=" * 50)
-    
-    if REPLICATE_API_TOKEN and REPLICATE_API_TOKEN != "r8_WEXQVdSzYAdPhgQHisxth2B34XLbM233G3YqP  ":
-        print(f"✅ Replicate API Token: {REPLICATE_API_TOKEN[:10]}...")
+    if REPLICATE_API_TOKEN:
+        print(f"✅ Token: {REPLICATE_API_TOKEN[:10]}...")
     else:
-        print("❌ Replicate API Token not configured!")
-        print("📝 Please add your token to backend/.env file")
-    
-    print("📡 Server: http://localhost:5000")
+        print("❌ No token found")
+    print("📡 http://localhost:5000")
     print("=" * 50)
-    
     app.run(debug=True, port=5000)
