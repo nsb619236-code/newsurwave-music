@@ -1,161 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suno AI - Professional AI Music Generator</title>
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="style.css">
+<title>AI Song Generator</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">
-                <i class="fas fa-wave-square"></i>
-                <span>Suno AI</span>
-            </div>
-            <div class="nav-links">
-                <a href="index.html" class="active">Home</a>
-                <a href="create.html">Create</a>
-                <a href="explore.html">Explore</a>
-                <a href="#pricing">Pricing</a>
-                <a href="login.html" class="btn-outline">Sign In</a>
-                <a href="signup.html" class="btn-primary">Sign Up</a>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-badge">
-                <i class="fas fa-robot"></i>
-                <span>AI-Powered Music Generation</span>
-            </div>
-            <h1>
-                Create <span class="gradient-text">Professional Music</span><br>
-                with Artificial Intelligence
-            </h1>
-            <p>Generate studio-quality songs in seconds. Write lyrics, choose style, and let AI create your masterpiece.</p>
-            
-            <div class="hero-stats">
-                <div class="stat-item">
-                    <span class="stat-number">2M+</span>
-                    <span class="stat-label">Songs Created</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">100K+</span>
-                    <span class="stat-label">Happy Artists</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">50+</span>
-                    <span class="stat-label">Music Styles</span>
-                </div>
-            </div>
-            
-            <div class="hero-buttons">
-                <a href="create.html" class="btn-primary btn-large">
-                    <i class="fas fa-magic"></i>
-                    Start Creating Free
-                </a>
-                <button class="btn-outline btn-large" onclick="playDemo()">
-                    <i class="fas fa-play"></i>
-                    Listen to Demo
-                </button>
-            </div>
-        </div>
-        
-        <div class="hero-visual">
-            <div class="visual-card">
-                <div class="waveform-visual">
-                    <div class="wave-bar"></div>
-                    <div class="wave-bar"></div>
-                    <div class="wave-bar"></div>
-                    <div class="wave-bar"></div>
-                    <div class="wave-bar"></div>
-                    <div class="wave-bar"></div>
-                    <div class="wave-bar"></div>
-                    <div class="wave-bar"></div>
-                    <div class="wave-bar"></div>
-                </div>
-            </div>
-        </div>
-    </section>
+<h1>🎵 AI Song Generator</h1>
 
-    <!-- Features Section -->
-    <section class="features" id="features">
-        <div class="section-header">
-            <h2>Why Choose <span class="gradient-text">Suno AI</span></h2>
-            <p>The most advanced AI music generation platform</p>
-        </div>
-        
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-bolt"></i>
-                </div>
-                <h3>Instant Generation</h3>
-                <p>Create full songs in under 60 seconds</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-microphone"></i>
-                </div>
-                <h3>AI Vocals</h3>
-                <p>Male, female, duet, and choir voices</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-pen-fancy"></i>
-                </div>
-                <h3>Lyrics Integration</h3>
-                <p>Write your own lyrics with AI</p>
-            </div>
-        </div>
-    </section>
+<input id="prompt" placeholder="Enter song idea">
 
-    <!-- CTA Section -->
-    <section class="cta">
-        <h2>Ready to Create Your <span class="gradient-text">First Song?</span></h2>
-        <p>Join 100,000+ creators making music with AI</p>
-        <div class="cta-buttons">
-            <a href="create.html" class="btn-primary btn-large">
-                <i class="fas fa-magic"></i>
-                Start Creating Free
-            </a>
-        </div>
-    </section>
+<button onclick="generateSong()">
+Generate Song
+</button>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <div class="logo">
-                    <i class="fas fa-wave-square"></i>
-                    <span>Suno AI</span>
-                </div>
-                <p>Create professional music with artificial intelligence</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Suno AI. All rights reserved.</p>
-        </div>
-    </footer>
+<audio id="player" controls></audio>
 
-    <script>
-        function playDemo() {
-            alert('Demo song playing...');
-        }
-    </script>
 </body>
+
+<script src="app.js"></script>
 </html>
