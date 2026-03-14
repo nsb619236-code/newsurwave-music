@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suno AI - Create Professional Songs</title>
+    <title>Create Music - Suno AI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,281 +20,105 @@
                 <a href="index.html">Home</a>
                 <a href="create.html" class="active">Create</a>
                 <a href="explore.html">Explore</a>
-                <a href="library.html">Library</a>
-                <button class="btn-primary">Sign In</button>
+                <a href="#pricing">Pricing</a>
+                <a href="login.html" class="btn-outline">Sign In</a>
             </div>
         </div>
     </nav>
 
-    <!-- Main Create Container -->
+    <!-- Main Container -->
     <main class="create-container">
         <div class="create-header">
-            <h1>Create with <span style="background: linear-gradient(135deg, #A855F7, #EC4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Suno AI</span></h1>
-            <p>Write lyrics, choose style, and generate professional songs</p>
+            <h1>Create with <span class="gradient-text">Suno AI</span></h1>
+            <p>Write lyrics and generate professional songs</p>
         </div>
 
         <!-- Create Grid -->
         <div class="create-grid">
-            <!-- LEFT PANEL - Lyrics -->
+            <!-- Left Panel - Lyrics -->
             <div class="lyrics-panel">
                 <div class="panel-header">
                     <h2><i class="fas fa-pen-fancy"></i> Song Lyrics</h2>
-                    <span class="badge">AI-Powered</span>
                 </div>
 
-                <!-- Song Title -->
                 <div class="song-title-input">
-                    <input type="text" id="songTitle" placeholder="Song title..." value="Tera Mera Pyaar">
+                    <input type="text" id="songTitle" placeholder="Song title..." value="My AI Song">
                 </div>
 
-                <!-- Lyrics Editor -->
                 <div class="lyrics-editor">
                     <div class="editor-toolbar">
-                        <button class="tool-btn" onclick="addSection('verse')"><i class="fas fa-plus"></i> Verse</button>
-                        <button class="tool-btn" onclick="addSection('chorus')"><i class="fas fa-plus"></i> Chorus</button>
-                        <button class="tool-btn" onclick="addSection('bridge')"><i class="fas fa-plus"></i> Bridge</button>
-                        <button class="tool-btn" onclick="formatBold()"><i class="fas fa-bold"></i></button>
-                        <button class="tool-btn" onclick="formatItalic()"><i class="fas fa-italic"></i></button>
-                        <button class="tool-btn" onclick="clearFormatting()"><i class="fas fa-eraser"></i></button>
+                        <button class="tool-btn"><i class="fas fa-plus"></i> Verse</button>
+                        <button class="tool-btn"><i class="fas fa-plus"></i> Chorus</button>
+                        <button class="tool-btn"><i class="fas fa-bold"></i></button>
                     </div>
                     
-                    <textarea id="fullLyrics" class="lyrics-textarea" placeholder="Write your song lyrics here...">[Verse 1]
+                    <textarea id="fullLyrics" class="lyrics-textarea" placeholder="Write your lyrics here...">[Verse 1]
 तेरा मेरा प्यार है ऐसा
 दिल का है रिश्ता प्यारा
-हर पल में तू समाया
-बन गया है दिल का सहारा
 
 [Chorus]
 तेरा मेरा प्यार
-है सबसे प्यारा
-दिल की ये बातें
-हैं सबसे न्यारा
-
-[Verse 2]
-तेरी हंसी है बहारें
-तेरी बातें हैं खुशबू
-हर दिन तेरे संग
-लगे दिल को है जादू</textarea>
+है सबसे प्यारा</textarea>
                 </div>
 
-                <!-- Structure -->
-                <div class="lyrics-structure">
-                    <h4><i class="fas fa-layer-group"></i> Song Structure</h4>
-                    <div class="structure-chips">
-                        <span class="chip" onclick="jumpToSection('verse1')">Verse 1</span>
-                        <span class="chip" onclick="jumpToSection('chorus')">Chorus</span>
-                        <span class="chip" onclick="jumpToSection('verse2')">Verse 2</span>
-                        <span class="chip" onclick="jumpToSection('bridge')">Bridge</span>
-                        <span class="chip" onclick="jumpToSection('chorus')">Chorus</span>
-                        <span class="chip" onclick="jumpToSection('outro')">Outro</span>
-                    </div>
-                </div>
-
-                <!-- Quick Prompts -->
                 <div class="quick-prompts">
-                    <span class="prompt-chip" onclick="loadExample('romantic')">❤️ Romantic Hindi</span>
-                    <span class="prompt-chip" onclick="loadExample('punjabi')">🪘 Punjabi Bhangra</span>
-                    <span class="prompt-chip" onclick="loadExample('sad')">😢 Sad Urdu</span>
-                    <span class="prompt-chip" onclick="loadExample('party')">🎉 Party EDM</span>
-                    <span class="prompt-chip" onclick="loadExample('bhajan')">🕉️ Bhajan</span>
-                    <span class="prompt-chip" onclick="loadExample('rap')">🎤 Hindi Rap</span>
+                    <span class="prompt-chip">❤️ Romantic</span>
+                    <span class="prompt-chip">🪘 Punjabi</span>
+                    <span class="prompt-chip">😢 Sad</span>
                 </div>
             </div>
 
-            <!-- RIGHT PANEL - Controls -->
+            <!-- Right Panel - Controls -->
             <div class="controls-panel">
                 <div class="panel-header">
                     <h2><i class="fas fa-sliders-h"></i> Music Settings</h2>
                 </div>
 
-                <!-- Tabs -->
-                <div class="settings-tabs">
-                    <button class="tab-btn active" onclick="switchTab('basic')">Basic</button>
-                    <button class="tab-btn" onclick="switchTab('voice')">Voice</button>
-                    <button class="tab-btn" onclick="switchTab('instruments')">Instruments</button>
-                    <button class="tab-btn" onclick="switchTab('advanced')">Advanced</button>
+                <div class="input-group">
+                    <label><i class="fas fa-music"></i> Genre</label>
+                    <select class="styled-select">
+                        <option value="hindi">Hindi Bollywood</option>
+                        <option value="punjabi">Punjabi</option>
+                        <option value="pop">Pop</option>
+                    </select>
                 </div>
 
-                <!-- BASIC TAB -->
-                <div id="tab-basic" class="tab-content active">
-                    <div class="input-group">
-                        <label><i class="fas fa-music"></i> Genre</label>
-                        <select id="genreSelect" class="styled-select">
-                            <optgroup label="🇮🇳 Indian">
-                                <option value="hindi" selected>Hindi Bollywood</option>
-                                <option value="punjabi">Punjabi</option>
-                                <option value="tamil">Tamil</option>
-                                <option value="bengali">Bengali</option>
-                                <option value="urdu">Urdu Ghazal</option>
-                            </optgroup>
-                            <optgroup label="🌍 International">
-                                <option value="pop">Pop</option>
-                                <option value="rock">Rock</option>
-                                <option value="edm">EDM</option>
-                                <option value="jazz">Jazz</option>
-                                <option value="classical">Classical</option>
-                                <option value="hiphop">Hip Hop</option>
-                            </optgroup>
-                        </select>
-                    </div>
-
-                    <div class="input-group">
-                        <label><i class="fas fa-heart"></i> Mood</label>
-                        <div class="mood-grid">
-                            <button class="mood-btn active" data-mood="romantic">❤️ Romantic</button>
-                            <button class="mood-btn" data-mood="happy">😊 Happy</button>
-                            <button class="mood-btn" data-mood="sad">😢 Sad</button>
-                            <button class="mood-btn" data-mood="energetic">⚡ Energetic</button>
-                            <button class="mood-btn" data-mood="calm">😌 Calm</button>
-                            <button class="mood-btn" data-mood="dark">🌑 Dark</button>
-                            <button class="mood-btn" data-mood="devotional">🕉️ Devotional</button>
-                            <button class="mood-btn" data-mood="party">🎉 Party</button>
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label><i class="fas fa-clock"></i> Duration</label>
-                        <div class="duration-selector">
-                            <button class="duration-btn">30s</button>
-                            <button class="duration-btn active">1m</button>
-                            <button class="duration-btn">2m</button>
-                            <button class="duration-btn">3m</button>
-                            <button class="duration-btn">5m</button>
-                        </div>
-                        <input type="range" min="15" max="300" value="60" step="15">
+                <div class="input-group">
+                    <label><i class="fas fa-heart"></i> Mood</label>
+                    <div class="mood-grid">
+                        <button class="mood-btn active">❤️ Romantic</button>
+                        <button class="mood-btn">😊 Happy</button>
+                        <button class="mood-btn">😢 Sad</button>
                     </div>
                 </div>
 
-                <!-- VOICE TAB -->
-                <div id="tab-voice" class="tab-content hidden">
-                    <div class="input-group">
-                        <label><i class="fas fa-microphone"></i> Voice Type</label>
-                        <div class="voice-grid">
-                            <div class="voice-option selected">
-                                <i class="fas fa-male"></i>
-                                <span>Male</span>
-                            </div>
-                            <div class="voice-option">
-                                <i class="fas fa-female"></i>
-                                <span>Female</span>
-                            </div>
-                            <div class="voice-option">
-                                <i class="fas fa-users"></i>
-                                <span>Duet</span>
-                            </div>
-                            <div class="voice-option">
-                                <i class="fas fa-child"></i>
-                                <span>Child</span>
-                            </div>
-                            <div class="voice-option">
-                                <i class="fas fa-microphone-alt"></i>
-                                <span>Rap</span>
-                            </div>
-                            <div class="voice-option">
-                                <i class="fas fa-users"></i>
-                                <span>Choir</span>
-                            </div>
+                <div class="input-group">
+                    <label><i class="fas fa-microphone"></i> Voice</label>
+                    <div class="voice-grid">
+                        <div class="voice-option selected">
+                            <i class="fas fa-male"></i>
+                            <span>Male</span>
                         </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label><i class="fas fa-chart-line"></i> Voice Pitch</label>
-                        <input type="range" min="0.5" max="2" value="1" step="0.1">
-                        <div class="range-labels">
-                            <span>Deep</span>
-                            <span>Normal</span>
-                            <span>High</span>
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label><i class="fas fa-tachometer-alt"></i> Voice Speed</label>
-                        <input type="range" min="0.5" max="1.5" value="1" step="0.1">
-                        <div class="range-labels">
-                            <span>Slow</span>
-                            <span>Normal</span>
-                            <span>Fast</span>
+                        <div class="voice-option">
+                            <i class="fas fa-female"></i>
+                            <span>Female</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- INSTRUMENTS TAB -->
-                <div id="tab-instruments" class="tab-content hidden">
-                    <div class="input-group">
-                        <label><i class="fas fa-drum"></i> Instruments</label>
-                        <div class="instruments-grid">
-                            <label class="instrument-check">
-                                <input type="checkbox" checked> Piano
-                            </label>
-                            <label class="instrument-check">
-                                <input type="checkbox" checked> Guitar
-                            </label>
-                            <label class="instrument-check">
-                                <input type="checkbox"> Drums
-                            </label>
-                            <label class="instrument-check">
-                                <input type="checkbox" checked> Bass
-                            </label>
-                            <label class="instrument-check">
-                                <input type="checkbox"> Violin
-                            </label>
-                            <label class="instrument-check">
-                                <input type="checkbox"> Flute
-                            </label>
-                            <label class="instrument-check">
-                                <input type="checkbox"> Sitar
-                            </label>
-                            <label class="instrument-check">
-                                <input type="checkbox"> Tabla
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="input-group">
-                        <label><i class="fas fa-sliders-h"></i> Music vs Vocals</label>
-                        <input type="range" min="0" max="100" value="70">
-                        <div class="range-labels">
-                            <span>Vocals</span>
-                            <span>Balanced</span>
-                            <span>Music</span>
-                        </div>
+                <div class="input-group">
+                    <label><i class="fas fa-clock"></i> Duration</label>
+                    <div class="duration-selector">
+                        <button class="duration-btn">30s</button>
+                        <button class="duration-btn active">1m</button>
+                        <button class="duration-btn">2m</button>
                     </div>
                 </div>
 
-                <!-- ADVANCED TAB -->
-                <div id="tab-advanced" class="tab-content hidden">
-                    <div class="input-group">
-                        <label><i class="fas fa-music"></i> Key</label>
-                        <select class="styled-select">
-                            <option value="C">C Major (Happy)</option>
-                            <option value="Am">A Minor (Sad)</option>
-                            <option value="G">G Major (Energetic)</option>
-                            <option value="Em">E Minor (Dark)</option>
-                        </select>
-                    </div>
-
-                    <div class="input-group">
-                        <label><i class="fas fa-tachometer-alt"></i> Tempo (BPM)</label>
-                        <input type="range" min="40" max="200" value="120">
-                        <div class="range-labels">
-                            <span>40</span>
-                            <span>120</span>
-                            <span>200</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Generate Button -->
                 <button class="generate-btn" onclick="generateSong()">
-                    <span class="btn-content">
-                        <i class="fas fa-magic"></i>
-                        Generate Song
-                    </span>
+                    <i class="fas fa-magic"></i>
+                    Generate Song
                 </button>
-
-                <p class="info-text">
-                    <i class="fas fa-clock"></i> Takes 30-60 seconds • 5 credits
-                </p>
             </div>
         </div>
 
@@ -305,18 +130,10 @@
                     <div class="wave"></div>
                     <div class="wave"></div>
                     <div class="wave"></div>
-                    <div class="wave"></div>
                 </div>
                 <h3>Creating Your Song</h3>
                 <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <p class="loading-tip" id="loadingTip">🎵 Composing melody...</p>
-                
-                <!-- Live Lyrics Preview -->
-                <div class="live-lyrics">
-                    <p class="current-line">तेरा मेरा प्यार है ऐसा</p>
-                    <p class="next-line">दिल का है रिश्ता प्यारा</p>
+                    <div class="progress-fill" style="width: 60%;"></div>
                 </div>
             </div>
         </div>
@@ -324,70 +141,38 @@
         <!-- Result Section -->
         <div id="resultSection" class="result-section hidden">
             <div class="result-card">
-                <!-- Header -->
-                <div class="result-header">
-                    <div class="song-info">
-                        <h2><i class="fas fa-check-circle" style="color: #10B981;"></i> Tera Mera Pyaar</h2>
-                        <div class="song-meta">
-                            <span class="meta-tag"><i class="fas fa-clock"></i> 3:30</span>
-                            <span class="meta-tag"><i class="fas fa-tag"></i> Hindi</span>
-                            <span class="meta-tag"><i class="fas fa-microphone"></i> Male</span>
-                            <span class="meta-tag"><i class="fas fa-heart"></i> Romantic</span>
-                        </div>
+                <div class="song-info">
+                    <h2>My AI Song</h2>
+                    <div class="song-meta">
+                        <span class="meta-tag"><i class="fas fa-clock"></i> 1:30</span>
+                        <span class="meta-tag"><i class="fas fa-tag"></i> Hindi</span>
                     </div>
                 </div>
 
-                <!-- Karaoke Lyrics -->
-                <div class="karaoke-container">
-                    <h3><i class="fas fa-microphone-alt"></i> Lyrics with Timestamps</h3>
-                    <div class="lyrics-timeline">
-                        <div class="lyric-line active">[00:00] तेरा मेरा प्यार है ऐसा</div>
-                        <div class="lyric-line">[00:05] दिल का है रिश्ता प्यारा</div>
-                        <div class="lyric-line">[00:10] हर पल में तू समाया</div>
-                        <div class="lyric-line">[00:15] बन गया है दिल का सहारा</div>
-                        <div class="lyric-line chorus">[00:20] तेरा मेरा प्यार</div>
-                        <div class="lyric-line chorus">[00:25] है सबसे प्यारा</div>
-                    </div>
-                </div>
-
-                <!-- Waveform -->
-                <div class="waveform-container">
-                    <canvas id="waveform" width="800" height="100"></canvas>
-                </div>
-
-                <!-- Audio Player -->
                 <div class="music-player">
-                    <audio controls>
+                    <audio id="audioPlayer" controls>
                         <source src="#" type="audio/mpeg">
                     </audio>
                 </div>
 
-                <!-- Actions -->
                 <div class="action-grid">
                     <button class="action-btn primary"><i class="fas fa-download"></i> MP3</button>
-                    <button class="action-btn"><i class="fas fa-file-audio"></i> WAV</button>
-                    <button class="action-btn"><i class="fas fa-file-alt"></i> Lyrics</button>
-                    <button class="action-btn"><i class="fas fa-piano"></i> MIDI</button>
                     <button class="action-btn"><i class="fas fa-save"></i> Save</button>
-                    <button class="action-btn"><i class="fas fa-share-alt"></i> Share</button>
-                    <button class="action-btn"><i class="fas fa-redo"></i> Remix</button>
-                    <button class="action-btn"><i class="fas fa-code-branch"></i> Variation</button>
-                </div>
-
-                <!-- AI Suggestions -->
-                <div class="ai-suggestions">
-                    <h4><i class="fas fa-robot"></i> AI Suggestions</h4>
-                    <div class="suggestion-chips">
-                        <span class="suggestion-chip">⚡ Faster tempo</span>
-                        <span class="suggestion-chip">🥁 Add more drums</span>
-                        <span class="suggestion-chip">👩 Try female voice</span>
-                        <span class="suggestion-chip">⏱️ Make longer</span>
-                    </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <script src="script.js"></script>
+    <script>
+        function generateSong() {
+            document.getElementById('loadingSection').classList.remove('hidden');
+            document.getElementById('resultSection').classList.add('hidden');
+            
+            setTimeout(() => {
+                document.getElementById('loadingSection').classList.add('hidden');
+                document.getElementById('resultSection').classList.remove('hidden');
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
