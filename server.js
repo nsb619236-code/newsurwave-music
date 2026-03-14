@@ -38,4 +38,6 @@ res.json(data);
 
 app.listen(3000,()=>{
 console.log("AI music server running");
+});app.get("/", (req, res) => {
+res.send("Server chal raha hai 🚀");
 });
