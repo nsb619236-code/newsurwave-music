@@ -6,8 +6,8 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-
-const TOKEN = "r8_WEXQVdSzYAdPhgQHisxth2B34XLbM233G3YqP ";
+r8_WEXQVdSzYAdPhgQHisxth2B34XLbM233G3YqP
+const TOKEN = " ";
 
 app.post("/generate-song", async (req,res)=>{
 
@@ -18,7 +18,7 @@ const response = await fetch(
 {
 method:"POST",
 headers:{
-"Authorization":`Token ${r8_WEXQVdSzYAdPhgQHisxth2B34XLbM233G3YqP }`,
+"Authorization":`Token ${TOKEN}`,
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
@@ -38,6 +38,4 @@ res.json(data);
 
 app.listen(3000,()=>{
 console.log("AI music server running");
-});app.get("/", (req, res) => {
-res.send("Server chal raha hai 🚀");
 });
