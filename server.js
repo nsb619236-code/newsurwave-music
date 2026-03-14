@@ -18,12 +18,15 @@ const response = await fetch(
 {
 method:"POST",
 headers:{
-"Authorization":`Token ${TOKEN}`,
+"Authorization":`Token ${r8_WEXQVdSzYAdPhgQHisxth2B34XLbM233G3YqP }`,
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
 version:"musicgen-version-id",
-input:{prompt:prompt}
+input:{
+prompt:prompt,
+duration:15
+}
 })
 });
 
