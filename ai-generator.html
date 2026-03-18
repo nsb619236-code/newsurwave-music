@@ -3,176 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Music - Suno AI</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>AI MP3 Song Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            text-align: center;
+            width: 400px;
+        }
+        h2 { margin-bottom: 20px; color: #00adb5; }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #00adb5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        button:hover { background: #028d94; }
+        .loader { display: none; margin-top: 15px; }
+        audio { margin-top: 20px; width: 100%; display: none; }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">
-                <i class="fas fa-wave-square"></i>
-                <span>Suno AI</span>
-            </div>
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="create.html" class="active">Create</a>
-                <a href="explore.html">Explore</a>
-                <a href="#pricing">Pricing</a>
-                <a href="login.html" class="btn-outline">Sign In</a>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Main Container -->
-    <main class="create-container">
-        <div class="create-header">
-            <h1>Create with <span class="gradient-text">Suno AI</span></h1>
-            <p>Write lyrics and generate professional songs</p>
-        </div>
+<div class="container">
+    <h2>🎵 AI Song Generator</h2>
+    <p>Apna song description likhein:</p>
+    <textarea id="prompt" rows="3" placeholder="e.g., A happy hindi song about friendship"></textarea>
+    <button onclick="generateSong()">Generate MP3</button>
+    
+    <!-- Loading Animation -->
+    <div class="loader" id="loader">
+        Song generate ho raha hai... 🎧
+    </div>
 
-        <!-- Create Grid -->
-        <div class="create-grid">
-            <!-- Left Panel - Lyrics -->
-            <div class="lyrics-panel">
-                <div class="panel-header">
-                    <h2><i class="fas fa-pen-fancy"></i> Song Lyrics</h2>
-                </div>
+    <!-- Audio Player -->
+    <audio id="audioPlayer" controls></audio>
+</div>
 
-                <div class="song-title-input">
-                    <input type="text" id="songTitle" placeholder="Song title..." value="My AI Song">
-                </div>
+<script>
+    async function generateSong() {
+        const prompt = document.getElementById('prompt').value;
+        const loader = document.getElementById('loader');
+        const audioPlayer = document.getElementById('audioPlayer');
 
-                <div class="lyrics-editor">
-                    <div class="editor-toolbar">
-                        <button class="tool-btn"><i class="fas fa-plus"></i> Verse</button>
-                        <button class="tool-btn"><i class="fas fa-plus"></i> Chorus</button>
-                        <button class="tool-btn"><i class="fas fa-bold"></i></button>
-                    </div>
-                    
-                    <textarea id="fullLyrics" class="lyrics-textarea" placeholder="Write your lyrics here...">[Verse 1]
-तेरा मेरा प्यार है ऐसा
-दिल का है रिश्ता प्यारा
-
-[Chorus]
-तेरा मेरा प्यार
-है सबसे प्यारा</textarea>
-                </div>
-
-                <div class="quick-prompts">
-                    <span class="prompt-chip">❤️ Romantic</span>
-                    <span class="prompt-chip">🪘 Punjabi</span>
-                    <span class="prompt-chip">😢 Sad</span>
-                </div>
-            </div>
-
-            <!-- Right Panel - Controls -->
-            <div class="controls-panel">
-                <div class="panel-header">
-                    <h2><i class="fas fa-sliders-h"></i> Music Settings</h2>
-                </div>
-
-                <div class="input-group">
-                    <label><i class="fas fa-music"></i> Genre</label>
-                    <select class="styled-select">
-                        <option value="hindi">Hindi Bollywood</option>
-                        <option value="punjabi">Punjabi</option>
-                        <option value="pop">Pop</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label><i class="fas fa-heart"></i> Mood</label>
-                    <div class="mood-grid">
-                        <button class="mood-btn active">❤️ Romantic</button>
-                        <button class="mood-btn">😊 Happy</button>
-                        <button class="mood-btn">😢 Sad</button>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label><i class="fas fa-microphone"></i> Voice</label>
-                    <div class="voice-grid">
-                        <div class="voice-option selected">
-                            <i class="fas fa-male"></i>
-                            <span>Male</span>
-                        </div>
-                        <div class="voice-option">
-                            <i class="fas fa-female"></i>
-                            <span>Female</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label><i class="fas fa-clock"></i> Duration</label>
-                    <div class="duration-selector">
-                        <button class="duration-btn">30s</button>
-                        <button class="duration-btn active">1m</button>
-                        <button class="duration-btn">2m</button>
-                    </div>
-                </div>
-
-                <button class="generate-btn" onclick="generateSong()">
-                    <i class="fas fa-magic"></i>
-                    Generate Song
-                </button>
-            </div>
-        </div>
-
-        <!-- Loading Section -->
-        <div id="loadingSection" class="loading-section hidden">
-            <div class="loading-card">
-                <div class="loading-animation">
-                    <div class="wave"></div>
-                    <div class="wave"></div>
-                    <div class="wave"></div>
-                    <div class="wave"></div>
-                </div>
-                <h3>Creating Your Song</h3>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 60%;"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Result Section -->
-        <div id="resultSection" class="result-section hidden">
-            <div class="result-card">
-                <div class="song-info">
-                    <h2>My AI Song</h2>
-                    <div class="song-meta">
-                        <span class="meta-tag"><i class="fas fa-clock"></i> 1:30</span>
-                        <span class="meta-tag"><i class="fas fa-tag"></i> Hindi</span>
-                    </div>
-                </div>
-
-                <div class="music-player">
-                    <audio id="audioPlayer" controls>
-                        <source src="#" type="audio/mpeg">
-                    </audio>
-                </div>
-
-                <div class="action-grid">
-                    <button class="action-btn primary"><i class="fas fa-download"></i> MP3</button>
-                    <button class="action-btn"><i class="fas fa-save"></i> Save</button>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <script>
-        function generateSong() {
-            document.getElementById('loadingSection').classList.remove('hidden');
-            document.getElementById('resultSection').classList.add('hidden');
-            
-            setTimeout(() => {
-                document.getElementById('loadingSection').classList.add('hidden');
-                document.getElementById('resultSection').classList.remove('hidden');
-            }, 3000);
+        if(!prompt) {
+            alert("Please enter a description!");
+            return;
         }
-    </script>
+
+        // UI Loading state
+        loader.style.display = 'block';
+        audioPlayer.style.display = 'none';
+
+        try {
+            // Backend ko request bhejna
+            const response = await fetch('http://localhost:5000/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: prompt })
+            });
+            
+            const data = await response.json();
+
+            if(data.audio_url) {
+                // Song play karna
+                audioPlayer.src = data.audio_url;
+                audioPlayer.style.display = 'block';
+                audioPlayer.play();
+            } else {
+                alert("Error: Song generate nahi hua.");
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert("Server se connect nahi ho pa raha.");
+        } finally {
+            loader.style.display = 'none';
+        }
+    }
+</script>
+
 </body>
 </html>
