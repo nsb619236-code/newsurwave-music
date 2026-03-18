@@ -1,23 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>AI Song Generator</title>
-<link rel="stylesheet" href="style.css">
+  <title>Suno AI Clone</title>
 </head>
-
 <body>
 
-<h1>🎵 AI Song Generator</h1>
+<h1>🎤 Suno AI Clone</h1>
 
-<input id="prompt" placeholder="Enter song idea">
+<input type="text" id="prompt" placeholder="Enter song idea..." />
+<button onclick="generateSong()">Generate</button>
 
-<button onclick="generateSong()">
-Generate Song
-</button>
+<pre id="lyrics"></pre>
 
-<audio id="player" controls></audio>
+<audio id="audio" controls></audio>
 
+<script src="script.js"></script>
 </body>
-
-<script src="app.js"></script>
 </html>
