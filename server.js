@@ -1,41 +1,34 @@
 const express = require("express");
-const fetch = require("node-fetch");
+const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const app = express();
-
 app.use(cors());
-app.use(express.json());
-r8_WEXQVdSzYAdPhgQHisxth2B34XLbM233G3YqP
-const TOKEN = " ";
+app.use(bodyParser.json());
+app.use(express.static("public"));
 
-app.post("/generate-song", async (req,res)=>{
+// Fake AI song generator
+app.post("/generate-song", (req, res) => {
+    const { prompt } = req.body;
 
-const prompt = req.body.prompt;
+    const lyrics = `
+🎶 ${prompt} 🎶
 
-const response = await fetch(
-"https://api.replicate.com/v1/predictions",
-{
-method:"POST",
-headers:{
-"Authorization":`Token ${TOKEN}`,
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-version:"musicgen-version-id",
-input:{
-prompt:prompt,
-duration:15
-}
-})
+Verse:
+Dil ke jazbaat keh na sake,
+Tere bina hum reh na sake...
+
+Chorus:
+Tu hi mera sapna hai,
+Tu hi mera apna hai...
+`;
+
+    res.json({
+        lyrics,
+        audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+    });
 });
 
-const data = await response.json();
-
-res.json(data);
-
-});
-
-app.listen(3000,()=>{
-console.log("AI music server running");
+app.listen(3000, () => {
+    console.log("Server running on http://localhost:3000");
 });
