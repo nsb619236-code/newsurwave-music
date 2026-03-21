@@ -1,17 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SonicAI - Generate Music with AI</title>
-    <meta name="description" content="Create studio-quality music with Artificial Intelligence. Text to Audio generation in seconds.">
-    <meta name="keywords" content="AI Music, Music Generation, Audio AI, Text to Music">
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="SonicAI - Generate Music with AI">
-    <meta property="og:description" content="Create studio-quality music with Artificial Intelligence. Text to Audio generation in seconds.">
-    <meta property="twitter:title" content="SonicAI - Generate Music with AI">
-    <meta property="twitter:description" content="Create studio-quality music with Artificial Intelligence. Text to Audio generation in seconds.">
+    <title>SurWave Music</title>
+    <meta name="description" content="Stream your favorite music on SurWave">
+    <meta name="keywords" content="music, streaming, audio, songs, playlist">
 
     <script src="https://resource.trickle.so/vendor_lib/unpkg/react@18/umd/react.production.min.js"></script>
     <script src="https://resource.trickle.so/vendor_lib/unpkg/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -22,67 +16,73 @@
     <style type="text/tailwindcss">
     @layer theme {
         :root {
-            --bg-color: #0f172a;
-            --text-color: #f8fafc;
-            --primary-color: #8b5cf6;
-            --primary-hover: #7c3aed;
-            --secondary-color: #06b6d4;
-            --card-bg: #1e293b;
-            --border-color: #334155;
+            --bg-base: #000000;
+            --bg-surface: #121212;
+            --bg-highlight: #282828;
+            --bg-elevated: #242424;
+            --primary: #1ed760;
+            --primary-hover: #1fdf64;
+            --text-base: #ffffff;
+            --text-subdued: #a7a7a7;
         }
     }
 
     @layer base {
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Inter', sans-serif;
+            @apply bg-[var(--bg-base)] text-[var(--text-base)] font-sans antialiased overflow-hidden;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #555; 
+            border-radius: 6px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #888; 
         }
     }
 
     @layer components {
-        .btn {
-            @apply px-6 py-3 rounded-full font-medium transition-all duration-300 flex items-center gap-2 cursor-pointer;
-        }
         .btn-primary {
-            @apply bg-[var(--primary-color)] text-white hover:bg-[var(--primary-hover)] shadow-lg shadow-violet-500/20 hover:shadow-violet-500/40;
+            @apply bg-[var(--primary)] text-black font-bold py-3 px-8 rounded-full hover:scale-105 hover:bg-[var(--primary-hover)] transition-transform duration-200;
         }
-        .btn-secondary {
-            @apply bg-transparent border border-[var(--border-color)] text-white hover:border-[var(--secondary-color)] hover:text-[var(--secondary-color)];
+        .btn-icon {
+            @apply text-[var(--text-subdued)] hover:text-white transition-colors duration-200 cursor-pointer;
         }
-        .section-padding {
-            @apply py-20 px-6 md:px-12 lg:px-20;
+        .card-surface {
+            @apply bg-[var(--bg-surface)] hover:bg-[var(--bg-highlight)] transition-colors duration-300 rounded-lg p-4 cursor-pointer;
         }
-        .glass-card {
-            @apply bg-[var(--card-bg)] bg-opacity-60 backdrop-blur-lg border border-[var(--border-color)] rounded-2xl;
+        .sidebar-link {
+            @apply flex items-center gap-4 text-[var(--text-subdued)] hover:text-white font-medium transition-colors duration-200 py-2 cursor-pointer;
+        }
+        .sidebar-link.active {
+            @apply text-white;
         }
     }
 
     @layer utilities {
-        .text-gradient {
-            @apply bg-clip-text text-transparent bg-gradient-to-r from-[var(--secondary-color)] to-[var(--primary-color)];
-        }
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
+        .text-shadow {
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
     }
     </style>
 </head>
 <body>
     <div id="root"></div>
-    <!-- Scripts loaded in body -->
-    <script type="text/babel" src="components/Header.js"></script>
-    <script type="text/babel" src="components/Footer.js"></script>
-    <script type="text/babel" src="components/MusicPlayer.js"></script>
-    <script type="text/babel" src="components/FeatureSection.js"></script>
-    <script type="text/babel" src="components/Pricing.js"></script>
-    <script type="text/babel" src="utils/db.js"></script>
-    <script type="text/babel" src="components/Hero.js"></script>
+    
+    <!-- Load Components -->
+    <script type="text/babel" src="data/mockData.js"></script>
+    <script type="text/babel" src="components/Sidebar.js"></script>
+    <script type="text/babel" src="components/TopBar.js"></script>
+    <script type="text/babel" src="components/SongCard.js"></script>
+    <script type="text/babel" src="components/MainContent.js"></script>
+    <script type="text/babel" src="components/Player.js"></script>
     <script type="text/babel" src="app.js"></script>
 </body>
 </html>
